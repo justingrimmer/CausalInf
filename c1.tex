@@ -1,0 +1,677 @@
+\documentclass{beamer}
+
+%\usepackage[table]{xcolor}
+\mode<presentation> {
+  \usetheme{Boadilla}
+%  \usetheme{Pittsburgh}
+%\usefonttheme[2]{sans}
+\renewcommand{\familydefault}{cmss}
+%\usepackage{lmodern}
+%\usepackage[T1]{fontenc}
+%\usepackage{palatino}
+%\usepackage{cmbright}
+  \setbeamercovered{transparent}
+\useinnertheme{rectangles}
+}
+%\usepackage{normalem}{ulem}
+%\usepackage{colortbl, textcomp}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg= black}
+\definecolor{trial}{cmyk}{1,0,0, 0}
+\definecolor{trial2}{cmyk}{0.00,0,1, 0}
+\definecolor{darkgreen}{rgb}{0,.4, 0.1}
+\usepackage{array}
+\beamertemplatesolidbackgroundcolor{white}  \setbeamercolor{alerted
+text}{fg=red}
+
+\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}
+
+%\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{colortbl}
+%\usepackage[usenames, dvipsnames]{color}
+%\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}c
+%\newcolumntype{Y}{\columncolor[cmyk]{0, 0, 1, 0}\raggedright}
+%\newcolumntype{C}{\columncolor[cmyk]{1, 0, 0, 0}\raggedright}
+%\newcolumntype{G}{\columncolor[rgb]{0, 1, 0}\raggedright}
+%\newcolumntype{R}{\columncolor[rgb]{1, 0, 0}\raggedright}
+
+%\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{Block}
+%$A = B$.
+%\end{beamerboxesrounded}}
+\renewcommand{\familydefault}{cmss}
+%\usepackage[all]{xy}
+
+\usepackage{tikz}
+\usepackage{lipsum}
+
+ \newenvironment{changemargin}[3]{%
+ \begin{list}{}{%
+ \setlength{\topsep}{0pt}%
+ \setlength{\leftmargin}{#1}%
+ \setlength{\rightmargin}{#2}%
+ \setlength{\topmargin}{#3}%
+ \setlength{\listparindent}{\parindent}%
+ \setlength{\itemindent}{\parindent}%
+ \setlength{\parsep}{\parskip}%
+ }%
+\item[]}{\end{list}}
+\usetikzlibrary{arrows}
+%\usepackage{palatino}
+%\usepackage{eulervm}
+\usecolortheme{lily}
+
+\newtheorem{com}{Comment}
+\newtheorem{lem} {Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+ \numberwithin{equation}{section}
+
+
+\title[Causal Inference] % (optional, nur bei langen Titeln nötig)
+{Causal Inference}
+
+\author{Justin Grimmer}
+\institute[University of Chicago]{Associate Professor\\Department of Political Science \\  University of Chicago}
+\vspace{0.3in}
+
+\date{March 26th, 2018}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Who Take This Class and Why They Take It}
+
+
+Who: \pause 
+\begin{itemize}
+\invisible<1>{\item[1)] You have taken the prior two classes in the sequence (covering Math, Probability, and Linear Regression) \emph{or their equivalent courses}} \pause 
+\invisible<1-2>{\item[2)] Familiar with the {\tt R} programming language} \pause 
+\end{itemize} 
+\invisible<1-3>{Why: } \pause 
+\begin{itemize}
+\invisible<1-4>{\item[1)] Learn about methods for causal inference: \alert{the effect of some intervention on some outcomes}} \pause
+\invisible<1-5>{\item[2)] Topics: experiments, matching, regression, sensitivity analysis, difference-in-differences, panel methods, instrumental variable estimation, and regression discontinuity designs (and if time, machine learning + causal inference)} \pause
+\invisible<1-6>{\item[3)] Applications from across the social sciences, with a focus on public policy questions in the social sciences.} \pause
+\end{itemize}  
+
+\invisible<1-7>{Goal:\\
+
+\alert{Provide you with adequate methodological skills to conduct cutting-edge empirical research}}
+
+\end{frame}
+
+\begin{frame}{Causal Inference}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Statistics can be used for many purposes:\bigskip
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Discovery\pause \bigskip
+  \item
+    Measurement \pause \bigskip
+  \item
+    Causal inference
+
+    \begin{itemize}
+    \itemsep1pt\parskip0pt\parsep0pt 
+    \item
+      Relatively new subfield within statistics\medskip
+    \item
+      Highly interdisciplinary, rapidly expanding
+    \end{itemize}
+%   \item Model based inference
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+
+\centering
+\fbox{Causal Inference is a Hard Problem}
+
+\end{frame}
+
+\begin{frame}{Traditional Approaches}
+
+John Stuart Mill's \textbf{Method of Difference}:\medskip
+
+\begin{quote}
+If an instance in which the phenomenon under investigation occurs, and
+an instance in which it does not occur, have every circumstance in
+common save one, that one occurring only in the former; the circumstance
+in which alone the two instances differ is the effect, or the cause, or
+an indispensable part of the cause, of the phenomenon.
+\end{quote}\medskip
+
+% idea to compare like and like are often invoked in CP 
+
+% that are alike in every way except one: they differ in the presence or absence of the
+% antecedent we conjecture to be the true cause of a.
+
+% For these methods to lead to valid inferences, though, there
+% must be only one possible cause of the effect of interest, the
+% relationship between cause and effect must be deterministic,
+% and there must be no measurement error.
+
+\pause
+
+It would be fantastic if two cases were exactly alike and only differ in one single characteristic, but we rarely have such comparisons in the social sciences 
+
+
+\end{frame}
+
+\begin{frame}{More from Mill}
+
+\small
+%thatMill himself railed against the exact use to which his methods have been put.
+
+\begin{quote}
+
+If so little can be done by the method to determine conditions of an effect of many combined causes in the case of the medical sciences, still less is the method applicable to a class of phenomena more complicated than even those of physiology, the phenomena of politics and history. There, Plurality of Causes exists in almost boundless excess, and effects are, for the most part, inextricably interwoven with one another. To add to the embarrassment, most of the inquiries in political science relate to the production of effects of a most comprehensive description, such as the public wealth, the public security, public morality, and the like: results liable to be affected directly or indirectly either in plus or minus by nearly every fact which exists, or event which occurs, in human society. \alert{The vulgar notion that, the safe methods on political subjects are those of Baconian induction [...] will one day be quoted as among the most unequivocal marks of a low state of the speculative faculties in any age in which it is accredited.} 
+\end{quote}
+
+%\pause
+%
+%\begin{quote}
+%For even if we could try to experiments upon a nation or upon the human race, with little scruple as M. Magendie tried them on dogs and rabbits, we should never succeed on making two instances identical in every respect except the presence of absence of some one definite circumstance. 
+%\end{quote}
+
+%\begin{quote}
+%Nothing can be more ludicrous than the sort of parodies on experimental
+%reasoning which one is accustomed to meet with, not in popular
+%discussion only, but in grave treatises, when the affairs of nations are
+%the theme.
+%\end{quote}
+%
+%\pause
+%
+%\begin{quote}
+%How, it is asked, can an institution be bad, when the country has
+%prospered under it? How can such or such causes have contributed to the
+%prosperity of one country, when another has prospered without them?
+%Whoever makes use of an argument of this kind, not intending to deceive,
+%should be sent back to learn the elements of some one of the more
+%\textbf{easy} physical sciences.
+%\end{quote}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{itemize}
+\item[-] Causes of Effects $\leadsto$ Why Did Trump Win?   (Headache question (Dawid 2000): Headache is gone, is that because I took asprin?) \pause 
+
+\invisible<1>{\item[-] Effects of Causes $\leadsto$ How did a ``China Shock" effect support for Trump?  (Dawid 2000: I have a headache, will it help if I take aspirin?)} 
+\end{itemize}  
+
+
+\end{frame}
+
+
+
+\begin{frame}{A Case Study in Failed Causal Inference}
+
+\begin{center}
+\includegraphics[width=4in]{images/two_million_regressions.png}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Empirical Growth Literature}
+
+Levine and Ross (1992):
+
+\begin{quote}
+There are many econometric specifications in which measures of economic
+policy are significantly correlated with long-run per capita growth
+rates.
+\end{quote}
+
+\pause
+
+\begin{quote}
+The cross-country statistical relationships between long-run average
+growth rates and almost every particular policy indicator considered by
+the profession are fragile: small alterations in the ``other''
+explanatory variables overturn past results.
+\end{quote}
+
+\end{frame}
+
+\begin{frame}{Is Causal Inference Possible?}
+
+\includegraphics[width=4in]{images/rodrik_learn_nothing.png}
+
+\pause
+
+Why is this a widespread sentiment?
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item Important topic
+\item
+  A lot of data
+\item
+  A lot of theory
+\item
+  Many smart people working on this problem
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Case Study: Post-Menopausal Estrogen}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Postmenopausal estrogen plus progestin showed large reduced risk in
+  coronary heart disease.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    High quality observational studies using regression and related
+    techniques on large samples provided the basis for wide scale
+    prescription of estrogen.
+  \end{itemize}
+\end{itemize}
+
+\pause
+
+Grodstein and Stampfer (1998):
+
+\begin{quote}
+``Consistent evidence from over \textbf{40} epidemiologic studies
+demonstrates that postmenopausal women who use estrogen therapy after
+the menopause have significantly lower rates of heart disease than women
+who do not take estrogen\ldots{}the evidence clearly supports a
+clinically important protection against heart disease for postmenopausal
+women who use estrogen.''
+\end{quote}
+
+\end{frame}
+
+\begin{frame}{Case Study: Post-Menopausal Estrogen}
+
+\includegraphics[width=4in]{images/hormone_studies.png}
+\scriptsize \medskip
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Women's Health Initiative (WHI) was a large randomized trial studying
+  the question\medskip
+\item
+  Experiment showed no benefits from the therapy and increased risk from
+  Breast Cancer\medskip
+\item
+  Experiment was halted early and prescription of therapy plummeted
+  immediately thereafter
+%    \item ``If there are such discrepancies, how many other medical facts do we believe based on one type of
+%study or another type of study because we don't have the luxury of having both?''' Dr. Isaac
+%Schiff, the chairman of obstetrics and gynecology at Massachusetts General Hospital.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Case Study: Voter ID Laws}
+
+\begin{itemize}
+\item Voter ID laws: require government issued identification (proof of citizenship) to vote \pause 
+\invisible<1>{\item \alert{Disproportionately Burdens}: (1) poor, (2) persons of color, and (3) elderly (Ansolabahere and Hersh 2016)} \pause 
+\invisible<1-2>{\item Causal effect(?): } \pause 
+
+\invisible<1-3>{\scalebox{0.35}{\includegraphics{images/LDCaus.png}}} \pause 
+
+\invisible<1-4>{\item And yet:} \pause 
+
+\invisible<1-5>{``To date, there is little convincing evidence that voter identification laws influence turnout substantially" Highton 2017.  } \pause 
+
+\invisible<1-6>{\item Or: } \pause 
+
+\invisible<1-7>{``When errors are corrected [in Hajnal, Lajevardi, and Nielson 2017], one can recover positive, negative, or null estimates of the effect of voter ID laws on turnout, precluding firm conclusions" Grimmer, Hersh, Meredith, Mummolo, and Nall (2018)}
+\end{itemize}  
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Case Study: Voter ID Laws}
+
+Why? \pause 
+\begin{itemize}
+\invisible<1>{\item[-] Uneven enforcement (``For example, Ansolabehere (2009) reports that white voters are less likely to be asked for
+a photo ID than either Latinos or African Americans by about seven percentage points" (see also White et. al 2015))}
+\invisible<1-2>{\item[-] Psychological motivation (Valentino and Neuner (2017))} \pause 
+\invisible<1-3>{\item[-] Compensatory campaign spending} \pause 
+\invisible<1-4>{\item[-] \alert{Difficulty in assessing effect}} 
+\end{itemize}  
+
+
+\end{frame}
+
+
+
+\begin{frame}{Doesn't Regression Solve the Problem?}
+
+%\includegraphics[width=4in]{images/rodrik_learn_nothing.png}
+
+$$
+Y = \alpha + \tau D + \beta_1 X_1 + ... + \beta_k X_k + u
+$$
+\bigskip
+
+Key problems with regression: \pause \medskip
+\begin{itemize}
+\invisible<1>{\item Endogeneity and omitted variable bias\medskip} \pause 
+\invisible<1-2>{\item Misspecified functional form \medskip} \pause 
+\invisible<1-3>{\item Heterogeneous treatment effects \medskip}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\huge 
+Let's be adults \pause \\
+\invisible<1>{Language games don't change that you're estimating a causal effect} \pause \\
+\invisible<1-2>{So talk about it like a causal effect}
+
+
+
+\end{frame}
+
+
+
+
+\begin{frame}{Causal Identification (Manski 1995)}
+
+\small
+
+\pause 
+
+\begin{quote}
+\invisible<1>{Studies of \textbf{identification} seek to characterize the conclusions
+that could be drawn if one could use the sampling process to obtain an
+unlimited number of observations.} \pause
+\end{quote}
+
+\begin{quote}
+\invisible<1-2>{Studies of \textbf{statistical inference} seek to characterize the
+generally weaker conclusions that can be drawn from a finite number of
+observations.} \pause 
+\end{quote}
+
+\pause
+
+\invisible<1-3>{In statistics, something is \textbf{identifiable} if you can get it from
+the joint distribution of observable random variables.\\\bigskip
+}
+\pause
+
+\invisible<1-4>{Informally, \textbf{causal identification} describes the combination of
+assumptions, estimation approach, and data necessary to reach a
+conclusion about a causal effect:\\
+} \pause 
+\centering
+\invisible<1-5>{assumptions + data $\rightarrow$ causal conclusions} 
+
+\end{frame}
+
+\frame{
+\frametitle{How can we conduct causal inference?}
+
+\begin{figure}[ht] \centering
+        \scalebox{.4}{\includegraphics{pyramid.pdf}}
+\end{figure}
+
+}
+
+\begin{frame}{Causal Inference Workflow}
+
+\centering
+  \includegraphics[width=.9\linewidth]{images/ciworkflow.pdf}
+
+\end{frame}
+
+\begin{frame}{Roadmap for the Course}
+
+\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Potential Outcomes Model\smallskip
+\item
+  Random Assignment%: Design and Analysis of Experiments
+ \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item Design and Analysis of Experiments\smallskip
+
+  \end{itemize}
+
+
+
+%\item
+%  Statistical Inference in Causal Analysis
+\item
+  Selection on Observables
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Matching, Regression
+  \item 
+    Sensitivity Analyses\smallskip
+  \end{itemize}
+ 
+  \item
+  Selection on Unobservables
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+     Longitudinal Research Designs: Difference-in-Differences, Panel Methods, and related methods\smallskip
+  \end{itemize}
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+   Cross-Sectional Designs:  Instrumental Variables, Regression Discontinuity Design
+  \end{itemize}
+%\item
+ % Additional Topics
+
+ % \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Attrition
+ % \item
+  %  External Validity
+%  \item Model Based Methods:\\
+%  Binary Outcome Models, Ordered and Multinomial Outcome Models, Event Count Models, Censored and Truncated Outcome Models
+ 
+%  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{If there is time...}
+Machine Learning + Causal Inference
+\begin{itemize}
+\item Heterogeneous Treatment Effects, Extrapolation of Effects
+\item Text + Causal Inference. 
+\end{itemize}  
+
+
+
+\end{frame}
+
+
+\begin{frame}{Prerequisites}
+
+\begin{itemize}
+
+\item This course assumes a graduate level knowledge of linear regression, probability, and statistical computing in \texttt{R} .\bigskip
+
+
+\item A willingness to work \alert{hard} on possibly unfamiliar material\bigskip
+
+\item  A correlate of whether you have the background:\bigskip
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  $\beta = (X'X)^{-1}X'Y$\bigskip
+\item
+  $Var[X + Y] =  Var[X] + Var[X] + Cov[X + Y]$\bigskip
+\end{itemize}
+\item  Computing: \texttt{R}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Requirements}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Readings (best read before lecture)
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Read slow, some material should be read multiple times, and do not skip equations.
+  \item
+    Read at least one application of every technique.
+  \end{itemize}\medskip
+\item
+  Homework assignments (35\% of the final grade)
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+    \item
+    Posted on Wednesday, due following Wednesday before class.
+  \item Can work in groups, but solo attempt first.
+  \item Provide your own printed write-up and submit code files.
+
+  \end{itemize}\medskip
+   
+ \item Midterm exam (30\% of the final grade). Date is April 30th. \medskip
+  \item Final exam   (30\% of the final grade).\medskip
+%\item
+%  In-class midterm (March 20)
+%\item
+%  Student project
+\item
+  Participation and presentation (5\% of the final grade).
+\end{itemize}
+
+\end{frame}
+
+%\begin{frame}{Grades}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Weekly homework assignments (65\% of the final grade)
+%\item Final exam (30\% of the final grade)
+%%\item
+%%  Student project (25\% of the final grade)
+%
+%%  \begin{itemize}
+%%  \itemsep1pt\parskip0pt\parsep0pt
+%%  \item
+%%    Coauthoring is strongly encouraged.
+%%  \end{itemize}
+%\item
+%  Participation and presentation (5\% of the final grade)
+%\end{itemize}
+%
+%\end{frame}
+
+\begin{frame}{Housekeeping}
+\small
+
+\begin{itemize}
+\item Piazza course website will have slides, homework, data sets, and some additional readings: \url{piazza.com/uchicago/spring2018/plsc30600/home}  \bigskip
+\item You can sign up on the Piazza course page directly from the above address. There are also free Piazza apps for mobile devices. \bigskip
+
+\item The course github is at \url{https://github.com/justingrimmer/CausalInf} .  There you'll find all the content that I post here, homeworks, code, etc.  
+
+\item \alert{Use OHs and Piazza site to ask questions about the course and homework. Do not email your questions directly to the instructor or TAs.}\bigskip
+
+\item   Office hours:
+
+  \begin{itemize}
+   \item Justin: Open Door
+  \end{itemize}
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Readings}
+\small
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Books:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+ 
+  \item Angrist, Joshua D. and J\"orn-Steffen Pischke. 2009. \emph{Mostly Harmless Econometrics: An Empiricist's Companion}. Princeton University Press. \bigskip
+  \item Morgan, Stephen L. and Christopher Winship. 2015. \emph{Counterfactuals and Causal Inference: Methods and Principles for Social Research}, \textbf{Second Edition}. Cambridge University Press. \bigskip
+%  \item Wooldridge, Jeffrey. 2010. {\it Econometric Analysis of Cross Section and Panel Data}, 2nd ed. MIT Press. (A standard reference for applied researchers for most topics covered in the second part of the course.)
+%    \item Gelman, Andrew and Jennifer Hill. 2007. {\it Data Analysis Using Regression and Multilevel/Hierarchical Models.}
+  %    Cambridge University Press. 
+
+  \end{itemize}
+\item
+  Assigned articles
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Most linked from syllabus, a few will be posted on course website
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Scheduling to Keep in Mind}
+
+\begin{itemize}
+  \item[1)] No class on 5/28
+  \item[2)] I'll be absent on 4/2 and 4/4.  I'll hold make up sessions on 3/30 and 4/6.  Time and location TBA
+  \item[3)] Last day of Class is 5/30
+  \item[4)] Midterm is 4/30.  \alert{you must be here}
+  \item[5)] Final exam is 6/4 - 6/7.  You can take it remotely.  
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\end{document}

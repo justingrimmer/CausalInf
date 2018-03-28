@@ -1,0 +1,846 @@
+\documentclass{beamer}
+
+%\usepackage[table]{xcolor}
+\mode<presentation> {
+  \usetheme{Boadilla}
+%  \usetheme{Pittsburgh}
+%\usefonttheme[2]{sans}
+\renewcommand{\familydefault}{cmss}
+%\usepackage{lmodern}
+%\usepackage[T1]{fontenc}
+%\usepackage{palatino}
+%\usepackage{cmbright}
+  \setbeamercovered{transparent}
+\useinnertheme{rectangles}
+}
+%\usepackage{normalem}{ulem}
+%\usepackage{colortbl, textcomp}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg= black}
+\definecolor{trial}{cmyk}{1,0,0, 0}
+\definecolor{trial2}{cmyk}{0.00,0,1, 0}
+\definecolor{darkgreen}{rgb}{0,.4, 0.1}
+\usepackage{array}
+\beamertemplatesolidbackgroundcolor{white}  \setbeamercolor{alerted
+text}{fg=red}
+\newtheorem{assumption}{Assumption}
+
+\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}
+
+%\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{colortbl}
+%\usepackage[usenames, dvipsnames]{color}
+%\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}c
+%\newcolumntype{Y}{\columncolor[cmyk]{0, 0, 1, 0}\raggedright}
+%\newcolumntype{C}{\columncolor[cmyk]{1, 0, 0, 0}\raggedright}
+%\newcolumntype{G}{\columncolor[rgb]{0, 1, 0}\raggedright}
+%\newcolumntype{R}{\columncolor[rgb]{1, 0, 0}\raggedright}
+
+%\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{Block}
+%$A = B$.
+%\end{beamerboxesrounded}}
+\renewcommand{\familydefault}{cmss}
+%\usepackage[all]{xy}
+
+\usepackage{tikz}
+\usepackage{lipsum}
+
+ \newenvironment{changemargin}[3]{%
+ \begin{list}{}{%
+ \setlength{\topsep}{0pt}%
+ \setlength{\leftmargin}{#1}%
+ \setlength{\rightmargin}{#2}%
+ \setlength{\topmargin}{#3}%
+ \setlength{\listparindent}{\parindent}%
+ \setlength{\itemindent}{\parindent}%
+ \setlength{\parsep}{\parskip}%
+ }%
+\item[]}{\end{list}}
+\usetikzlibrary{arrows}
+%\usepackage{palatino}
+%\usepackage{eulervm}
+\usecolortheme{lily}
+
+\newtheorem{com}{Comment}
+\newtheorem{lem} {Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+ \numberwithin{equation}{section}
+
+
+\title[Causal Inference] % (optional, nur bei langen Titeln nötig)
+{Causal Inference}
+
+\author{Justin Grimmer}
+\institute[University of Chicago]{Associate Professor\\Department of Political Science \\  University of Chicago}
+\vspace{0.3in}
+
+\date{March 28th, 2018}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Purpose, Scope, and Examples}
+Goal in causal inference is to assess the causal effect of some potential cause (e.g. an institution, intervention, policy, or event) on some outcome.\\\bigskip
+
+Examples of such research questions include... \\\medskip
+
+What is the effect of:
+\begin{itemize}
+ \item political institutions on corruption?
+ \item voting technology on  voting fraud?
+ \item incumbency status on vote shares?
+ \item peacekeeping missions on peace?
+ \item mass media on voter preferences?
+ \item church attendance on turnout?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What Do We Mean by Causal Inference?}
+
+As in all statistics, we must begin with a model of the reality we are interested in studying, such as:
+
+\[y_i = \alpha + \tau D_i + X_i\beta + \epsilon_i\] \bigskip
+
+Key problems with regression:\medskip \pause
+\pause
+\begin{itemize}
+\item Endogeneity and omitted variable bias\medskip
+\item Misspecified functional form \medskip
+\item Heterogenous treatment effects \medskip
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Neyman-Rubin Potential Outcomes Model}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{images/Neyman_3.jpeg}
+  \caption{Neyman}
+
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.5\linewidth]{images/DonRubin.jpg}
+  \caption{Rubin}
+\end{minipage}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Neyman Urn Model}
+
+\centering
+  \includegraphics[width=.9\linewidth]{images/potential_outcomes_1.pdf}
+
+\end{frame}
+
+\begin{frame}{Neyman Urn Model}
+
+\centering
+  \includegraphics[width=.9\linewidth]{images/potential_outcomes_2.pdf}
+
+\end{frame}
+
+\begin{frame}{Causality with Potential Outcomes}
+
+\begin{definition}[Treatment]
+$D_i$: Indicator of treatment intake for {\em unit} $i$
+ \[
+ D_i = \left\{
+ \begin{array}{ll}
+  1 & \mbox{if unit $i$ received the treatment}\\
+  0 & \mbox{otherwise}.
+ \end{array}
+ \right.
+ \]
+\end{definition}
+
+\begin{definition}[Outcome]
+ $Y_i$: Observed outcome variable of interest for unit $i$. The treatment occurs temporally before the outcome.
+\end{definition}
+
+\begin{definition}[Potential Outcomes]
+$Y_{0i}$ and $Y_{1i}$: Potential outcomes for unit $i$
+ \[
+ Y_{di} = \left\{
+ \begin{array}{ll}
+  Y_{1i} & \mbox{Potential outcome for unit $i$ with treatment}\\
+  Y_{0i} & \mbox{Potential outcome for unit $i$ without treatment}
+ \end{array}
+ \right.
+ \]
+\end{definition}
+
+\end{frame}
+
+\begin{frame}{Causality with Potential Outcomes}
+
+\begin{definition}[Causal Effect]
+Causal effect of the treatment on the outcome
+for unit $i$ is the difference between its two potential outcomes:
+\[
+\tau_i = Y_{1i} - Y_{0i}
+\]
+\end{definition}
+
+\begin{assumption}
+Observed outcomes are realized as
+\[
+Y_i = D_i\cdot Y_{1i} + (1-D_i)\cdot Y_{0i}\,\, \mbox{so}\,\,
+Y_i = \left\{
+ \begin{array}{ll}
+  Y_{1i} & \mbox{if $D_i=1$}\\
+  Y_{0i} & \mbox{if $D_i=0$}
+ \end{array}
+ \right.
+\]
+\end{assumption}
+
+%\pause
+
+%\begin{definition}[Fundamental Problem of Causal Inference]
+%Cannot observe both potential outcomes $(Y_{1i},Y_{0i})$
+%\end{definition}
+
+\end{frame}
+
+\begin{frame}{Causal Inference as a Missing Data Problem}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .8 \linewidth]{images/potential_outcome_flowchart.pdf}
+\end{figure}
+
+%\emph{Fundamental Problem of Causal Inference}: 
+
+\begin{definition}[Fundamental Problem of Causal Inference]
+We cannot observe both potential outcomes. So how can we calculate $\tau_i = Y_{1i} - Y_{0i}$?
+\end{definition}
+
+\end{frame}
+
+
+
+\begin{frame}{Fundamental Problem of Causal Inference}
+\scriptsize
+
+Imagine a study population with 4 units:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c   c  c c c }
+      $i$ & $D_i$ & $Y_{1i}$ & $Y_{0i}$ & $\tau_i$ \\ \hline
+      1  & 1 & 10  & 4 & 6 \\
+      2  & 1 & 1  & 2 & -1 \\
+      3 & 0 & 3 & 3 & 0 \\
+      4 & 0 & 5 & 2 & 3 \\
+    \end{tabular}
+    \end{table}
+    
+ What do we observe?   \pause
+    
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c  c c c c c}
+      $i$ & $D_i$ & $Y_{1i}$ & $Y_{0i}$ & $\tau_i$ & $Y_i$ \\ \hline
+      1  & 1 & 10  & \alert{?}  & \alert{?} & 10 \\
+      2  & 1 & 1  & \alert{?}  & \alert{?}  & 1 \\
+      3 & 0 & \alert{?}  & 3 & \alert{?}  & 3  \\
+      4 & 0 & \alert{?}  & 2 & \alert{?}  & 2 \\
+    \end{tabular}
+    \end{table}
+
+Causal inference is difficult because it involves
+missing data.
+
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Causal Inference as a Missing Data Problem}
+
+How can we calculate $\tau_i = Y_{1i} - Y_{0i}$?\medskip
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Homogeneity is one solution:\medskip
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    If $\{Y_{1i}, Y_{0i}\}$ is constant across individuals, then
+    cross-sectional comparisons will recover $\tau_i$\medskip
+  \item
+    If $\{Y_{1i}, Y_{0i}\}$ is constant across time, then before and
+    after comparisons will recover $\tau_i$\medskip
+  \end{itemize}
+\end{itemize}
+
+\pause
+
+In social phenomena, unfortunately, homogeneity is very rare.
+
+\end{frame}
+
+\begin{frame}{Other Assumptions}
+\small
+\begin{assumption}
+Observed outcomes are realized as
+\[
+Y_i = D_i\cdot Y_{1i} + (1-D_i)\cdot Y_{0i}
+\]
+\end{assumption}
+\pause
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Embedded in this formulation is the assumption that potential outcomes
+  for unit $i$ are unaffected by treatment assignment for unit $j$.
+\end{itemize}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Assumption known by several names:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    \textbf{S}table \textbf{U}nit \textbf{T}reatment \textbf{V}alue
+    \textbf{A}ssumption (SUTVA)
+  \item
+    No interference
+  \item
+    Individualized Treatment Response
+  \end{itemize}\medskip
+\item
+  Examples: vaccination, fertilizer on plot yield, communication
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Potential Outcomes with Interference}
+\small
+Let $\mathbf{D}=\{D_i,D_j\}$ be the set of vectors of treatment assignments for
+two units $i$ (me) and $j$ (you).\\\medskip
+
+How many elements in $\mathbf{D}$?
+
+\pause
+
+\[
+\mathbf{D}=\{(D_i=0,D_j=0),(D_i=1,D_j=0),(D_i=0,D_j=1),(D_i=1,D_j=1)\}
+\]
+
+\pause
+
+How many potential outcomes for unit $i$? 
+
+\pause
+
+\begin{small}
+\[
+Y_{1i}(\mathbf{D}) = \left\{
+ \begin{array}{l}
+  \textcolor{blue}{Y_{1i}(1,1)} \\
+  \textcolor{cyan}{Y_{1i}(1,0)}
+ \end{array}
+ \right.\,\,
+Y_{0i}(\mathbf{D}) = \left\{
+ \begin{array}{l}
+  \textcolor{red}{Y_{0i}(0,1)} \\
+  \textcolor{orange}{Y_{0i}(0,0)}
+ \end{array}
+ \right.
+\]
+\end{small}
+
+\end{frame}
+
+\begin{frame}{Potential Outcomes with Interference}
+\small
+How many causal effects for unit $i$?
+
+\pause
+
+\begin{small}
+\[
+\tau_i(\mathbf{D}) = \left\{
+ \begin{array}{l}
+  \textcolor{blue}{Y_{1i}(1,1)} - \textcolor{orange}{Y_{0i}(0,0)} \\
+ \textcolor{blue}{ Y_{1i}(1,1)} - \textcolor{red}{Y_{0i}(0,1)} \\
+  \textcolor{cyan}{Y_{1i}(1,0)} - \textcolor{orange}{Y_{0i}(0,0)} \\
+\textcolor{cyan}{  Y_{1i}(1,0)} - \textcolor{red}{Y_{0i}(0,1)} \\
+ \textcolor{blue}{ Y_{1i}(1,1)} - \textcolor{cyan}{Y_{1i}(1,0)} \\
+ \textcolor{red}{ Y_{0i}(0,1)}  - \textcolor{orange}{Y_{0i}(0,0)} \\
+ \end{array}
+ \right.
+\]
+\end{small}\medskip
+
+\pause
+
+How many potential outcomes are observed for unit $i$?\\\medskip \pause Since we only observe one of the four potential outcomes, the missing data problem for causal inference is even more severe.
+
+\end{frame}
+
+\begin{frame}{Potential Outcomes with Interference}
+\small
+The No Interference assumption states that unit $i$'s potential outcomes
+depend on $D_i$, not $\mathbf{D}$:\medskip
+
+$\textcolor{blue}{Y_{1i}(1,1)}=\textcolor{cyan}{Y_{1i}(1,0)}$ and
+$\textcolor{red}{Y_{0i}(0,1)}=\textcolor{orange}{Y_{0i}(0,0)}$\medskip
+
+This assumption furthermore allows us to define the effect for unit $i$
+as $\tau_i = Y_{1i} - Y_{0i}$.\medskip
+
+%\pause
+
+%More generally, if $N_T$ units receive treatment, then there are
+%${N \choose N_T}$ possible treatment allocations. Thus, each unit will
+%have ${N \choose N_T}$ potential outcomes.\medskip
+
+\pause
+
+No interference is an example of an \textbf{exclusion restriction}. We
+rely on outside information to rule out the possibility of certain
+causal effects (e.g. you taking the treatment has no effect on my
+potential outcomes).\medskip
+
+Note that traditional models like regression also involve an implicit SUTVA assumption ($Y_i$ depends on $X_i$)
+
+\end{frame}
+
+\begin{frame}{Potential Outcomes with Interference}
+\small
+Some Examples of Interference:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item  Contagion
+\item  Displacement
+\item  Communication
+%\item   Social comparison
+\item   Deterrence
+%\item  Persistence and memory
+\end{itemize}
+
+Causal inference in the presence of interference between subjects is an
+area of active research. Specially tailored experimental designs have
+been developed to study these interactions, e.g.~Miguel and Kremer
+(2004) and Sinclair, McConnell, and Green (2012).
+
+\end{frame}
+
+\begin{frame}{Back to the Neyman Urn Model}
+
+\centering
+  \includegraphics[width=.9\linewidth]{images/potential_outcomes_1.pdf}
+
+\end{frame}
+
+\begin{frame}{Estimands}
+\small
+Because $\tau_i$ are unobservable, we shift what we are interested in to:
+
+\begin{definition}[Average Treatment Effect (ATE)]
+
+   
+    {\centering
+ $\tau_{ATE} =$  Average of all treatment potential outcomes $-$\\ Average of all control potential outcomes
+    
+    or  
+    $$\tau_{ATE} = \frac{\sum_i^N Y_{1i}}{N} - \frac{\sum_i^N Y_{0i}}{N} $$
+
+    or
+    $$ \tau_{ATE} = E[Y_{1i} - Y_{0i}]$$
+    or
+    $$ \tau_{ATE} = E[\tau_i]$$
+    }
+\end{definition}
+
+\end{frame}
+
+\begin{frame}{Other Estimands}
+\small
+\begin{definition}[Average treatment effect on the treated (ATT)]
+
+$$ \tau_{ATT} = E[Y_{1i} - Y_{0i} | D_i = 1]$$
+
+\end{definition}
+
+\pause
+
+\begin{definition}[Average treatment effect on the controls (ATC)]
+
+$$ \tau_{ATC} = E[Y_{1i} - Y_{0i} | D_i = 0]$$
+
+\end{definition}
+
+\pause
+
+\begin{definition}[Average treatment effects for subgroups]
+    {\centering
+    $$ \tau_{ATE(X)} = E[Y_{1i} - Y_{0i} | X_i = x]$$
+    or 
+        $$ \tau_{ATT(X)} = E[Y_{1i} - Y_{0i} | D_i = 1, X_i = x]$$
+}
+\end{definition}
+
+\end{frame}
+
+\begin{frame}{Average Treatment Effect}
+
+Imagine a study population with 4 units:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c  c c c c }
+      $i$ & $D_i$ & $Y_{1i}$ & $Y_{0i}$ & $\tau_i$ \\ \hline
+      1  & 1 & 10  & 4 & 6 \\
+      2  & 1 & 1  & 2 & -1 \\
+      3 & 0 & 3 & 3 & 0 \\
+      4 & 0 & 5 & 2 & 3 \\
+    \end{tabular}
+    \end{table}
+
+What is the ATE?\medskip
+
+\pause
+
+$E[Y_{1i} - Y_{0i}] = 1/4 \times (6 + -1 + 0 + 3) = 2$\medskip
+
+\pause
+
+Note: Average effect is positive, but $\tau_i$ are negative for some
+units!
+
+\end{frame}
+
+\begin{frame}{Average Treatment Effect on the Treated}
+
+Imagine a study population with 4 units:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c  c c c c }
+      $i$ & $D_i$ & $Y_{1i}$ & $Y_{0i}$ & $\tau_i$ \\ \hline
+      1  & 1 & 10  & 4 & 6 \\
+      2  & 1 & 1  & 2 & -1 \\
+      3 & 0 & 3 & 3 & 0 \\
+      4 & 0 & 5 & 2 & 3 \\
+    \end{tabular}
+    \end{table}
+    
+    \medskip
+
+What is the ATT and ATC?\medskip
+
+\pause
+
+$E[Y_{1i} - Y_{0i} | D_i = 1] = 1/2 \times (6 + -1) = 2.5$\\\medskip
+$E[Y_{1i} - Y_{0i} | D_i  = 0] = 1/2 \times (0 + 3) = 1.5$
+
+\end{frame}
+
+%\begin{frame}{Naive Comparison: Difference in Means}
+%\small
+%Comparisons between \emph{observed} outcomes of treated and control
+%units can often be misleading.
+%
+%\begin{equation}
+%\begin{split}
+%E[Y|D=1]-E[Y_i|D_i=0]=E[Y_{1i} | D_i=1]-E[Y_{0i} | D_i=0]\\
+%                 =\underbrace{E[Y_{1i} - Y_{0i} | D_i=1]}_{\mbox{ATT}}
+%                 +\underbrace{\{ E[Y_{i0} | D_i=1]- E[Y_{0i} | D_i=0]\}}_{\mbox{BIAS}}\nonumber
+%\end{split}
+%\end{equation}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Bias term unlikely to be 0 in most applications.
+%\item
+%  Selection into treatment is often associated with the potential
+%  outcomes
+%\end{itemize}
+%
+%\end{frame}
+
+\begin{frame}{Naive Comparison: Difference in Means}
+\small
+Comparisons between \emph{observed} outcomes of treated and control
+units can often be misleading.
+
+\begin{scriptsize}
+\begin{align}
+\begin{split}
+E[Y_i|D=1]-E[Y_i|D_i=0] \\
+&=E[Y_{1i} | D_i=1]-E[Y_{0i} | D_i=0]\\
+                 &=\underbrace{E[Y_{1i} - Y_{0i} | D_i=1]}_{\mbox{ATT}}
+                 +\underbrace{\{ E[Y_{i0} | D_i=1]- E[Y_{0i} | D_i=0]\}}_{\mbox{BIAS}}\nonumber
+\end{split}
+\end{align}
+\end{scriptsize}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Bias term unlikely to be 0 in most applications.
+\item
+  Selection into treatment is often associated with the potential
+  outcomes.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Selection Bias}
+\small
+\begin{scriptsize}
+\begin{align}
+\begin{split}
+E[Y_i|D_i=1]-E[Y_i|D_i=0] \\
+&=E[Y_{1i} | D_i=1]-E[Y_{0i} | D_i=0]\\
+                 &=\underbrace{E[Y_{1i} - Y_{0i} | D_i=1]}_{\mbox{ATT}}
+                 +\underbrace{\{ E[Y_{i0} | D_i=1]- E[Y_{0i} | D_i=0]\}}_{\mbox{BIAS}}\nonumber
+\end{split}
+\end{align}
+\end{scriptsize}
+
+Example: Church Attendance and Political Participation
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Churchgoers are likely to differ from non-churchgoers on a range of
+  background characteristics (e.g.~civic duty).\medskip
+\item
+  Given these differences, turnout for churchgoers would be higher than
+  for non-churchgoers even if churchgoers never attended church or
+  church had zero mobilizing effect
+  ($E[Y_0 | D=1]-E[Y_0 | D=0]>0$).
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Selection Bias}
+
+\small
+\begin{scriptsize}
+\begin{align}
+\begin{split}
+E[Y_i|D_i=1]-E[Y_i|D_i=0] \\
+&=E[Y_{1i} | D_i=1]-E[Y_{0i} | D_i=0]\\
+                 &=\underbrace{E[Y_{1i} - Y_{0i} | D_i=1]}_{\mbox{ATT}}
+                 +\underbrace{\{ E[Y_{i0} | D_i=1]- E[Y_{0i} | D_i=0]\}}_{\mbox{BIAS}}\nonumber
+\end{split}
+\end{align}
+\end{scriptsize}
+
+Example: Gender Quotas and Redistribution Towards Women
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Countries with gender quotas are likely countries where women are
+  politically mobilized.\medskip
+\item
+  Given this difference, policies targeted towards women are more common in
+  quota countries even if these countries had not adopted quotas
+  ($E[Y_0 | D=1]-E[Y_0 | D=0]>0$).
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Regression to Estimate the Average Treatment Effect}
+\small
+
+What happens when you run a regression of the observed outcome on the treatment indicator to estimate the ATE?\\\bigskip
+
+The ATE can be expressed as a regression equation:
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  Y_i &=& D_i\, Y_{1i} + (1-D_i)\, Y_{0i} \\
+   &=& Y_{0i} + (Y_{1i}- Y_{0i})\,D_i \\
+   &=& \underbrace{\bar Y_0}_{\alpha} + \underbrace{(\bar Y_1 - \bar Y_0)}_{\tau_{Reg}} D_i + \underbrace{\{(Y_{i0} - \bar Y_0) + D_i \cdot [(Y_{i1} - \bar Y_1) - (Y_{i0} - \bar Y_0)] \}}_{\epsilon} \\ 
+%   &=&\E[Y_0] + (E[Y_1]-\E[Y_0])\,D_i + u_i \\
+%   &=& \beta + \alpha_{ATE} D_i + u_i
+   &=& \alpha + \tau_{Reg} D_i + \epsilon_i
+ \end{eqnarray*}
+ 
+%where the disturbance term is $u_i\equiv Y_{0i}-\E[Y_0] +[(Y_{1i}-\E[Y_1])-(Y_{0i}-\E[Y_0])]D_i$\\
+\begin{itemize}
+%\item  $D_i$ is random in this interpretation, as opposed to classical regression.
+\item   $\tau_{Reg}$ could be biased and inconsistent for $\tau_{ATE}$ in two ways: \pause
+  \begin{itemize}
+  \item Baseline difference in potential outcomes under control that is correlated with $D_i$. 
+  \item Individual treatment effects $\tau_i$ are correlated with $D_i$ 
+  \end{itemize}\pause
+\item
+  Effect heterogeneity implies ``heteroskedasticity'', i.e. error variance differs by values of $D_i$.
+  \begin{itemize}
+  \item  Neyman model imples ``robust'' standard errors. 
+  \end{itemize}
+  
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{The Assignment Mechanism}
+\small
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Since missing potential outcomes are unobservable we must make
+  assumptions to fill them in, i.e. \textbf{estimate} missing potential
+  outcomes.
+\item
+  In the causal inference literature, we typically make assumptions
+  about the \textbf{assignment mechanism} to do so.
+\end{itemize}
+
+\pause 
+
+\begin{definition}[Assignment Mechanism]
+Assignment mechanism is the procedure that determines which units
+are selected for treatment. Examples include:
+ \begin{itemize}
+\item random assignment
+\item selection on observables
+\item selection on unobservables
+\end{itemize}
+\end{definition}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Most statistical models of causal inference attain identification of
+  treatment effects by restricting the assignment mechanism in some way.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Assignment Mechanism}
+
+Imagine a study population with 4 units:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c c c c c c }
+      $i$ &$\Pr(D_i = 1)$ & $D_i$ & $Y_{1i}$ & $Y_{0i}$ & $\tau_i$ \\ \hline
+      1  &\color{red}{?} &1 & 10  & 4 & 6 \\
+      2  &\color{red}{?} &1 & 1  & 2 & -1 \\
+      3 &\color{red}{?} &0 & 3 & 3 & 0 \\
+      4 &\color{red}{?} &0 & 5 & 2 & 3 \\
+    \end{tabular}
+    \end{table}
+
+\end{frame}
+
+
+\begin{frame}
+
+\centering
+\fbox{No causation without manipulation?}\bigskip\bigskip\bigskip
+
+\pause
+
+Always ask:\\\bigskip
+What is the \alert{ideal experiment} you would run if you had infinite
+resources and power?
+
+\end{frame}
+
+\begin{frame}{Causal Inference Workflow}
+
+\centering
+  \includegraphics[width=.9\linewidth]{images/ciworkflow.pdf}
+
+\end{frame}
+
+
+\begin{frame}{Summing Up: Neyman-Rubin causal model}
+\small
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Useful for studying the ``effects of causes,'' less so for the
+  ``causes of effects.''\medskip
+\item
+  No assumption of homogeneity, allows for causal effects to vary unit
+  by unit.\medskip
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    No single ``causal effect,'' thus the need to be precise about the
+    target estimand.
+  \end{itemize}\medskip
+\item
+  Distinguishes between \emph{observed} outcomes and \emph{potential}
+  outcomes.\medskip
+\item
+  Causal inference is a missing data problem: we typically make
+  assumptions about the assignment mechanism to go from descriptive
+  inference to causal inference.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Alternative Causal Models}
+\small
+The Neyman-Rubin causal model is popular in the social and health sciences, but
+alternatives exist:
+
+\includegraphics[width=.7\linewidth]{images/dag.png}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Structural Equation Modeling:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Write down causal model using Directed Acyclic Graphs (DAG)
+  \item
+    Causal effects are defined by interventions that set variables to
+    specified values in the causal model.
+  \item
+    Set of axioms (``Do Calculus'') that establish identifiablity of
+    causal parameters given structure of the causal graph.\\
+  \item
+    Can be re-expressed in potential outcome notation (though sometimes
+    difficult!)
+  \end{itemize}
+\item
+  Causality without Counterfactuals (Dawid 2000)
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}

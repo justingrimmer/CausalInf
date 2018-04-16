@@ -1,0 +1,3032 @@
+\documentclass{beamer}
+
+%\usepackage[table]{xcolor}
+\mode<presentation> {
+  \usetheme{Boadilla}
+%  \usetheme{Pittsburgh}
+%\usefonttheme[2]{sans}
+\renewcommand{\familydefault}{cmss}
+%\usepackage{lmodern}
+%\usepackage[T1]{fontenc}
+%\usepackage{palatino}
+%\usepackage{cmbright}
+  \setbeamercovered{transparent}
+\useinnertheme{rectangles}
+}
+%\usepackage{normalem}{ulem}
+%\usepackage{colortbl, textcomp}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg= black}
+\definecolor{trial}{cmyk}{1,0,0, 0}
+\definecolor{trial2}{cmyk}{0.00,0,1, 0}
+\definecolor{darkgreen}{rgb}{0,.4, 0.1}
+\usepackage{ifxetex,ifluatex}
+
+\usepackage{array}
+\beamertemplatesolidbackgroundcolor{white}  \setbeamercolor{alerted
+text}{fg=red}
+\newtheorem{assumption}{Assumption}
+
+\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}
+
+%\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{colortbl}
+\usepackage{fancyvrb}
+%\usepackage[usenames, dvipsnames]{color}
+%\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}c
+%\newcolumntype{Y}{\columncolor[cmyk]{0, 0, 1, 0}\raggedright}
+%\newcolumntype{C}{\columncolor[cmyk]{1, 0, 0, 0}\raggedright}
+%\newcolumntype{G}{\columncolor[rgb]{0, 1, 0}\raggedright}
+%\newcolumntype{R}{\columncolor[rgb]{1, 0, 0}\raggedright}
+
+%\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{Block}
+%$A = B$.
+%\end{beamerboxesrounded}}
+\renewcommand{\familydefault}{cmss}
+%\usepackage[all]{xy}
+
+\usepackage{tikz}
+\usepackage{lipsum}
+
+
+ \newenvironment{changemargin}[3]{%
+ \begin{list}{}{%
+ \setlength{\topsep}{0pt}%
+ \setlength{\leftmargin}{#1}%
+ \setlength{\rightmargin}{#2}%
+ \setlength{\topmargin}{#3}%
+ \setlength{\listparindent}{\parindent}%
+ \setlength{\itemindent}{\parindent}%
+ \setlength{\parsep}{\parskip}%
+ }%
+\item[]}{\end{list}}
+\usetikzlibrary{arrows}
+%\usepackage{palatino}
+%\usepackage{eulervm}
+\usecolortheme{lily}
+
+\newtheorem{com}{Comment}
+\newtheorem{lem} {Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+ \numberwithin{equation}{section}
+\newtheorem{iass}{Identification Assumption}
+\newtheorem{ires}{Identfication Result}
+\newtheorem{estm}{Estimand}
+\newtheorem{esti}{Estimator}
+\newcommand{\indep}{{\bot\negthickspace\negthickspace\bot}}
+
+%Box Types
+
+
+\title[Causal Inference] % (optional, nur bei langen Titeln nötig)
+{Causal Inference}
+
+\author{Justin Grimmer}
+\institute[University of Chicago]{Associate Professor\\Department of Political Science \\  University of Chicago}
+\vspace{0.3in}
+
+\date{April 9th, 2018}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Concepts for Inference}
+
+We refer to the (unobserved) population characteristic that we aim to
+learn about as the \textbf{estimand} $T$
+
+\pause
+
+To learn about estimands we use functions of the sample data
+$T_N(Y_1,...,Y_N)$ called \textbf{estimators}
+
+\pause
+
+The values taken by the estimators for particular samples are called
+\textbf{estimates}.
+
+To reduce notation, we will use the same symbols for estimators and
+estimates, but they are different concepts.
+
+\end{frame}
+
+\begin{frame}{Analogy Principle}
+
+The \textbf{analogy principle} tells us to estimate a characteristic in
+the population using the same characteristic in the sample.
+
+\pause
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  For example, following the analogy principle, we estimate the
+  population mean $\mu_Y=E[Y]$ using the sample mean $\bar{Y}$:
+  \[ \bar{Y}=\frac{1}{N}\sum_{i=1}^N Y_i. \]
+\end{itemize}
+
+\pause
+
+\begin{itemize}
+\item
+  To estimate the population variance
+  $\sigma^2_Y=V[Y]=E[(Y - E[Y])^2]$, use the sample variance:
+  \[ \widehat{\sigma}^2_Y =\frac{1}{N}\sum_{i=1}^N (Y_i-\bar{Y})^2. \]
+\item
+  Estimators are random variables and as the sample size increases (and
+  the sample ``approaches'' the population) we expect sample
+  characteristic to converge to the population characteristics.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Properties of Estimators}
+
+In order to assess the properties of an estimator, we assume it has a
+distribution under ``repeated sampling'', and we call this distribution
+a \textbf{sampling distribution}.
+
+\bigskip
+
+Criteria:
+
+\pause
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{Unbiasedness}: Is the sampling distribution of our estimator
+  centered over the true parameter value? $E[\hat{T_N}]=T$\\ \pause
+\item
+  \textbf{Efficiency}: Is the variance of the sampling distribution of
+  our estimator reasonably small? $V[\hat{T_N}_1]\leq V[\hat{T_N}_2]$
+  \pause
+\item
+  \textbf{Consistency}: As our sample size grows to infinity, does the
+  sampling distribution of our estimator ``converge'' to the true
+  parameter value.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Consistency is often more important than unbiasedness in applied
+    settings, especially when a consistent but biased estimator is more
+    efficient.
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Independence}
+
+\begin{Definition}[Independence of Events]
+\begin{small}
+Two events $A$ and $B$ are independent iff \pause $$\Pr(A \cap B)=\Pr(A)\Pr(B) \mbox{ and thus } \Pr(A\mid B)=\Pr(A)$$
+\end{small}
+\end{Definition}
+
+\begin{Definition}[Independence of Random Variables]
+\begin{small}
+Two random variables $Y$ and $X$ are independent iff \pause  $$f_{X,Y}(x,y) = f_X(x)f_Y(y)$$ for all pairs $(x,y)$. Independence implies $$f_{Y|X}(y|x)=f_{Y}(y)$$ and thus$$
+E[Y|X=x]=\pause E[Y]
+$$ we usually write $Y \indep X$
+\end{small}
+\end{Definition}
+
+\end{frame}
+
+\begin{frame}{Conditional Independence}
+
+\begin{Definition}[Conditional Independence of Random Variables]
+Random variables $Y$ and $X$ are conditionally independent given $Z$ iff \pause 
+  $$f_{XY|Z}(x, y | z) = f_{Y|Z}(y | z) \cdot f_{X|Z}(x|z)
+$$ for all triplets ($x,y,z)$.\\\medskip Conditional independence implies that $$
+\Pr(Y = y | X = x,Z = z) = \Pr(Y = y | Z = z)
+$$
+and thus$$
+E[Y| X = x, Z = z] = \pause  E[Y| Z = z]
+$$
+we usually write $Y \indep X | Z$
+\end{Definition}
+
+\end{frame}
+
+
+
+\begin{frame}{Selection Bias}
+
+Recall the selection problem when comparing the mean outcomes for the
+treated and the untreated:
+
+\begin{problem}
+\begin{equation}
+\begin{split}
+\underbrace{E[Y|D=1]-E[Y|D=0]}_{\mbox{Difference in Means}}=E[Y_1 | D=1]-E[Y_0 | D=0]\\
+                 =\underbrace{E[Y_1 - Y_0 | D=1]}_{\mbox{ATT}}
+                 +\underbrace{\{E[Y_0 | D=1]-E[Y_0 | D=0]\}}_{\mbox{BIAS}}\nonumber
+\end{split}
+\end{equation}
+\end{problem}
+
+How can we eliminate the bias term? \pause
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  As a result of randomization, the selection bias term will be zero
+\item
+  The treatment and control group will tend to be similar along all
+  characteristics (identical in expectation), including the potential
+  outcomes under the control condition
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Identification Under Random Assignment}
+
+\begin{iass}\footnotesize
+$(Y_1,Y_0) \indep D$ (random assignment)
+\end{iass}
+
+\pause
+
+\begin{ires}\small
+Problem: $\tau_{ATE}=E[Y_1-Y_0]$ is unobserved. But given random assignment
+\begin{eqnarray*}
+E[Y|D = 1] &=& E[D \cdot Y_1 + (1-D)\cdot Y_0|D=1]\\
+&=& E[Y_1 |D=1]\\ \pause
+&=& E[Y_1]
+\end{eqnarray*}
+%Similarly,
+\begin{eqnarray*}
+E[Y|D = 0] &=& \pause E[D \cdot Y_1 + (1-D)\cdot Y_0|D=0]\\
+&=& E[Y_0 |D=0]\\
+&=& E[Y_0]
+\end{eqnarray*}
+%So it follows that
+\[
+\tau_{ATE}=E[Y_1-Y_0]=E[Y_1] - E[Y_0]=\underbrace{E[Y|D=1]-E[Y|D=0]}_{\mbox{Difference in Means}}
+\]
+\end{ires}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}
+  \frametitle{Average Treatment Effect (ATE)}
+  \small
+Imagine a population with 4 units:\\
+\begin{overprint}
+\onslide<1>
+\begin{center}
+\begin{tabular}{ccccc}
+ %     Unit & Potential Outcome   & Potential Outcome & Observed Outcome & Treatment  & Treatment Effect
+%      \\
+%      & under Treatment &  under Control & & Indicator & for Unit i \\
+\multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &         3 &          1  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1 &          1   \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0 &          0  \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1 &          0  \\
+\end{tabular}
+\end{center}\bigskip
+What is $\tau_{ATE}=E[Y_1] -E[Y_0]$?
+\onslide<2>
+\begin{center}
+\begin{tabular}{ccccc}
+ %     Unit & Potential Outcome   & Potential Outcome & Observed Outcome & Treatment  & Treatment Effect
+%      \\
+%      & under Treatment &  under Control & & Indicator & for Unit i \\
+\multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}  \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &          3 &          1  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1 &          1   \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0 &          0 \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1 &          0 \\
+\hline
+$E[Y_1]$& \textcolor{red}{2} & & &    \\
+$E[Y_0]$&  & \textcolor{red}{.5} &  &    \\
+\end{tabular}
+\end{center}
+\bigskip
+$\tau_{ATE}=E[Y_1] -E[Y_0]=2-.5=1.5$
+\onslide<3>
+\begin{center}
+\begin{tabular}{ccccc}
+ \multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}  \\
+\hline
+\rowcolor{gray!10}        1 &          3 &         \textcolor{red}{?} &          3 &          1  \\
+\rowcolor{gray!10}         2 &         1 &          \textcolor{red}{?} &          1 &          1   \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{?} &         0 &          0 &          0  \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{?} &         1 &          1 &          0  \\
+\hline
+$E[Y_1]$& \textcolor{red}{?} & & &    \\
+$E[Y_0]$&  & \textcolor{red}{?} &  &    \\
+\hline
+\end{tabular}
+\end{center}
+\bigskip
+What is $\tau_{ATE}=E[Y_1] -E[Y_0]$?
+\onslide<4>
+\begin{center}
+\begin{tabular}{cccccc}
+ \multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}   &   \multicolumn{1}{p{2cm}}{\center $P(D_{i}=1)$}   \\
+\hline
+\rowcolor{gray!10}        1 &          3 &         \textcolor{red}{?} &          3 &          1  & \textcolor{red}{?} \\
+\rowcolor{gray!10}         2 &         1 &          \textcolor{red}{?} &          1 &          1 & \textcolor{red}{?}  \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{?} &         0 &          0 &          0  & \textcolor{red}{?} \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{?} &         1 &          1 &          0  & \textcolor{red}{?} \\
+\hline
+$E[Y_1]$& \textcolor{red}{?} & & &  &  \\
+$E[Y_0]$&  & \textcolor{red}{?} &  &  &  \\
+\hline
+\end{tabular}
+\end{center}
+\bigskip
+What is $\tau_{ATE}=E[Y_1] -E[Y_0]$? In an experiment, the researcher controls the probability of assignment to treatment for all units $P(D_i=1)$ and by imposing equal probabilities we ensure that treatment assignment is independent of the potential outcomes, i.e. $(Y_1,Y_0) \indep D$. 
+\onslide<5>
+\begin{center}
+\begin{tabular}{cccccc}
+ \multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}   &   \multicolumn{1}{p{2cm}}{\center $P(D_{i}=1)$}   \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &          3 &          1 & 2/4  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1 &          1  & 2/4 \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0 &          0  & 2/4 \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1 &          0 & 2/4  \\
+\hline
+$E[Y_1]$& 2 & & &    \\
+$E[Y_0]$&  & .5 &  &    \\
+\hline
+\end{tabular}
+\end{center}
+What is $\tau_{ATE}=E[Y_1] -E[Y_0]$? Given that $D_i$ is randomly assigned with probability 1/2, we have $E[Y|D=1]=E[Y_1|D=1]=E[Y_1]$.\\
+
+All possible randomizations with two treated units:
+\begin{center}
+\begin{tabular}{lcccccc}
+    Treated Units: & 1 \& 2 & 1 \& 3 & 1 \& 4 & 2 \& 3 & 2 \& 4 & 3 \& 4 \\
+    \hline
+   Average $Y|D=1$: & 2 & 2.5 & 2.5 & 1.5 & 1.5 & 2 \\
+\end{tabular}
+\end{center}
+So $E[Y|D=1]=E[Y_1]=2$
+%Since the treated units are randomly sampled from the population, their average observed outcome provides an unbiased estimate of the average potential outcome under the treatment condition in the population.
+\onslide<6>
+\begin{center}
+\begin{tabular}{cccccc}
+ \multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}   &   \multicolumn{1}{p{2cm}}{\center $P(D_{i}=1)$}   \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &          3 &          1 & 2/4  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1 &          1  & 2/4 \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0 &          0  & 2/4 \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1 &          0 & 2/4  \\
+\hline
+$E[Y_1]$& 2 & & &    \\
+$E[Y_0]$&  & .5 &  &    \\
+\hline
+\end{tabular}
+\end{center}
+\bigskip
+By the same logic, we have: $E[Y|D=0]=E[Y_0|D=0]=E[Y_0]=.5$.\bigskip\\
+Therefore the average treatment effect is \alert{identified}:
+\[
+\tau_{ATE}=E[Y_1] -E[Y_0]=\underbrace{E[Y|D=1]-E[Y|D=0]}_{\mbox{Difference in Means}}
+\]
+\onslide<7>
+\begin{center}
+\begin{tabular}{cccccc}
+ \multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}   &   \multicolumn{1}{p{2cm}}{\center $P(D_{i}=1)$}   \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &          3 &          1 & 2/4  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1 &          1  & 2/4 \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0 &          0  & 2/4 \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1 &          0 & 2/4  \\
+\hline
+$E[Y_1]$& 2 & & &    \\
+$E[Y_0]$&  & .5 &  &    \\
+\hline
+\end{tabular}
+\end{center}
+\bigskip
+Also since $E[Y|D=0]=E[Y_0|D=0]=E[Y_0|D=1]=E[Y_0]$\\\medskip we have that 
+\begin{eqnarray*}
+\tau_{ATT} &=&E[Y_1 - Y_0| D=1]=E[Y_1| D=1]-E[Y_0| D=0]\\
+&=&E[Y_1]-E[Y_0]=E[Y_1-Y_0]\\
+ &=& \tau_{ATE} \\
+\end{eqnarray*}
+\end{overprint}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Identification under Random Assignment}
+
+\begin{iass}\scriptsize
+$(Y_1,Y_0) \indep D$ (random assignment)
+\end{iass}
+\vspace{-.1in}
+\begin{ires}\scriptsize
+We have that\[
+E[Y_0|D=0]=E[Y_0]=E[Y_0|D=1]\]
+  and therefore
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  \underbrace{E[Y|D=1]-E[Y|D=0]}_{\mbox{Difference in Means}} &=& \underbrace{E[Y_1 - Y_0 | D=1]}_{\mbox{ATT}}+\underbrace{\{E[Y_0 | D=1]-E[Y_0 | D=0]\}}_{\mbox{BIAS}} \\
+   &=&  \underbrace{E[Y_1 - Y_0 | D=1]}_{\mbox{ATT}}
+\end{eqnarray*}
+As a result,
+\begin{equation}
+\begin{split}
+\underbrace{E[Y|D=1]-E[Y|D=0]}_{\mbox{Difference in Means}}=\tau_{ATE} = \tau_{ATT}\nonumber
+\end{split}
+\end{equation}
+%So $E[Y | D=1]-E[Y | D=0] = \tau_{ATE} = \tau_{ATET}$
+\end{ires}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Identification in Randomized Experiments}
+  \footnotesize
+\begin{iass}
+Given random assignment $(Y_1,Y_0) \indep D$
+\end{iass}
+\vspace{-.1in}
+\begin{ires}\small
+Let $F_{Y_d}(y)$ be the cumulative distribution function (CDF) of $Y_d$, then
+\begin{eqnarray*}
+F_{Y_0}(y) &=& \Pr(Y_0\leq y) = \Pr(Y_0\leq y | D=0)\\
+&=&\Pr(Y\leq y | D=0).
+\end{eqnarray*}
+Similarly,
+\[
+F_{Y_1}(y)=\Pr(Y\leq y | D=1).
+\]
+So the effect of the treatment at any quantile $\theta\in[0,1]$  is identified:\[
+\alpha_{\theta}=Q_\theta(Y_1)-Q_\theta(Y_0)=Q_\theta(Y|D=1)-Q_\theta(Y|D=0)
+\] where $F_{Y_d} (Q_\theta(Y_d)) = \theta$.
+\end{ires}
+%\begin{itemize}
+%\item Randomization identifies the whole marginal distributions of
+%$Y_0$ and $Y_1$, so $\alpha_{ATE(x)}=E[Y_1 - Y_0|X=x]$ is identified.
+%%\item Does not identify the quantiles of the effect: $Q_\theta(Y_1 - Y_0)$ (the difference of quantiles is not the quantile
+%of the difference)
+%\end{itemize}
+\end{frame}
+
+
+\section{Estimation Under Random Assignment}
+
+
+\subsection{Average Treatment Effect}
+
+\begin{frame}{Estimation Under Random Assignment}
+
+Consider a randomized trial with $N$ individuals.
+
+\begin{estm}\small
+$\tau_{ATE}=E[Y_1 -Y_0]=E[Y|D=1]-E[Y |D=0]$
+\end{estm}
+
+\begin{esti}\small
+\pause
+By the analogy principle we use\[ \widehat{\tau} = \bar{Y}_1 - \bar{Y}_0 
+\]
+\[
+\bar{Y}_1 = \frac{\sum Y_i\cdot D_i}{\sum D_i}=\frac{1}{N_1}\sum_{D_i=1} Y_i\,;
+\]
+\[
+\bar{Y}_0 = \frac{\sum Y_i\cdot (1-D_i)}{\sum (1-D_i)}=\frac{1}{N_0}\sum_{D_i=0} Y_i
+\]
+with $N_1 = \sum_i D_i$ and $N_0=N-N_1$.\\\medskip
+%By the Law of Large Numbers
+%we know that $\widehat{\alpha}\stackrel{p}{\rightarrow} \alpha_0$.
+
+%By the Law of Large Numbers
+%we know that $\widehat{\alpha}\stackrel{p}{\rightarrow} \alpha_0$.
+Under random assignment, $\widehat{\tau}$ is an unbiased and consistent estimator of $\tau_{ATE}$ ($E[\widehat{\tau}]=\tau_{ATE}$ and $\widehat{\tau}_N\stackrel{p}{\rightarrow}\tau_{ATE}$.)
+
+
+\end{esti}
+
+\end{frame}
+
+\begin{frame}{Unbiasedness Under Random Assignment}
+
+One way of showing that $\widehat{\tau}$ is unbiased is to exploit the
+fact that under independence of potential outcomes and treatment status,
+$E[D] = \frac{N_1}{N}$ and $E[1 - D] = \frac{N_0}{N}$
+
+\pause
+
+Rewrite the estimators as follows:
+
+\[
+\widehat{\tau} =  \frac{1}{N} \sum_{i=1}^N \left (\frac{D \cdot Y_1}{N_1 / N} - \frac{(1 - D) \cdot Y_0}{N_0 / N} \right )
+\]
+
+Take expectations with respect to the sampling distribution given by the
+design. Under the Neyman model, $Y_1$ and $Y_0$ are fixed
+and only $D_i$ is random.
+
+\pause
+
+\[
+E[\widehat{\tau}] = \frac{1}{N} \sum_{i=1}^N \left (\frac{E[D] \cdot Y_1}{N_1 / N} - \frac{E[(1 - D)] \cdot Y_0}{N_0 / N} \right ) = \frac{1}{N} \sum_{i=1}^N (Y_1 - Y_0) = \tau
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/y_0_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/y_1_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/treatment_effects_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/estimated_treatment_effect1_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/estimated_treatment_effect2_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/estimated_treatment_effect3_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/estimated_treatment_effect4_dotplot.pdf}
+\end{frame}
+
+\begin{frame}
+\centering
+\includegraphics[width = .95 \linewidth]{images/treatment_effect_distribution_dotplot.pdf}
+\end{frame}
+
+\subsection{Standard Error for ATE}
+
+\begin{frame}{What is the Estimand?}
+
+\begin{itemize}
+\item  So far we have emphasized effect estimation, but what about
+  \emph{uncertainty}?\bigskip
+\item In the design based literature, variability in our estimates can arise
+  from two sources:\bigskip
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Sampling variation induced by the procedure that selected the units
+    into our sample. \bigskip 
+  \item
+    Variation induced by the particular realization of the treatment
+    variable.\bigskip
+  \end{enumerate}
+\item
+  This distinction is important, but often ignored 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{What is the Estimand?}
+\centering
+    \includegraphics[width = .95 \linewidth]{images/sample_selection_potential_outcomes.pdf}
+\end{frame}
+
+\begin{frame}{SATE and PATE}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+ Typically we focus on estimating the average causal effect in a
+  particular sample: \textbf{S}ample \textbf{A}verage \textbf{T}reatment
+  \textbf{E}ffect (SATE)\medskip
+
+  \begin{itemize}
+   \item Uncertainty arises only from hypothetical randomizations.\medskip
+  \item  Inferences are limited to the sample in our study. 
+  \end{itemize}\bigskip
+\item Might care about the \textbf{P}opulation
+  \textbf{A}verage \textbf{T}reatment \textbf{E}ffect (PATE)\medskip
+ \begin{itemize}
+  \item Requires precise knowledge about the sampling process that selected
+    units from the population into the sample.\medskip
+\item Need to account for two sources of variation:\medskip
+  \begin{itemize}
+  \item     Variation from the sampling process\medskip
+  \item     Variation from treatment assignment. 
+  \end{itemize}
+  \end{itemize}\bigskip
+\item   Thus, in general,
+  $\text{Var}(\widehat{\textrm{PATE}}) > \text{Var}(\widehat{\textrm{SATE}})$.
+%\item  \textbf{Key Point}: different sampling processes imply different variances
+
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+\begin{frame}
+  \frametitle{Standard Error for Sample ATE}
+\small
+%Sample ATE is the ATE for the ``finite population'' of subjects in the experiment. 
+The standard error is the standard deviation of a sampling distribution: $SE_{\widehat{\theta}}\equiv\sqrt{\frac{1}{J}\sum_1^J (\widehat{\theta}_j -\overline{\widehat{\theta}})^2}$ (with $J$ possible random assignments).\vspace{-.3in}
+\begin{center}
+\begin{tabular}{cccccc}
+ \multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$}   &   \multicolumn{1}{p{2cm}}{\center $P(D_{i}=1)$}   \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &          3 &          1 & 2/4  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1 &          1  & 2/4 \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0 &          0  & 2/4 \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1 &          0 & 2/4  \\
+\hline
+\end{tabular}
+\end{center}
+ATE estimates given all possible random assignments with two treated units:\\
+\begin{center}
+\begin{tabular}{lcccccc}
+\hline
+\hline
+    Treated Units: & 1 \& 2 & 1 \& 3 & 1 \& 4 & 2 \& 3 & 2 \& 4 & 3 \& 4 \\
+   $\widehat{ATE}$: & 1.5 & 1.5 & 2  & 1  & 1.5 & 1.5 \\
+\hline \hline
+\end{tabular}
+\end{center}
+The average $\widehat{ATE}$ is $1.5$ and therefore the true standard error is
+\tiny{$SE_{\widehat{ATE}}=\sqrt{\frac{1}{6}[(1.5-1.5)^2+(1.5-1.5)^2+(2-1.5)^2+(1-1.5)^2+(1.5-1.5)^2+(1.5-1.5)^2]}\approx.28$}\\
+%Rule of thumb: approx. 95\% of estimated ATEs fall within interval $ATE \pm 2\cdot SE_{\widehat{ATE}}$
+\end{frame}
+
+\begin{frame}
+  \frametitle{Standard Error for Sample ATE}
+
+
+\scriptsize
+\begin{block}{Standard Error for Sample ATE}
+Given complete randomization of $N$ units with $N_1$ assigned to treatment and $N_0=N-N_1$ to control, the true standard error of the \emph{estimated} sample ATE is given by
+%\[
+% SE_{\widehat{ATE}}=\sqrt{\frac{1}{N-1}\left(\frac{N_1}{N-N_1}Var[Y_0]+\frac{N-N_1}{N_1}Var[Y_1]+2Cov[Y_1,Y_0]\right)}
+% \]
+ \begin{eqnarray*}
+ SE_{\widehat{ATE}}&=&\sqrt{ \left( \frac{N-N_1}{N-1}\right) \frac{Var[Y_{1i}]}{N_1}+ \left( \frac{N-N_0}{N-1}\right) \frac{Var[Y_{0i}]}{N_0} + \left(\frac{1}{N-1} \right) 2Cov[Y_{1i},Y_{0i}]} \\
+% SE_{\widehat{ATE}}&=&\sqrt{ \frac{1}{N-1} \left(\frac{N_1}{N_0}Var[Y_1]+\frac{N_0}{N_1}Var[Y_1]+2Cov[Y_1,Y_0]\right)} 
+\end{eqnarray*}
+with population variances and covariance
+\[
+Var[Y_{di}]\equiv\frac{1}{N}\sum_1^N\left(Y_{di}-\frac{\sum_1^N Y_{di}}{N}\right)^2=\sigma^2_{Y_{d}|D_i=d}
+\]
+\[
+Cov[Y_{1i},Y_{0i}]\equiv\frac{1}{N} \sum_1^N \left(Y_{1i}-\frac{\sum_1^N Y_{1i}}{N}\right) \left(Y_{0i}-\frac{\sum_1^N Y_{0i}}{N}\right)=\sigma^2_{Y_1,Y_0}
+\]
+\end{block}
+\begin{overprint}
+\onslide<2>
+Plugging in, we obtain the true standard error of the estimated sample ATE\[
+ SE_{\widehat{ATE}}=\sqrt{ \left( \frac{4-2}{4-1}\right) \frac{.25}{2}+ \left( \frac{4-2}{4-1}\right) \frac{.5}{2} + \left(\frac{1}{4-1} \right) 2 (-.25)}  \approx .28
+% \sqrt{\frac{1}{4-1}\left(\frac{2}{4-2}.25+\frac{4-2}{2}.5 +2 (-.25)\right)}\approx .28
+ \]
+\onslide<3>
+Standard error decreases if:
+\begin{itemize}
+\item $N$ grows
+\item $Var[Y_1]$, $Var[Y_0]$ decrease
+\item $Cov[Y_1,Y_0]$ decreases
+\end{itemize}
+\end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Conservative Estimator $\widehat{SE}_{\widehat{ATE}}$}
+\scriptsize
+\begin{block}{Conservative Estimator for Standard Error for Sample ATE}
+\[
+  \widehat{ SE}_{\widehat{ATE}} = \sqrt{ \frac{\widehat{Var[Y_{1i}]}}{N_1}+\frac{\widehat{Var[Y_{0i}]}}{N_0} } %= \sqrt{\frac{\widehat{\sigma}^2_{Y|D_i=1} }{N_1}+\frac{ \widehat{\sigma}^2_{Y|D_i=0}  }{N_0}}
+   \]
+with estimators of the sample variances given by\[
+\widehat{Var[Y_{1i}]}\equiv  \frac{1}{N_1-1} \sum_{i|D_i=1}^N \left(Y_{1i} -  \frac{\sum_{i|D_i=1}^N Y_{1i}}{N_1} \right)^2= \widehat{\sigma}^2_{Y|D_i=1}
+\]
+\[
+\widehat{Var[Y_{0i}]}\equiv \frac{1}{N_0-1} \sum_{i|D_i=0}^N \left(Y_{0i} -  \frac{\sum_{i|D_i=0}^N Y_{0i}}{N_0} \right)^2=  \widehat{\sigma}^2_{Y|D_i=0}
+\]
+\end{block}
+\begin{overprint}
+\onslide<2>
+What about the covariance?
+\onslide<3>
+\begin{itemize}
+\item Conservative compared to the true standard error, i.e. $SE_{\widehat{ATE}} < \widehat{ SE}_{\widehat{ATE}}$
+\item Asymptotically unbiased in two special cases:
+  \begin{itemize}
+  \item if $\tau_i$ is constant (i.e. $Cor[Y_1,Y_0]=1$) 
+  \item if we estimate standard error of population average treatment effect ($Cov[Y_1,Y_0]$ is negligible when we sample from a large population)
+  \end{itemize}
+ \item Equivalent to standard error for two sample t-test with unequal variances or ``robust'' standard error in regression of $Y$ on $D$
+\end{itemize}
+\end{overprint}
+\end{frame}
+
+
+%\begin{frame}
+%  \frametitle{Conservative Estimator $\hat{SE}_{\widehat{ATE}}$}
+%\scriptsize
+%\begin{block}{Conservative Estimator for Standard Error for Sample ATE}
+%\[
+%  \widehat{ SE}_{\widehat{ATE}} = \sqrt{\frac{N}{N-1} \left(\frac{\widehat{Var[Y_1]}}{N_1}+\frac{\widehat{Var[Y_0]}}{N_0}\right) } = \sqrt{\frac{\widehat{\sigma}^2_{Y|D_i=1} }{N_1}+\frac{ \widehat{\sigma}^2_{Y|D_i=0}  }{N_0}}
+%   \]
+%with unbiased estimators of the finite population variances\[
+%\widehat{Var[Y_1]}\equiv \frac{N-1}{N} \frac{1}{N_1-1} \sum_{i|D_i=1}^N \left(Y_{i} -  \frac{\sum_{i|D_i=1}^N Y_{i}}{N_1} \right)= \frac{N-1}{N} \,\widehat{\sigma}^2_{Y|D_i=1}
+%\]
+%\[
+%\widehat{Var[Y_0]}\equiv \frac{N-1}{N}  \frac{1}{N_0-1} \sum_{i|D_i=0}^N \left(Y_{i} -  \frac{\sum_{i|D_i=0}^N Y_{i}}{N_0} \right)= \frac{N-1}{N}\, \widehat{\sigma}^2_{Y|D_i=0}
+%\]
+%\end{block}
+%\begin{overprint}
+%\onslide<2>
+%What about the covariance?
+%\onslide<3>
+%\begin{itemize}
+%  \item Unbiased if $Cor[Y_1,Y_0]=1$  and conservative otherwise ($SE_{\widehat{ATE}} < \widehat{ SE}_{\widehat{ATE}}$)
+%  \item Unbiased for population average treatment effect
+%  \item Equivalent to standard error for two sample t-test with unequal variances or robust standard error in regression of $Y$ on $D$
+%\end{itemize}
+%\end{overprint}
+%\end{frame}
+
+
+\begin{frame}
+  \frametitle{Proof: $SE_{\widehat{ATE}}\leq \widehat{SE}_{\widehat{ATE}}$}
+\scriptsize
+Upper bound for standard error is when $Cor[Y_1,Y_0]=1$:\[
+Cor[Y_1,Y_0]=\frac{Cov[Y_1,Y_0]}{\sqrt{Var[Y_1]Var[Y_0]}} \leq 1 \Longleftrightarrow Cov[Y_1,Y_0] \leq \sqrt{Var[Y_1]Var[Y_0]}
+\]
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  SE_{\widehat{ATE}}  & = & \sqrt{ \left( \frac{N-N_1}{N-1}\right) \frac{Var[Y_{1}]}{N_1}+ \left( \frac{N-N_0}{N-1}\right) \frac{Var[Y_{0}]}{N_0} + \left(\frac{1}{N-1} \right) 2Cov[Y_{1},Y_{0}]} \\
+ & = & \sqrt{ \frac{1}{N-1} \left(\frac{N_0}{N_1}Var[Y_1]+\frac{N_1}{N_0}Var[Y_0]+2Cov[Y_1,Y_0]\right)}  \\
+                      & \leq & \sqrt{\frac{1}{N-1}\left( \frac{N_0}{N_1}Var[Y_1]+\frac{N_1}{N_0}Var[Y_0] +2\sqrt{Var[Y_1]Var[Y_0]}\right)} \\
+                      & \leq & \sqrt{\frac{1}{N-1}\left( \frac{N_0}{N_1}Var[Y_1]+\frac{N_1}{N_0}Var[Y_0]  + Var[Y_1]+Var[Y_0]\right)} \\
+\end{eqnarray*}
+Last step follows from the following inequality
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  (\sqrt{Var[Y_1]}-\sqrt{Var[Y_0]})^2 &\geq& 0 \\
+  Var[Y_1] -2\sqrt{Var[Y_1]Var[Y_0]}+Var[Y_0]  &\geq&0  \Longleftrightarrow  Var[Y_1] + Var[Y_0] \geq 2\sqrt{Var[Y_1] Var[Y_0]}
+\end{eqnarray*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proof: $SE_{\widehat{ATE}}\leq \widehat{SE}_{\widehat{ATE}}$}
+\scriptsize
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  SE_{\widehat{ATE}} & \leq &\sqrt{\frac{1}{N-1}\left( \frac{N_0}{N_1}Var[Y_1]+\frac{N_1}{N_0}Var[Y_0]  + Var[Y_1]+Var[Y_0]\right)} \\
+  & \leq & \sqrt{ \frac{N_0^2Var[Y_1]+N_1^2 Var[Y_0] + N_1 N_0 (Var[Y_1]+Var[Y_0])}{(N-1)N_1 N_0}} \\
+  & \leq & \sqrt{ \frac{(N_0^2 + N_1 N_0) Var[Y_1]+(N_1^2 + N_1 N_0) Var[Y_0] }{(N-1)N_1 N_0}} \\
+%  & \leq & \sqrt{ \frac{(N-m)^2Var[Y_1]+m^2Var[Y_0] + m(N-m)(Var[Y_1]+Var[Y_0])}{(N-1)m(N-m)}} \\
+    & \leq & \sqrt{ \frac{(N_0 + N_1) N_0 Var[Y_1]}{(N-1) N_1 N_0}+ \frac{ (N_1 + N_0) N_1  Var[Y_0]}{(N-1)N_1 N_0}}  \\
+    & \leq & \sqrt{ \frac{N \,  Var[Y_1]}{(N-1) N_1 }+ \frac{ N \, Var[Y_0]}{(N-1) N_0}}  \\
+%    & = & \sqrt{ \frac{N(N-m) Var[Y_1]}{(N-1)m(N-m)}+ \frac{m N Var[Y_0]}{(N-1)m(N-m)}}  \\
+    & \leq & \sqrt{\frac{N}{N-1} \left(\frac{Var[Y_1]}{N_1}+ \frac{ Var[Y_0]}{N_0}\right)}  \\
+%    &\leq & \sqrt{\frac{N}{N-1} \left(\frac{\widehat{Var[Y_1]}}{N_1}+ \frac{ \widehat{Var[Y_0]}}{(N_0)}\right)} 
+%    & \leq & \sqrt{ \frac{ \widehat{\sigma}^2_{Y|D_i=1}  }{N_1}+ \frac{ \widehat{\sigma}^2_{Y|D_i=0} }{(N_0)}}
+\end{eqnarray*}
+
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Proof: $SE_{\widehat{ATE}}\leq \widehat{SE}_{\widehat{ATE}}$}
+\scriptsize
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  SE_{\widehat{ATE}} & \leq & \sqrt{\frac{N}{N-1} \left(\frac{1}{N_1}Var[Y_1] + \frac{1}{N_0}Var[Y_0] \right)} 
+\end{eqnarray*}
+
+Now, we need to estimate $Var[Y_1]$ and $Var[Y_0]$. Recall that for simple random sampling without replacement, the unbiased estimator of a population variance ($\sigma^2$) is $\hat{\sigma}^2_n (\frac{n}{n-1})(\frac{N-1}{N})$, which can be rewritten as $\hat{\sigma}^2_{n-1}(\frac{N-1}{N})$. In the set-up presented here, we have defined $\widehat{Var[Y_d]}$ to correspond to $\hat{\sigma}^2_{n-1}$ (separately for $d=1,0$). Thus, inserting the unbiased estimators in for $Var[Y_1]$ and $Var[Y_0]$, we get:
+\begin{eqnarray*}
+\sqrt{\frac{N}{N-1} \left(\frac{1}{N_1}\widehat{Var[Y_1]} \left(\frac{N-1}{N} \right) + \frac{1}{N_0}\widehat{Var[Y_0]} \left(\frac{N-1}{N} \right) \right)} \\
+= \sqrt{\left(\frac{\widehat{Var[Y_1]}}{N_1}+ \frac{ \widehat{Var[Y_0]}}{N_0} \right)}
+\end{eqnarray*} 
+Thus:
+\begin{eqnarray*}
+SE_{\widehat{ATE}} & \leq  & \sqrt{\frac{\widehat{Var[Y_1]}}{N_1}+ \frac{ \widehat{Var[Y_0]}}{N_0} } =  \widehat{SE}_{\widehat{ATE}}\\
+\end{eqnarray*}
+So the estimator for the standard error is conservative.
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Standard Error for Sample ATE}
+\small
+\begin{center}
+\begin{tabular}{cccc}
+\multicolumn{1}{p{2cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&    \multicolumn{1}{p{1cm}}{\center $Y_{i}$}  \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{0} &          3   \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &          1    \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{2} &         0 &          0   \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{2} &         1 &          1  \\
+\hline
+\end{tabular}
+\end{center}\vspace{.05in}
+$\widehat{ SE}_{\widehat{ATE}}$ estimates given all possible assignments with two treated units:\\
+\begin{center}
+\begin{tabular}{lcccccc}
+\hline
+\hline
+    Treated Units: & 1 \& 2 & 1 \& 3 & 1 \& 4 & 2 \& 3 & 2 \& 4 & 3 \& 4 \\
+    \hline
+   $\widehat{ATE}$: & 1.5 & 1.5 & 2  & 1  & 1.5 & 1.5 \\
+   $\widehat{ SE}_{\widehat{ATE}}$: & 1.11 & .5 & .71  & .71  & .5 & .5 \\
+\hline \hline
+\end{tabular}
+\end{center}\vspace{.05in}
+The average $\widehat{ SE}_{\widehat{ATE}}$ is $\approx .67$ compared to the true standard error of  $SE_{\widehat{ATE}}\approx .28$
+\end{frame}
+
+
+
+
+
+
+
+
+%
+%
+%
+%
+%
+%
+%\begin{frame}{Variance Estimation}
+%
+%It can be shown that:
+%
+%\begin{small}
+%\begin{align*}
+%\V(\widehat{\alpha}) &= \frac{S^2_{Y_1}}{N_1} +   \frac{S^2_{Y_0}}{N_0} - \frac{S^2_{Y_1, Y_0}}{N}  \\ 
+%&=  \frac{1}{N_1} \cdot \frac{1}{N-1} \sum_{i=1}^N \left ( Y_{1i} - \bar{Y_1} \right )^2 + \frac{1}{N_0} \frac{1}{N-1} \cdot \sum_{i=1}^N \left ( Y_{0i} - \bar{Y_0} \right )^2 \\
+%& - \frac{1}{N} \cdot \frac{1}{N-1} \sum_{i=1}^N \left (Y_{1i} - Y_{0i} - \alpha \right)^2
+%\end{align*}
+%\end{small}
+%
+%\pause 
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  The first two terms are estimable from data but the variance of the
+%  unit level treatment effects are not.
+%\item
+%  The third term will be 0 when treatment effects are constant. \pause
+%\item
+%  Ignoring the variance of unit level treatment effects will result in a
+%  variance estimator that is \textbf{upwardly biased} .
+%\item
+%  Usual variance estimate is a conservative approximation of the true
+%  variance.
+%\end{itemize}
+%
+%\end{frame}
+
+
+\subsection{Hypothesis Testing}
+
+\begin{frame}
+  \frametitle{Example: Effect of Training on Earnings}
+\small
+\begin{itemize}
+  \item Treatment Group:
+  \begin{itemize}
+  \item $N_1=7,487$
+    \item Estimated Average Earnings $\bar{Y}_1$: \$$16,199$
+    \item Estimated Sample Standard deviation $\widehat{\sigma}_{Y|D_i=1}$: $\$17,038$
+  \end{itemize}\smallskip
+
+  \item Control Group :
+  \begin{itemize}
+  \item $N_0=3,717$
+    \item Estimated Average Earnings $\bar{Y}_0$: \$$15,040$
+    \item Estimated Sample  deviation $\widehat{\sigma}_{Y|D_i=0}$: $\$16,180$
+  \end{itemize}\smallskip
+%  \item Where the sample variances are given by $\widehat{\sigma}_d^2=\sum_{D_i=d} (Y_i-\bar{Y}_d)^2/(N_d-1)$
+  \item Estimated average effect of training: \pause
+  \begin{itemize}
+    \item $\widehat{\tau}_{ATE} = \bar{Y}_1 - \bar{Y}_0 = 16,199 - 15,040 = \$1,159$
+  \end{itemize}\smallskip
+  \item Estimated standard error for effect of training: \pause
+  \begin{itemize}
+    \item $\widehat{ SE}_{\widehat{ATE}} = \sqrt{ \frac{ \widehat{\sigma}^2_{Y|D_i=1}  }{N_1}+ \frac{ \widehat{\sigma}^2_{Y|D_i=0} }{N_0}} = \sqrt{\frac{17,038^2}{7,487}+ \frac{16,180^2}{3,717} }\approx\$330$
+  \end{itemize}\smallskip
+  \item Is this consistent with a zero average treatment effect $\alpha_{ATE}=0$?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Testing the Null Hypothesis of Zero Average Effect}
+\small
+\begin{itemize}
+  \item Under the null hypothesis H$_0$: $\tau_{ATE}=0$, the average potential outcomes in the population are the same for treatment and control: $E[Y_1]=E[Y_0]$.\medskip
+\item Since units are randomly assigned, both the treatment and control groups should therefore have the same sample average earnings\medskip
+\item However, we in fact observe a difference in mean earnings of \$$1,159$ \medskip
+\item What is the probability of observing a difference this large if the true average effect of the training were zero (i.e. the null hypothesis were true)?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Testing the Null Hypothesis of Zero Average Effect}
+\small
+\begin{itemize}
+  \item Use a two-sample t-test with unequal variances:\[
+t=\frac{\widehat{\tau}}{\sqrt{\displaystyle\frac{\widehat{\sigma}_{Y_i|D_i=1}^2}{N_1} + \displaystyle\frac{\widehat{\sigma}_{Y_i|D_i=0}^2}{N_0}}}=\frac{\$1,159}{\sqrt{\displaystyle\frac{\$17,038^2}{7,487} + \displaystyle\frac{\$16,180^2}{3,717}}}\approx3.5
+\]
+\begin{itemize}
+\item From basic statistical theory, we know that $t_N\stackrel{d}{\rightarrow} \mathcal{N}(0,1)$\medskip
+\item And for a standard normal distribution, the probability of observing a value of $t$ that is larger than $|t|>1.96$ is $<.05$\medskip
+\item So obtaining a value as high as $t=3.5$ is very unlikely under the null hypothesis of a zero average effect\medskip
+\item We reject the null hypothesis H$_0$: $\tau_0=0$ against the alternative H$_1$: $\tau_0 \neq 0$ at asymptotic 5\% significance level whenever $|t|>1.96$.\medskip
+\item Inverting the test statistic we can construct a 95\% confidence interval
+\[
+\widehat{\tau}_{ATE}\pm 1.96 \cdot \widehat{ SE}_{\widehat{ATE}}
+\]
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Testing the Null Hypothesis of Zero Average Effect}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> d <- read.dta("jtpa.dta")
+> head(d[,c("earnings","assignmt")])
+  earnings assignmt
+1     1353        1
+2     4984        1
+3    27707        1
+4    31860        1
+5    26615        0
+> 
+> meanAsd <- function(x)\{
++   out <- c(mean(x),sd(x))
++   names(out) <- c("mean","sd")
++   return(out)
++ \}
+> 
+> aggregate(earnings~assignmt,data=d,meanAsd)
+  assignmt earnings.mean earnings.sd
+1        0      15040.50    16180.25
+2        1      16199.94    17038.85
+\end{Verbatim}
+}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Testing the Null Hypothesis of Zero Average Effect}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> t.test(earnings~assignmt,data=d,var.equal=FALSE)
+
+  Welch Two Sample t-test
+
+data:  earnings by assignmt
+t = -3.5084, df = 7765.599, p-value = 0.0004533
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -1807.2427  -511.6239
+sample estimates:
+mean in group 0 mean in group 1 
+       15040.50        16199.94 
+\end{Verbatim}
+}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Regression to Estimate the Average Treatment Effect}
+\small
+\begin{esti}[Regression]\small
+The ATE can be expressed as a regression equation:
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  Y_i &=& D_i\, Y_{1i} + (1-D_i)\, Y_{0i} \\
+   &=& Y_{0i} + (Y_{1i}- Y_{0i})\,D_i \\
+   &=& \underbrace{\bar Y_0}_{\alpha} + \underbrace{(\bar Y_1 - \bar Y_0)}_{\tau_{Reg}} D_i + \underbrace{\{(Y_{i0} - \bar Y_0) + D_i \cdot [(Y_{i1} - \bar Y_1) - (Y_{i0} - \bar Y_0)] \}}_{\epsilon} \\ 
+%   &=&E[Y_0] + (E[Y_1]-E[Y_0])\,D_i + u_i \\
+%   &=& \beta + \alpha_{ATE} D_i + u_i
+   &=& \alpha + \tau_{Reg} D_i + \epsilon_i
+ \end{eqnarray*}
+%where the disturbance term is $u_i\equiv Y_{0i}-E[Y_0] +[(Y_{1i}-E[Y_1])-(Y_{0i}-E[Y_0])]D_i$\\
+\end{esti}\vspace{-.2in}
+\begin{itemize}
+%\item  $D_i$ is random in this interpretation, as opposed to classical regression.
+\item   $\tau_{Reg}$ could be biased for $\tau_{ATE}$ in two ways: \pause
+  \begin{itemize}
+  \item Baseline difference in potential outcomes under control that is correlated with $D_i$. 
+  \item Individual treatment effects $\tau_i$ are correlated with $D_i$ 
+  \item Under random assignment, both correlations are zero in expectation
+  \end{itemize}\pause
+\item
+  Effect heterogeneity implies ``heteroskedasticity'', i.e. error variance differs by values of $D_i$.
+  \begin{itemize}
+  \item  Neyman model implies ``robust'' standard errors. 
+  \end{itemize}
+\item
+  Can use regression in experiments without assuming constant effects.
+\end{itemize}
+
+%\item Random assignment ensures that $D_i$ is uncorrelated with $u_i$
+%  \item So we can estimate the ATE by regressing $Y$ on $D$
+ % \item When we use the ``robust'' variance estimator, the standard error of $\alpha_{ATE}$ is $\widehat{SE}=\sqrt{\displaystyle\frac{\widehat{\sigma}_1^2}{N_1} + \frac{\widehat{\sigma}_0^2}{N_0}}$ (same as two-sample t-test)
+%\end{itemize}
+
+
+\end{frame}
+
+
+
+%\begin{frame}{Hypothesis Testing: Two Sample T-Test}
+%
+%From basic statistical theory, we know that \[
+%\frac{\widehat{\tau}-\tau_0}{\sqrt{\displaystyle\frac{\widehat{\sigma}_1^2}{N_1} + \displaystyle\frac{\widehat{\sigma}_0^2}{N_0}}}
+%\stackrel{d}{\rightarrow} N(0,1),
+%\] where $\widehat{\sigma}_d^2= 1/N_d  \sum_{D_i=d} (Y_i-\bar{Y}_d)^2$ for $d\in\{0,1\}$.\\\medskip
+%
+%Let \[
+%t=\frac{\widehat{\tau}}{\sqrt{\displaystyle\frac{\widehat{\sigma}_1^2}{N_1} + \displaystyle\frac{\widehat{\sigma}_0^2}{N_0}}}.
+%\] We reject the null hypothesis H$_0$: $\tau_0=0$ against the
+%alternative H$_1$: $\tau_0 \neq 0$ at the asymptotic 5\% significance
+%level if $|t|>1.96$.\pause
+%
+%Note: This null hypothesis is known as the \textbf{weak} null.
+%
+%\end{frame}
+
+
+%
+%
+%\begin{frame}{Randomized Experiments and Regression}
+%
+%Randomized experiments can be analyzed using regression, though when
+%covariates are added there are some subtleties about interpretation.
+%
+%\begin{align*}
+%Y_i &= \alpha + bD_i + \epsilon_i    \\ 
+%Y_i &= \underbrace{\bar Y_0}_{\alpha} + \underbrace{(\bar Y_1 - \bar Y_0)}_{b} D_i + \underbrace{\{(Y_{i0} - \bar Y_0) + D_i \cdot [(Y_{i1} - \bar Y_1) - (Y_{i0} - \bar Y_0)] \}}_{\epsilon} \\ 
+%    &=  D_i\cdot Y_{1i} + (1-D_i)\cdot Y_{0i}
+%\end{align*}
+%
+%\end{frame}
+%
+%\begin{frame}{Randomized Experiments and Regression}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  $D_i$ is random in this interpretation, as opposed to classical
+%  regression.
+%\item
+%  $b$ could be biased for the ATE in 2 ways:
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Baseline difference in potential outcomes under control that is
+%    correlated with $D_i$. \pause
+%  \item
+%    Individual treatment effects are correlated with $D_i$ \pause
+%  \item
+%    In randomized experiments, neither of these correlations will be a
+%    problem.
+%  \end{itemize}
+%\item
+%  Effect heterogeneity implies ``heteroskedasticity'' because error
+%  variance differs by values of $D_i$.
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Neyman model imples ``robust'' standard errors. \pause
+%  \end{itemize}
+%\item
+%  Take away: Can analyze experiments with regression without assuming
+%  homogenous effects.
+%\end{itemize}
+%
+%\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Regression to Estimate the Average Treatment Effect}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> library(sandwich)
+> library(lmtest)
+> 
+> lout <- lm(earnings~assignmt,data=d)
+> coeftest(lout,vcov = vcovHC(lout, type = "HC1")) # matches Stata
+
+t test of coefficients:
+
+            Estimate Std. Error t value  Pr(>|t|)    
+(Intercept) 15040.50     265.38 56.6752 < 2.2e-16 ***
+assignmt     1159.43     330.46  3.5085 0.0004524 ***
+---
+\end{Verbatim}
+}
+\end{frame}
+
+\subsection{Covariates}
+
+
+\begin{frame}{Covariates and Experiments}
+\centering
+    \includegraphics[width = .9 \linewidth]{images/potential_outcomes_with_covariates.pdf}
+\end{frame}
+
+\begin{frame}{Covariates}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+ \item Randomization is gold standard for causal inference because in expectation it balances \alert{observed} but also \alert{unobserved} characteristics between treatment and control group.\medskip
+\item  Unlike potential outcomes, you observe baseline covariates for all units. Covariate values are predetermined with respect to the
+treatment and do not depend on $D_i$. \medskip
+\item  Under  randomization, $f_{X|D}(X|D=1) \,{\buildrel d \over =}\, f_{X|D}(X|D=0)$   (equality in distribution).\medskip
+% $ $X|D=1 \,{\buildrel d \over =}\, X|D=0$
+\item
+  Similarity in distributions of covariates is known as
+\alert{covariate balance}.\medskip
+\item
+  If this is not the case, then one of two possibilities: \pause
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Randomization was compromised.
+  \item
+    Sampling error (bad luck) 
+  \end{itemize}\medskip
+\item
+  One should always test for covariate balance on important covariates, using so called ``balance checks'' (eg. t-tests, F-tests, etc.)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Covariates and Experiments}
+\centering
+    \includegraphics[width = .9 \linewidth]{images/potential_outcomes_scatter.pdf}
+\end{frame}
+
+
+\begin{frame}{Covariates and Experiments}
+
+\centering
+    \includegraphics[width = .90 \linewidth]{images/covariate_imbalance_histogram.pdf}
+\end{frame}
+
+\begin{frame}{Regression with Covariates}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Practioners often run some variant of the following model with
+  experimental data:
+\end{itemize}
+
+\[ Y_i = \alpha + \tau D_i + X_i\beta + \epsilon_i \]
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Why include $X_i$ when experiments ``control'' for covariates by
+  design? \pause
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt 
+  \item
+    Correct for chance covariate imbalances that indicate that
+    $\hat{\tau}$ may be far from $\tau_{ATE}$. \pause
+  \item
+    Increase precision: remove variation in the outcome accounted for by
+    pre-treatment characteristics, thus making it easier to attribute
+    remaining differences to the treatment. \pause
+  \end{itemize}
+\item  ATE estimates are robust to model specification (with sufficient $N$).
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Never control for \textbf{post-treatment} covariates!
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Covariate Adjustment with Regression}
+\small
+Freedman (2008) shows that regression of the form:
+\[ Y_i = \alpha + \tau_{reg} D_i + \beta_1 X_i  + \epsilon_i \]
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item $\hat{\tau}_{reg}$ is consistent for ATE and has small sample bias  (unless model is true)
+\begin{itemize}
+\item bias is on the order of $1/n$ and diminishes rapidly as N increases
+\end{itemize}
+\item $\hat{\tau}_{reg}$ will not necessarily improve precision if model is incorrect
+\begin{itemize}
+\item But harmful to precision only if more than 3/4 of units are assigned
+  to one treatment condition or $\text{Cov}(D_i,  Y_1 - Y_0$) larger than
+  $\text{Cov}(D_i, Y)$.
+\end{itemize}
+\end{itemize}
+
+Lin (2013) shows that regression of the form:
+\[ Y_i = \alpha + \tau_{interact} D_i + \beta_1 \cdot (X_i - \bar X) + \beta_2 \cdot D_i \ \cdot (X_i - \bar X)  + \epsilon_i \]\vspace{-.2in}
+\begin{itemize}
+\item $\hat{\tau}_{interact}$ is consistent for ATE and has the same small sample bias
+\item  Cannot hurt asymptotic precision even if model is incorrect and will likely increase precision if covariates are predictive of the outcomes. 
+\item Results hold for multiple covariates
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{True ATE}
+\centering
+    \includegraphics[width = .90 \linewidth]{images/regadjust1a.pdf}
+\end{frame}
+
+%\begin{frame}{True ATE and Unadjusted Regression Estimator}
+% \centering
+%    \includegraphics[width = .90 \linewidth]{images/regadjust2a.pdf}
+%\end{frame}
+
+\begin{frame}{True ATE and Unadjusted Regression Estimator}
+\centering
+    \includegraphics[width = .90 \linewidth]{images/regadjust3a.pdf}
+\end{frame}
+
+%\begin{frame}{Adjusted Regression Estimator}
+%\centering
+%    \includegraphics[width = .90 \linewidth]{images/regadjust4a.pdf}
+%\end{frame}
+
+\begin{frame}{Adjusted Regression Estimator}
+\centering
+    \includegraphics[width = .90 \linewidth]{images/regadjust5a.pdf}
+\end{frame}
+
+\begin{frame}{Adjusted Regression Estimator}
+\centering
+    \includegraphics[width = .90 \linewidth]{images/regadjust6a.pdf}
+\end{frame}
+
+
+\begin{frame}{Adjusted Regression Estimator}
+\centering
+    \includegraphics[width = .90 \linewidth]{images/regadjust7a.pdf}
+\end{frame}
+
+
+%\begin{frame}{Covariate Adjustment with Regression}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .90 \linewidth]{images/bad_draw_scatter.pdf}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Covariate Adjustment with Regression}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .90 \linewidth]{images/bad_draw_treated_linearfit.pdf}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Covariate Adjustment with Regression}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .90 \linewidth]{images/bad_draw_treated_polyfit.pdf}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Covariate Adjustment with Regression}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .90 \linewidth]{images/bad_draw_controls_linearfit.pdf}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Covariate Adjustment with Regression}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .90 \linewidth]{images/bad_draw_controls_polyfit.pdf}
+%\end{figure}
+%
+%\end{frame}
+
+
+
+\begin{frame}{Covariate Adjustment with Regression}
+
+ \centering
+    \includegraphics[width = .90 \linewidth]{images/treatment_effect_distribution_density_with_adjustment.pdf}
+
+\end{frame}
+
+\begin{frame}{Why are Experimental Findings Robust to Alternative
+Specifications?}
+
+Note the following important property of OLS known as
+the Frisch-Waugh-Lovell (FWL) theorem or \emph{Anatomy of Regression}:
+\[\beta_k = \frac{Cov(Y_i, \tilde{x}_{ki})}{Var(\tilde{x}_{ki})}\] where
+$\tilde{x}_{ki}$ is the residual from a regression of $x_{ki}$ on all
+other covariates. \pause
+
+Any multivariate regression coefficient can be expressed as the
+coefficient on a bivariate regression between the outcome and the
+regressor, after ``partialling out'' other variables in the model.
+\pause
+
+Let $\tilde{D}_i$ be the residuals after regressing $D_i$ on $X_i$. For
+experimental data, on average, what will $\tilde{D}_i$ be equal to?
+\pause
+
+Since $\tilde{D}_i \approx D_i$, multivariate regressions will yield
+similar results to bivariate regressions.
+
+\end{frame}
+
+\begin{frame}{Summary: Covariate Adjustment with Regression}
+
+\small
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+
+\item One does not need to believe in the classical linear model (linearity and constant treatment effects) to tolerate or even advocate OLS covariate adjustment in randomized experiments (agnostic view of regression).\medskip
+\item Covariate adjustment can buy you power (and thus allows for a smaller sample).\medskip
+\item
+  Small sample bias might be a concern in small samples, but usually
+  swamped by efficiency gains.\medskip
+\item Since covariates are controlled for by design, results are typically not model dependent. \medskip
+\item
+  Best if covariate adjustment strategy is \emph{pre-specified} as this
+  rules out fishing.\medskip
+\item
+  Always show the unadjusted estimate for transparency.
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{Hypothesis Testing in Small Samples}
+
+\begin{frame}
+  \frametitle{Testing in Small Samples: Fisher's Exact Test}
+\begin{itemize}
+\item Test of differences in means with large $N$:
+\[
+H_0:E[Y_1] =E[Y_0],\quad H_1:E[Y_1] \neq E[Y_0]  \mbox{  (weak null)}
+\]\pause
+\item Fisher's Exact Test with small $N$:
+\[
+H_0: Y_1 = Y_0,\pause\quad H_1: Y_1 \neq Y_0\qquad\mbox{(sharp null of no effect)}
+\]\pause
+\item Let $\Omega$ be the set of all possible randomization realizations.
+\item We only observe the outcomes, $Y_i$, for one realization of the
+experiment. We calculate $\hat\tau=\bar Y_1-\bar Y_0$.
+\pause
+\item Under the sharp null hypothesis, we can compute the value
+that the difference in means estimator would have taken under any other
+realization, $\hat\tau(\omega)$, for $\omega\in\Omega$.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Testing in Small Samples: Fisher's Exact Test}
+\begin{overprint}
+\onslide<1>
+\begin{tabular}{cccc}
+\multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&       \multicolumn{1}{p{1cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{?} &                   1  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{?} &                    1   \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{?} &         0 &                    0  \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{?} &         1 &                    0  \\
+\hline
+$\widehat{\tau}_{ATE}$    &                                &                       &   1.5      \\
+\end{tabular}\bigskip\\
+What do we know given the sharp null $H_0: Y_1 = Y_0$?
+\onslide<2>
+\begin{tabular}{cccc}
+\multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$}&      \multicolumn{1}{p{1cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{3} &                   1  \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &                    1   \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{0} &         0 &                   0  \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{1} &         1 &                   0  \\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &           &               1.5      \\
+$\hat\tau(\omega)$    &                               &                       &  1.5         \\
+\end{tabular}\bigskip\\
+Given the full schedule of potential outcomes under the sharp null, we can compute the null distribution of $ATE_{H_0}$ across all possible randomization.
+\onslide<3>
+\begin{tabular}{ccccc}
+\multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{3} &                  1 & 1  \\
+\rowcolor{gray!30}         2 &         1 &       \textcolor{red}{1} &                    1 & 0  \\
+\rowcolor{gray!10}         3 &          \textcolor{red}{0} &         0 &                    0 & 1 \\
+\rowcolor{gray!30}         4 &          \textcolor{red}{1} &         1 &                    0 & 0  \\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &                       &   1.5   &    \\
+$\hat\tau(\omega)$   &                               &                       & 1.5  &  0.5      \\
+\end{tabular}
+\onslide<4>
+\begin{tabular}{cccccc}
+ \multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!10}        1 &          3 &        \textcolor{red}{3} &                  1 & 1  & 1  \\
+\rowcolor{gray!30}         2 &         1 &       \textcolor{red}{1} &                    1 & 0 & 0 \\
+\rowcolor{gray!30}         3 &          \textcolor{red}{0} &         0 &                    0 & 1 & 0\\
+\rowcolor{gray!10}         4 &          \textcolor{red}{1} &         1 &                    0 & 0 & 1 \\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &                       &   1.5   &  &  \\
+$\hat\tau(\omega)$    &                               &                       &  1.5 &  0.5  &  1.5  \\
+\end{tabular}
+\onslide<5>
+\begin{tabular}{ccccccc}
+\multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!30}        1 &          3 &        \textcolor{red}{3} &                  1 & 1     & 1 & 0 \\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &                    1 & 0    & 0 & 1 \\
+\rowcolor{gray!10}         3 &          \textcolor{red}{0} &         0 &                    0 & 1 & 0 & 1\\
+\rowcolor{gray!30}         4 &          \textcolor{red}{1} &         1 &                    0 & 0 & 1 & 0\\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &                       &   1.5   &  &   & \\
+$\hat\tau(\omega)$    &                               &                       & 1.5  &  0.5       &1.5&-1.5  \\
+\end{tabular}
+\onslide<6>
+\begin{tabular}{cccccccc}
+ \multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} \\
+\hline
+\rowcolor{gray!30}        1 &          3 &        \textcolor{red}{3} &                  1 & 1     & 1 & 0 & 0\\
+\rowcolor{gray!10}         2 &         1 &       \textcolor{red}{1} &                    1 & 0    & 0 & 1 & 1\\
+\rowcolor{gray!30}         3 &          \textcolor{red}{0} &         0 &                    0 & 1 & 0 & 1 & 0 \\
+\rowcolor{gray!10}         4 &          \textcolor{red}{1} &         1 &                    0 & 0 & 1 & 0 & 1\\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &                       &   1.5   &  &   & & \\
+$\hat\tau(\omega)$    &                               &                       & 1.5  &  0.5       &1.5&-1.5&-.5  \\
+\end{tabular}
+\onslide<7>
+\begin{tabular}{ccccccccc}
+\multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$}   \\
+\hline
+\rowcolor{gray!30}        1 &          3 &        \textcolor{red}{3} &                  1 & 1     & 1 & 0 & 0&0\\
+\rowcolor{gray!30}         2 &         1 &       \textcolor{red}{1} &                    1 & 0    & 0 & 1 & 1&0\\
+\rowcolor{gray!10}         3 &          \textcolor{red}{0} &         0 &                    0 & 1 & 0 & 1 & 0&1 \\
+\rowcolor{gray!10}         4 &          \textcolor{red}{1} &         1 &                    0 & 0 & 1 & 0 & 1&1\\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &                       &   1.5   &  &   & & &\\
+$\hat\tau(\omega)$    &                               &                       & 1.5  &  0.5       &1.5&-1.5&-.5&-1.5  \\
+\end{tabular}\vspace{.5in}\\
+So $\Pr(\hat\tau(\omega) \geq \widehat{\tau}_{ATE})=2/6\approx.33$.\medskip\\ Which assumptions are needed?
+\onslide<8>
+\begin{tabular}{ccccccccc}
+ \multicolumn{1}{p{1cm}}{\center $i$} &   \multicolumn{1}{p{1cm}}{\center $Y_{1i}$} & \multicolumn{1}{p{1cm}}{\center $Y_{0i}$} &   \multicolumn{1}{p{1cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} &\multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$} & \multicolumn{1}{p{.5cm}}{\center $D_{i}$}   \\
+\hline
+\rowcolor{gray!30}        1 &          3 &        \textcolor{red}{3} &                  1 & 1     & 1 & 0 & 0&0\\
+\rowcolor{gray!30}         2 &         1 &       \textcolor{red}{1} &                    1 & 0    & 0 & 1 & 1&0\\
+\rowcolor{gray!10}         3 &          \textcolor{red}{0} &         0 &                    0 & 1 & 0 & 1 & 0&1 \\
+\rowcolor{gray!10}         4 &          \textcolor{red}{1} &         1 &                    0 & 0 & 1 & 0 & 1&1\\
+\hline
+$\widehat{\tau}_{ATE}$    &                               &                       &   1.5   &  &   & & &\\
+$\hat\tau(\omega)$    &                               &                       & 1.5  &  0.5       &1.5&-1.5&-.5&-1.5  \\
+\end{tabular}\vspace{.5in}\\
+So $\Pr(\hat\alpha(\omega) \geq \widehat{\tau}_{ATE})=2/6\approx.33$.\medskip\\ Which assumptions are needed? None! Randomization as ``reasoned basis for causal inference'' (Fisher 1935)
+
+\end{overprint}
+\end{frame}
+
+
+
+
+
+\section{Examples}\label{examples}
+
+\begin{frame}{Experiments in Popular Culture}
+
+\centering
+        \scalebox{.45}{\includegraphics{images/books.jpg}}
+\end{frame}
+
+\begin{frame}{The Rise of Experiments}
+\small
+Large increase in the use of experiments in the social sciences:
+laboratory, survey, and field experiments (see syllabus)
+
+Abbreviated list of examples:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \emph{Program Evaluation}: development programs, education programs,
+  weight loss programs, fundraising, deliberative polls, virginity
+  pledging, advertising campaigns, mental exercise for elderly
+\item
+  \emph{Public policy evaluations}: teacher pay, class size, speed
+  traps, vouchers, alternative sentencing, job training, health
+  insurance subsidies, tax compliance, public housing, jury selection,
+  police interventions 
+\item
+  \emph{Behavioral Research}: persuasion, mobilization, education,
+  income, interpersonal influence, conscientious health behaviors, media
+  exposure, deliberation, discrimination 
+\item
+  \emph{Research on Institutions}: rules for authorizing decisions,
+  rules of succession, monitoring performance, transparency, corruption
+  auditing, electoral systems
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Experiments from Political Science and Economics}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Voter mobilization (Nickerson, Gerber and Green)
+\item
+  Voting mechanisms (Olken)
+\item
+  Health insurance reform (Finkelstein et al.)
+\item
+  Race-based discrimination in labor markets (Bertrand and Mullainathan)
+\item
+  Clientelistic vs programmatic presidential campaigns (Wantchekon)
+\item
+  Female incumbents (Duflo)
+\item
+  Information interventions for Elites (Butler)
+\item
+  Monitoring interventions (Ichino)
+\item
+  Audience costs (Tomz)
+\item
+  Many more \ldots{}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Social Pressure Experiment}
+\small
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Voter turnout theories based on rational self-interested behavior
+  generally fail to predict significant turnout unless they account for
+  the utility that citizens receive from performing their civic duty.\medskip
+  
+\item
+  Two aspects of this type of utility: intrinsic satisfaction from
+  behaving in accordance with a norm and extrinsic incentives to comply.\medskip
+  
+\item
+  Gerber, Green, and Larimer (2008) test these motives in a large
+  scale field experiment by applying varying degrees of intrinsic and extrinsic
+  pressure on voters using a series of mailings to 180,002 households
+  before the August 2006 primary election in Michigan.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Social Pressure Experiment}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{Civic Duty}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Encouraged to vote.
+  \end{itemize}
+\item
+  \textbf{Hawthorne}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Encouraged to vote.
+  \item
+    Told that researchers would be checking on whether they voted: ``YOU
+    ARE BEING STUDIED!'' \pause
+  \end{itemize}
+\item
+  \textbf{Self}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Encouraged to vote.
+  \item
+    Told that whether one votes is a matter of public record.
+  \item
+    Shown whether members of their own household voted in the last two
+    elections and promised to send post-card after election indicating
+    whether or not they voted. \pause
+  \end{itemize}
+\item
+  \textbf{Neighbors}
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Like \textbf{Self} treatment but in addition recipients are shown
+    whether the neighbors on the block voted in the last two elections.
+  \item
+    Promised to inform neighbors whether or not subject voted after
+    election.
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Example: Social Pressure Experiment}
+
+\centering
+  \includegraphics[scale=.8 ]{images/gerber1.pdf}
+
+\end{frame}
+
+\begin{frame}{Example: Social Pressure Experiment}
+
+\centering
+  \includegraphics[width = .95 \linewidth]{images/gerber2.png}
+
+\end{frame}
+
+\begin{frame}[fragile]{Example: Social Pressure Experiment}
+
+\footnotesize
+
+\begin{verbatim}
+d <- read.dta("gerber.dta")
+covars <- c("hh_size","g2002","g2000","p2004","p2002","p2000","sex","yob")
+print(aggregate(d[,covars],by=list(d$treatment),mean),digits=3)
+\end{verbatim}
+
+\pause
+
+\begin{verbatim}
+     Group.1 hh_size g2002 g2000 p2004 p2002 p2000   sex  yob
+1    Control    1.91 0.834 0.866 0.417 0.409 0.265 0.502 1955
+2  Hawthorne    1.91 0.836 0.867 0.419 0.412 0.263 0.503 1955
+3 Civic Duty    1.91 0.836 0.865 0.416 0.410 0.266 0.503 1955
+4  Neighbors    1.91 0.835 0.865 0.423 0.406 0.263 0.505 1955
+5       Self    1.91 0.835 0.863 0.421 0.410 0.263 0.501 1955
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{Example: Social Pressure Experiment}
+
+\footnotesize
+
+\begin{verbatim}
+print(aggregate(d[,covars],by=list(d$treatment),sd),digits=3)
+\end{verbatim}
+
+\pause
+
+\begin{verbatim}
+     Group.1 hh_size g2002 g2000 p2004 p2002 p2000   sex  yob
+1    Control   0.720 0.294 0.271 0.444 0.435 0.395 0.273 12.9
+2  Hawthorne   0.718 0.295 0.270 0.444 0.435 0.393 0.272 12.9
+3 Civic Duty   0.729 0.293 0.270 0.444 0.435 0.396 0.275 12.9
+4  Neighbors   0.728 0.295 0.273 0.445 0.434 0.393 0.274 13.0
+5       Self   0.718 0.294 0.274 0.444 0.434 0.392 0.274 12.8
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{Example: Social Pressure Experiment}
+
+\footnotesize
+
+\begin{verbatim}
+print(aggregate(d[,c("yob")],by=list(d$treatment),quantile),digits=3)
+\end{verbatim}
+
+\pause
+
+\begin{verbatim}
+    Group.1 x.0% x.25% x.50% x.75% x.100%
+1    Control 1900  1946  1957  1964   1986
+2  Hawthorne 1908  1946  1957  1964   1984
+3 Civic Duty 1906  1947  1957  1964   1986
+4  Neighbors 1905  1946  1957  1964   1986
+5       Self 1908  1946  1957  1964   1986
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{Example: Social Pressure Experiment}
+
+\footnotesize
+
+\begin{verbatim}
+form <- as.formula(paste("treatment","~",paste(covars,collapse="+")))
+form
+treatment ~ hh_size + g2002 + g2000 + p2004 + p2002 + p2000 +
+    sex + yob
+summary(lm(form,data=d))
+\end{verbatim}
+
+\pause
+
+\begin{verbatim}
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept)  1.7944614  0.5496699   3.265   0.0011 **
+hh_size     -0.0032727  0.0051836  -0.631   0.5278
+g2002        0.0121818  0.0123389   0.987   0.3235
+g2000       -0.0233410  0.0133489  -1.749   0.0804 .
+p2004        0.0118147  0.0079130   1.493   0.1354
+p2002        0.0018055  0.0081488   0.222   0.8247
+p2000       -0.0031604  0.0087721  -0.360   0.7186
+sex          0.0031331  0.0125052   0.251   0.8022
+yob          0.0001671  0.0002815   0.594   0.5528
+Residual standard error: 1.449 on 179993 degrees of freedom
+Multiple R-squared: 4.004e-05,  Adjusted R-squared: -4.406e-06
+F-statistic: 0.9009 on 8 and 179993 DF,  p-value: 0.5145
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}{Example: Social Pressure Experiment}
+
+\centering
+  \includegraphics[width = .99 \linewidth]{images/gerber10.pdf}
+
+\end{frame}
+
+
+%\begin{frame}{Example: Klingsmith et al.}
+%
+%\centering
+%
+%\includegraphics[width = .95 \linewidth]{images/hajj_tech_01.jpg}
+%
+%\end{frame}
+
+%\begin{frame}{Example: Natural Experiment in Pakistan}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Pakistan allocated about 135,000 visas to Saudi Arabia for the Hajj
+%  via a randomized lottery.
+%\item
+%  Wealthier Pakistanis tend to use private Hajj tour operators rather
+%  than the lottery.
+%\item
+%  Randomization occurs among individuals grouped into ``parties'' (up to
+%  20 individuals), where parties are stratified by sect, region, and
+%  accommodation.
+%\item
+%  ``Compliance'' with the experiment is imperfect:
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    99\% who win lottery attend the Hajj.
+%  \item
+%    11\% who lose lottery still attend the Hajj (via private tours).
+%  \item
+%    Technically, \emph{double crossover} non-compliance, but effectively
+%    \emph{single crossover}. \pause
+%  \end{itemize}
+%\item
+%  Because randomization is not controlled by researcher, balance checks
+%  and qualitative investigation is crucial.
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Example: Natural Experiment in Pakistan}
+%
+%Two pieces of information to bolster the randomization assumption:
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Cursory qualitative information:
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    The lottery selection algorithm was designed and implemented by an
+%    independent and reputable third party, and there were no reports of
+%    lottery manipulation. \pause
+%  \end{itemize}
+%\item
+%  Balance tests:
+%  \includegraphics[width = .95 \linewidth]{images/balance_hajj.pdf}
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Example: Natural Experiment in Pakistan}
+%
+%\includegraphics[width = .95 \linewidth]{images/effects_hajj.pdf}
+%
+%\end{frame}
+%
+\begin{frame}
+  \frametitle{Example: Job Training Partnership Act (JTPA)}
+
+\begin{itemize}
+\item Largest randomized training evaluation ever undertaken in the U.S.; started in 1983 at 649 sites throughout the country
+\item Sample: Disadvantaged persons in the labor market (previously unemployed or low earnings)
+\item D: Assignment to one of three general service strategies
+\begin{itemize}
+\item classroom training in occupational skills
+\item on-the-job training and/or job search assistance
+\item other services (eg. probationary employment)
+\end{itemize}
+\item Y: Earnings 30 months following assignment
+\item X: Characteristics measured before assignment (age, gender, previous earnings, race, etc.)
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Random Assignment Model for JTPA Experiment}
+  \includegraphics[height=3.2in,keepaspectratio=1 ]{images/jtpa1.pdf}
+\end{frame}
+
+ \begin{frame}
+  \frametitle{Means and Standard Deviations for JTPA Experiment}
+  \includegraphics[height=3.2in,keepaspectratio=1 ]{images/jtpa3.pdf}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Subgroup Effects for JTPA Experiment}
+  \includegraphics[height=4.2in,keepaspectratio=1,angle=270 ]{images/jtpa0.pdf}
+\end{frame}
+
+% \begin{frame}
+%  \frametitle{Means and Standard Deviations for JTPA Experiment}
+%  \includegraphics[height=3.3in,keepaspectratio=1 ]{jtpa3.pdf}
+%\end{frame}
+ \begin{frame}
+\frametitle{A Word about Policy Implications}
+
+After the results of the National JTPA study were released, in 1994,
+funding for JTPA training for the youth were drastically cut:
+\medskip
+
+\begin{center}
+\begin{tabular}{lcc}
+%\multicolumn{3}{c}{\sc\small Table \thesection.1}\\
+\multicolumn{3}{c}{\sc\small Spending on JTPA Programs}\vspace*{0.1cm}\\
+\hline\hline
+\multicolumn{1}{c}{Year}&\multicolumn{1}{c}{Youth Training}&\multicolumn{1}{c}{Adult Training}\\
+&\multicolumn{1}{c}{Grants}&\multicolumn{1}{c}{Grants}\\\hline
+1993&677&1015\ \ \\
+1994&609&988\\
+1995&127&996\\
+1996&127&850\\
+1997&127&895\\\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+
+
+
+\section{Further Issues in Experimental Design}\label{experimental-design}
+
+\begin{frame}{Considerations for Experimental Designs}
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Unit of analysis and unit of randomization (individuals, groups,
+  institutions, etc)?
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Choice of analytic level determines what the study has the capacity
+    to demonstrate.
+  \item
+    Example: randomize school vouchers at the level of the individual or
+    at the level of the community? Do we want to know how students respond
+    to new environment or or how schools respond to competition?
+  \item
+    Can also help with SUTVA (e.g.~interactions within and between
+    schools) \pause
+  \end{itemize}
+\item
+  How many treatments?
+\item
+  How many units?
+\item
+  How many treated and how many controls?
+\item
+  Is background information available? If so, how can it be used?
+\end{itemize}
+
+\end{frame}
+
+\subsection{Blocking}
+
+\begin{frame}{Blocking}
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Imagine you have data on the units that you are about to randomly
+  assign. Why leave it to ``pure'' chance to balance the observed
+  characteristics?
+\item
+  Idea in blocking is to pre-stratify the sample and then to randomize
+  separately within each stratum to ensure that the groups start out
+  with identical observable characteristics on the blocked factors.
+\item
+  You effectively run a separate experiment within each stratum,
+  randomization will balance the unobserved attributes
+\item
+  Why is this helpful?
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Four subjects with pre-treatment outcomes of \{2,2,8,8\}
+  \item
+    Divided evenly into treatment and control groups and treatment
+    effect is zero
+  \item
+    Simple random assignment will place \{2,2\} and \{8,8\} together in
+    the same treatment or control group 1/3 of the time
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Blocking}
+
+Imagine you run an experiment where you block on gender. It's possible
+to think about an ATE composed of two seperate block-specific ATEs:
+\[ \tau = \frac{N_f}{N_f + N_m} \cdot \tau_f  + \frac{N_m}{N_f + N_m} \cdot \tau_m\]
+\pause
+
+An unbiased estimator for this quantity will be
+
+\[ \hat \tau_{B} = \frac{N_f}{N_f + N_m} \cdot \hat \tau_f  + \frac{N_m}{N_f + N_m} \cdot \hat \tau_m\]
+\pause
+
+or more generally, if there are $J$ strata or blocks, then
+
+\[\hat\tau_B = \sum_{j=1}^J \frac{N_j}{N} \hat\tau_j\]
+
+\end{frame}
+
+\begin{frame}{Blocking}
+
+Because the randomizations in each block are independent, the variance
+of the blocking estimator is simply
+($\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$):
+
+\[\text{Var}(\hat \tau_B) = \left (\frac{N_f}{N_f + N_m} \right)^2 \text{Var}(\hat \tau_f) + \left(\frac{N_m}{N_f + N_m} \right)^2 \text{Var}(\hat \tau_m)\]
+
+or more generally
+
+\[ \text{Var}(\hat \tau_B)  =  \sum_{j=1}^J  \left (\frac{N_j}{N} \right)^2  \text{Var}(\hat \tau_j)\]
+
+\end{frame}
+
+
+\begin{frame}{Blocking with Regression}
+\small
+When analyzing a blocked randomized experiment with OLS and the
+probability of receiving treatment is equal across blocks, then OLS with
+block ``fixed effects'' will result in a valid estimator of the ATE:
+
+\[ y_i =   \tau D_i + \sum_{j=2}^{J} \beta_j \cdot B_{ij} + \epsilon_i\]
+
+where $B_j$ is a dummy for the $j$-th block (one omitted as reference category).\bigskip \pause
+
+If probabilites of treatment, $p_{ij}=P(D_{ij}=1)$, vary by block, then weight each
+observation:
+\[ w_{ij} = \left ( \frac{1}{p_{ij}} \right ) D_i + \left ( \frac{1}{1 - p_{ij}} \right ) (1 - D_i)\]
+
+\pause 
+
+Why do this? When treatment probabilities vary by
+block, then OLS will weight blocks by the variance of the treatment
+variable in each block. Without correcting for this, OLS will result in
+biased estimates of ATE!
+
+\end{frame}
+
+
+
+\begin{frame}{When Does Blocking Help?}
+\small
+Imagine a model for a complete and blocked randomized design:
+
+\begin{small}
+\begin{eqnarray}
+  Y_i &=& \alpha + \tau_{CR} D_i + \textcolor{red}{\varepsilon_i} \pause \\
+  Y_i &=& \alpha + \tau_{BR} D_i + \sum_{j=2}^J \beta_j B_{ij}+ \textcolor{blue}{\varepsilon^{\ast}_i}
+\end{eqnarray}
+\end{small}
+
+where $B_j$ is a dummy for the $j$-th block. Then given iid sampling:
+\pause
+
+\begin{small}
+\begin{eqnarray}
+Var[\widehat{\tau}_{CR}]  &=& \frac{\textcolor{red}{\sigma_{\varepsilon}^2}}{\sum_{i=1}^n (D_i - \bar{D})^2}\quad \,\,\, \quad \quad \mbox{ with } \textcolor{red}{\widehat{\sigma}_{\varepsilon}^2} \quad = \pause \quad\frac{\sum_{i=1}^n \widehat{\varepsilon}_i^2}{n-2}=\frac{SSR_{\widehat{\varepsilon}}}{n-2}\nonumber \\
+Var[\widehat{\tau}_{BR}]  &=&  \frac{\textcolor{blue}{\sigma_{\varepsilon^{\ast}}^2}}{\sum_{i=1}^n (D_{i} - \bar{D})^2 (1-R_j^2)}\mbox{ with } \textcolor{blue}{\widehat{\sigma}_{\varepsilon^{\ast}}}^2 = \frac{\sum_{i=1}^n \widehat{ \varepsilon }^{\ast^2}_{i}}{n-k-1}=\frac{SSR_{\widehat{\varepsilon^{\ast}}}}{n-k-1}\nonumber
+\end{eqnarray}
+\end{small}
+
+where $R_j^2$ \pause is $R^2$ from regression of $D$ on all $B_j$
+variables and a constant.
+
+\end{frame}
+
+\begin{frame}{When Does Blocking Help?}
+\small
+\begin{small}
+\begin{eqnarray}
+  Y_i &=& \alpha + \tau_{CR} D_i + \textcolor{red}{\varepsilon_i}  \\
+  Y_i &=& \alpha + \tau_{BR} D_i + \sum_{j=2}^J \beta_j B_{ij}+ \textcolor{blue}{\varepsilon^{\ast}_i}
+\end{eqnarray}
+\end{small}
+
+where $B_k$ is a dummy for the $k$-th block. Then given iid sampling:
+
+\begin{small}
+\begin{eqnarray}
+V[\widehat{\tau}_{CR}]  &=& \frac{\textcolor{red}{\sigma_{\varepsilon}^2}}{\sum_{i=1}^n (D_i - \bar{D})^2}\quad \,\,\, \quad \quad \mbox{ with } \textcolor{red}{\widehat{\sigma}_{\varepsilon}^2} \quad =  \quad\frac{\sum_{i=1}^n \widehat{\varepsilon}_i^2}{n-2}=\frac{SSR_{\widehat{\varepsilon}}}{n-2}\nonumber \\
+V[\widehat{\tau}_{BR}]  &=&  \frac{\textcolor{blue}{\sigma_{\varepsilon^{\ast}}^2}}{\sum_{i=1}^n (D_{i} - \bar{D})^2 (1-R_j^2)}\mbox{ with } \textcolor{blue}{\widehat{\sigma}_{\varepsilon^{\ast}}}^2 = \frac{\sum_{i=1}^n \widehat{ \varepsilon }^{\ast^2}_{i}}{n-k-1}=\frac{SSR_{\widehat{\varepsilon^{\ast}}}}{n-k-1}\nonumber
+\end{eqnarray}
+\end{small}
+
+where $R_j^2$ is $R^2$ from regression of $D$ on the $B_k$ dummies and
+a constant.
+
+So when is $Var[\widehat{\tau}_{BR}]<Var[\widehat{\tau}_{CR}]$?
+
+\end{frame}
+
+\begin{frame}{When Does Blocking Help?}
+\small
+\begin{small}
+\begin{eqnarray}
+  Y_i &=& \alpha + \tau_{CR} D_i + \textcolor{red}{\varepsilon_i}  \\
+  Y_i &=& \alpha + \tau_{BR} D_i + \sum_{j=2}^J \beta_j B_{ij}+ \textcolor{blue}{\varepsilon^{\ast}_i}
+\end{eqnarray}
+\end{small}
+
+where $B_k$ is a dummy for the $k$-th block. Then given iid sampling:
+
+\begin{small}
+\begin{eqnarray}
+V[\widehat{\tau}_{CR}]  &=& \frac{\textcolor{red}{\sigma_{\varepsilon}^2}}{\sum_{i=1}^n (D_i - \bar{D})^2}\quad \,\,\, \quad \quad \mbox{ with } \textcolor{red}{\widehat{\sigma}_{\varepsilon}^2} \quad =  \quad\frac{\sum_{i=1}^n \widehat{\varepsilon}_i^2}{n-2}=\frac{SSR_{\widehat{\varepsilon}}}{n-2}\nonumber \\
+V[\widehat{\tau}_{BR}]  &=&  \frac{\textcolor{blue}{\sigma_{\varepsilon^{\ast}}^2}}{\sum_{i=1}^n (D_{i} - \bar{D})^2 (1-R_j^2)}\mbox{ with } \textcolor{blue}{\widehat{\sigma}_{\varepsilon^{\ast}}}^2 = \frac{\sum_{i=1}^n \widehat{ \varepsilon }^{\ast^2}_{i}}{n-k-1}=\frac{SSR_{\widehat{\varepsilon^{\ast}}}}{n-k-1}\nonumber
+\end{eqnarray}
+\end{small}
+
+where $R_j^2$ is $R^2$ from regression of $D$ on the $B_k$ dummies and
+a constant.
+
+Since $R_j^2\approx0$ $V[\widehat{\tau}_{BR}]<V[\widehat{\tau}_{CR}]$ if
+$\frac{SSR_{\widehat{\varepsilon^{\ast}}}}{n-k-1}<\frac{SSR_{\widehat{\varepsilon}}}{n-2}$
+
+\end{frame}
+
+%\begin{frame}{Example: Anti-Vote Fraud Experiment in the Republic of
+%Georgia}
+%
+%\centering
+%  \includegraphics[width = .95 \linewidth]{images/georgia_experiment_map.pdf}
+%
+%\end{frame}
+%
+%\begin{frame}[fragile]{Example: Anti-Vote Fraud Experiment in the
+%Republic of Georgia}
+%
+%\begin{verbatim}
+%Call:
+%lm(formula = total.complaints ~ tr.complaints, data = exp.data)    
+%
+%Residuals:
+%    Min      1Q  Median      3Q     Max 
+%-0.2619 -0.2619  0.0000  0.0000  4.7381     
+%
+%Coefficients:
+%                Estimate Std. Error t value Pr(>|t|)  
+%(Intercept)   -2.423e-17  9.657e-02   0.000   1.0000  
+%tr.complaints  2.619e-01  1.366e-01   1.918   0.0586 .
+%\end{verbatim}
+%
+%\end{frame}
+%
+%\begin{frame}[fragile]{Example: Anti-Vote Fraud Experiment in the
+%Republic of Georgia}
+%
+%\begin{verbatim}
+%Call:
+%lm(formula = total.complaints ~ tr.complaints + block, 
+%  data = exp.data)    
+%
+%Residuals:
+%   Min     1Q Median     3Q    Max 
+%-2.369 -0.131 -0.125  0.131  2.369     
+%
+%Coefficients:
+%              Estimate Std. Error t value Pr(>|t|)    
+%(Intercept)     2.3690     0.4089   5.794 3.84e-07 ***
+%tr.complaints   0.2619     0.1247   2.100 0.040492 *  
+%block10u       -2.5000     0.4949  -5.051 5.54e-06 ***
+%block11r       -2.5000     0.5715  -4.375 5.73e-05 ***
+%block11u       -2.0000     0.4949  -4.041 0.000173 ***
+%block12r       -2.5000     0.5715  -4.375 5.73e-05 ***
+%\end{verbatim}
+%
+%\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Example: Fair Trade Labeling Experiment}
+  \centering
+  \includegraphics[scale=.4]{images/wf2.pdf}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Fair Trade Labeling Experiment}
+  \centering
+  \includegraphics[scale=.4]{images/wf1.pdf}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Fair Trade Labeling Experiment}
+  \centering
+  \includegraphics[scale=.4]{images/wf3.pdf}
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Example: Fair Trade Labeling Experiment}
+%  \centering
+%  \includegraphics[scale=.8]{images/block.pdf}
+%\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example: Fair Trade Labeling Experiment}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> d <- read.dta("FTdata.dta")
+> head(d)
+  store pair FTweek lnsalesd
+1     1    1      1     3.20
+2     4    1      0     2.77
+3     6    2      1     4.18
+4     9    2      0     4.04
+5    21    3      1     4.30
+6    24    3      0     3.93
+\end{Verbatim}
+}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example: Fair Trade Labeling Experiment}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> cr.out <- lm(lnsalesd~FTweek,data=d)
+> coeftest(cr.out,vcov = vcovHC(cr.out, type = "HC1"))
+
+t test of coefficients:
+
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  4.35000    0.16079 27.0537   <2e-16 ***
+\alert{FTweek       0.12385    0.21424  0.5781   0.5686}    
+---
+\end{Verbatim}
+}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Example: Fair Trade Labeling Experiment}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> br.out <- lm(lnsalesd~FTweek+as.factor(pair),data=d)
+> coeftest(br.out,vcov = vcovHC(br.out, type = "HC1"))
+
+t test of coefficients:
+
+                  Estimate Std. Error t value  Pr(>|t|)    
+(Intercept)       2.923077   0.162144 18.0277 4.671e-10 ***
+\alert{FTweek            0.123846   0.060176  2.0581 0.0619840 .}  
+as.factor(pair)2  1.125000   0.159549  7.0511 1.335e-05 ***
+as.factor(pair)3  1.130000   0.204440  5.5273 0.0001304 ***
+as.factor(pair)4  1.145000   0.231925  4.9369 0.0003439 ***
+as.factor(pair)5  1.280000   0.161773  7.9123 4.208e-06 ***
+as.factor(pair)6  1.410000   0.169987  8.2948 2.591e-06 ***
+as.factor(pair)7  1.575000   0.203689  7.7324 5.317e-06 ***
+as.factor(pair)8  1.585000   0.277319  5.7154 9.675e-05 ***
+as.factor(pair)9  1.610000   0.169987  9.4713 6.420e-07 ***
+as.factor(pair)10 1.795000   0.165195 10.8660 1.450e-07 ***
+as.factor(pair)11 1.810000   0.169987 10.6479 1.810e-07 ***
+as.factor(pair)12 2.015000   0.164183 12.2729 3.763e-08 ***
+as.factor(pair)13 2.070000   0.160298 12.9134 2.127e-08 ***
+---
+\end{Verbatim}
+}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Fair Trade Labeling Experiment}
+  \centering
+  \includegraphics[scale=.4]{images/FTblocking1.pdf}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example: Fair Trade Labeling Experiment}
+{
+\footnotesize
+\begin{Verbatim}[frame=single, label=R Code, commandchars=\\\{\}]
+> summary(lm(lnsalesd~as.factor(pair),data=d))
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)    
+(Intercept)         2.9850     0.1212  24.621 2.72e-12 ***
+as.factor(pair)2    1.1250     0.1715   6.562 1.82e-05 ***
+as.factor(pair)3    1.1300     0.1715   6.591 1.74e-05 ***
+as.factor(pair)4    1.1450     0.1715   6.678 1.52e-05 ***
+as.factor(pair)5    1.2800     0.1715   7.466 4.73e-06 ***
+as.factor(pair)6    1.4100     0.1715   8.224 1.65e-06 ***
+as.factor(pair)7    1.5750     0.1715   9.186 4.77e-07 ***
+as.factor(pair)8    1.5850     0.1715   9.245 4.44e-07 ***
+as.factor(pair)9    1.6100     0.1715   9.390 3.71e-07 ***
+as.factor(pair)10   1.7950     0.1715  10.469 1.05e-07 ***
+as.factor(pair)11   1.8100     0.1715  10.557 9.56e-08 ***
+as.factor(pair)12   2.0150     0.1715  11.752 2.68e-08 ***
+as.factor(pair)13   2.0700     0.1715  12.073 1.94e-08 ***
+---
+Residual standard error: 0.1715 on 13 degrees of freedom
+\alert{Multiple R-squared:  0.9474},  Adjusted R-squared:  0.8988 
+F-statistic:  19.5 on 12 and 13 DF,  p-value: 2.356e-06
+\end{Verbatim}
+}
+\end{frame}
+
+
+
+\begin{frame}{Blocking}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  How does blocking help?
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Increases efficiency if the blocking variables predict outcomes
+    (i.e.~they ``remove'' the variation that is driven by nuisance factors)
+  \item
+    Blocking on irrelevant predictors can burn up degrees of freedom
+  \item
+    Can help with small sample bias due to ``bad'' randomization
+  \item
+    Is powerful especially in small to medium sized samples \pause
+  \end{itemize}
+\item
+  What to block on?
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    ``Block what you can, randomize what you can't''
+  \item
+    The baseline of the outcome variable and other main predictors
+  \item
+    Variables desired for subgroup analysis
+  \end{itemize}
+\item
+  How to block?
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Stratification
+  \item
+    Pair-matching
+  \item
+    Check: \texttt{blockTools} library
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Analysis with Blocking}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{``As ye randomize, so shall ye analyze''} (Senn 2004): Need to
+  account for the method of randomization when performing statistical
+  analysis.
+\item
+  If using OLS, strata dummies should be included when analyzing results
+  of stratified randomization.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    If probability of treatment assignment varies across blocks, then
+    weight treated units by probability of being in treatment and
+    controls by the probability of being a control.\\
+  \end{itemize}
+\item
+  Failure to control for the method of randomization can result in
+  incorrect test size.
+\end{itemize}
+
+\end{frame}
+
+\subsection{Power Calculations}
+
+\begin{frame}{Relative Sample Sized for Fixed N}
+
+If sample sizes are large enough, we can approximate \[
+\bar Y_1 - \bar Y_0 \sim N \left(\mu_1-\mu_0,\frac{\sigma^2_1}{N_1}+\frac{\sigma^2_0}{N_0} \right).
+\]
+
+\begin{problem}
+Choose $N_1$ and $N_0$, such that $N_1+N_0=N$, to
+minimize the variance of the estimator of the average treatment effect.\smallskip\\ Recall that the variance
+of $\bar Y_1-\bar Y_0$ is approximately:
+$$
+\mbox{var}(\bar Y_1-\bar Y_0)=
+\frac{\sigma^2_1}{p N}+\frac{\sigma^2_0}{(1-p) N}
+$$
+where $p=N_1/N$ is the proportion of treated in the sample.
+\end{problem}
+
+\end{frame}
+
+\begin{frame}{Relative Sample Sized for Fixed N}
+
+Find the value $p^*$ that makes the derivative with respect to $p$ equal
+to zero: \[
+-\frac{\sigma^2_1}{p^{*2} N}+\frac{\sigma^2_0}{(1-p^*)^2 N}=0.
+\] Therefore: \[
+\frac{1-p^*}{p^*} = \frac{\sigma_0}{\sigma_1},
+\] and \[
+p^* = \frac{\sigma_1}{\sigma_1+\sigma_0}=\frac{1}{1+\sigma_0/\sigma_1}
+\] A ``rule of thumb'' for the case $\sigma_1\approx \sigma_0$ is
+$p*=0.5$
+
+For practical reasons it is sometimes better to choose unequal sample
+sizes (even if $\sigma_1\approx \sigma_0$). Note: precision erodes
+slowly until the degree of imbalance becomes extreme ($p < .2$ or
+$p>.8$), so there is latitude for using an unbalanced allocation.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Variance of ATE as Function of $p$}
+
+Imagine: $\sigma^2_1=\sigma^2_0=1$, $N=100$
+\begin{center}
+\includegraphics[height=2.8in,keepaspectratio=1]{outt.pdf}\\
+\end{center}
+\end{frame}
+
+
+
+ \begin{frame}
+\frametitle{Experimental Design: Power calculations to choose $N$}
+\begin{itemize}
+\item Recall that for a statistical test:
+\begin{itemize}\medskip
+\item Type I error: Rejecting the null if
+  the null is true ($\alpha$)\medskip
+\item Type II error: Not rejecting the null if
+  the null is false ($\Psi$)
+\end{itemize}\bigskip
+\item Size of a test is the probability of type I error. Usually 0.05\bigskip
+\item Power of a test is one minus the probability of type II error, i.e. the probability of rejecting the null if the null is false\bigskip
+\item What does power depend on? \pause
+\begin{itemize}
+  \item True size of the effect ($\delta$)
+  \item Sample size and proportion of treated ($N$ and $p$)
+  \item Variability of outcomes ($\sigma$)
+  \item Desired $\alpha$ level
+  \item Test statistic
+  \item Number of treatments
+\end{itemize}
+
+\end{itemize}
+\end{frame}
+
+ \begin{frame}
+\frametitle{Power calculations with equal and known variances}
+\tiny
+Suppose that $Y_0 \sim (\mu_0, \sigma^2_0=\sigma^2)$ and $Y_1 \sim (\mu_1, \sigma^2_1=\sigma^2)$. Assume also that $p=0.5$, so $N_0=N_1=N/2$. Let $\delta=\mu_1-\mu_0$. Then, for the t-statistic of equality of means:
+%\[
+%\frac{\bar Y_1 - \bar Y_0-\delta}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} =
+%\frac{\bar Y_1 - \bar Y_0-\delta}{\sqrt{\displaystyle\frac{2\sigma^2}{N}+\displaystyle\frac{2\sigma^2}{N}}}=\frac{\bar Y_1 - \bar Y_0-\delta}{2\sigma/\sqrt{N}}\sim
+% N \left(0,1\right).
+%\]
+
+\[
+\frac{\bar Y_1 - \bar Y_0-\delta}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} \sim
+ N \left(0,1\right).
+\]
+Therefore:
+\begin{eqnarray*}
+\frac{\bar Y_1 - \bar Y_0-\delta}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} &=& \frac{\bar Y_1 - \bar Y_0}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} - \frac{\delta}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} \\
+&=& \frac{\bar Y_1 - \bar Y_0}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} - \frac{\delta}{\sqrt{\displaystyle\frac{2\sigma^2}{N}+\displaystyle\frac{2\sigma^2}{N}}}\\
+&=& \frac{\bar Y_1 - \bar Y_0}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} - \frac{\delta}{2\sigma/\sqrt{N}} \\
+&=& \frac{\bar Y_1 - \bar Y_0}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}} - \frac{\delta \sqrt{N} }{2\sigma }
+\end{eqnarray*}
+Therefore:
+\[
+t=\frac{\bar Y_1 - \bar
+  Y_0}{\sqrt{\displaystyle\frac{\sigma^2_1}{N_1}+\displaystyle\frac{\sigma^2_0}{N_0}}}
+\sim N\left(\frac{\delta\sqrt{N}}{2\sigma},1\right)
+\]
+
+\end{frame}
+
+ \begin{frame}
+\frametitle{Power calculations with equal and known variances}
+
+The power, i.e. $\Pr\left(\mbox{reject } \mu_1-\mu_0=0 | \mu_1-\mu_0=\delta\right)$ is:
+\begin{eqnarray*}
+\Pr\left(|t|>1.96\right)&=&\textcolor{red}{\Pr\left(t<-1.96\right)}+\textcolor{blue}{\Pr\left(t>1.96\right)}\\
+&=&\textcolor{red}{\Pr\left(t-\frac{\delta\sqrt N}{2\sigma}<-1.96-\frac{\delta\sqrt N}{2\sigma}\right)}\\
+&+&\textcolor{blue}{\Pr\left(t-\frac{\delta\sqrt N}{2\sigma}>1.96-\frac{\delta\sqrt N}{2\sigma}\right)}\\
+&=&\textcolor{red}{\Phi\left(-1.96-\frac{\delta\sqrt N}{2\sigma}\right)} + \textcolor{blue}{
+\left(1-\Phi\left(1.96-\frac{\delta\sqrt N}{2\sigma}\right)\right)}
+\end{eqnarray*}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Power functions for $N=25$, $N=50$, and $\sigma^2=1$}
+  \centering
+  \includegraphics[height=2.8in,keepaspectratio=1]{images/power1.pdf}\\
+  \begin{small}
+Note: increasing sample size has a diminishing return for precision.
+\end{small}
+\end{frame}
+
+\begin{frame}
+  \frametitle{General formula for the power function ($p\neq 0.5$, $\sigma_0^2\neq \sigma_1^2$)}
+  \small
+\begin{multline*}
+\Pr\left(\mbox{reject } \mu_1-\mu_0=0 | \mu_1-\mu_0=\delta\right)\\
+= \Phi\left(-1.96-\delta\Bigg/\sqrt{\displaystyle\frac{\sigma_1^2}{p N}+\displaystyle\frac{\sigma_0^2}{(1-p)N}}\right)\\ +
+\Bigg(1-\Phi\Bigg(1.96-\delta\Bigg/\sqrt{\displaystyle\frac{\sigma_1^2}{p N}+\displaystyle\frac{\sigma_0^2}{(1-p)N}}\Bigg)\Bigg).
+\end{multline*}
+To choose $N$ we need to specify:
+\begin{enumerate}
+\item $\delta$: \alert{minimum detectable effect} magnitude
+\item Power value (usually 0.80 or higher)
+\item $\sigma_1^2$ and $\sigma_0^2$ (usually $\sigma_1^2=\sigma_0^2$) (e.g. using previous measures)
+\item $p$: proportion of observations in the treatment group
+(if $\sigma_1=\sigma_0$, then the power is maximized by $p=0.5$)
+\end{enumerate}
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Formula for Minimum Detectable Effect}
+  \small
+Assume $\sigma^2=\sigma_1^2=\sigma_0^2$, we can solve for the \alert{minimum detectable effect}:
+\[
+MDE(\delta) = M_{n-2} \sqrt{\frac{\sigma^2}{N p(1-p)}}
+\]
+where $M_{n-2}=t_{(1-\alpha/2)}+t_{1-\Psi}$ is called the \alert{multiplier}
+\begin{itemize}
+  \item $t_{(1-\alpha/2)}$: critical t-value to reject the null (two-tailed)
+  \item $t_{1-\Psi}$: t-value for t-distribution of the alternative. Depends on desired power ($1-\Psi$) where $\Psi$ is Pr(type II error)
+  \item E.g. for a two-tailed test with .80 power and $df>20$ we have approximatly \\
+  $M_{n-2}=t_{0.975}+t_{.2}=1.96 + .84 = 2.8$
+%  \item Both t-values depend on degrees of freedom $(n-2)$
+\end{itemize}
+We can also consider the  \alert{standardized mean difference effect size} ES which is $ES=\frac{\delta}{\sigma}$ and the minimum detectable effect is thus
+\[
+MDES(\delta) = M_{n-2} \sqrt{\frac{1}{N p(1-p)}}
+\]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Minimum Detectable Effect}
+  \small
+Example: Standard deviation is \$500 dollars, and average earnings are \$2,500 dollars. Here is what we can expect to detect for a given sample size and power.
+\begin{table}[!tbp]
+ \begin{center}
+ \begin{tabular}{rrrrrrrr}\hline\hline
+\multicolumn{1}{c}{MDE}&\multicolumn{1}{c}{MDES}&\multicolumn{1}{c}{N}&\multicolumn{1}{c}{SD}&\multicolumn{1}{c}{Sig}&\multicolumn{1}{c}{Po}&\multicolumn{1}{c}{mean Y}&\multicolumn{1}{c}{MDE/Mean}\tabularnewline
+\hline
+$ 88.68$&$0.18$&$1000$&$500$&$0.05$&$0.8$&$2500$&$ 3.55$\tabularnewline
+$125.54$&$0.25$&$ 500$&$500$&$0.05$&$0.8$&$2500$&$ 5.02$\tabularnewline
+$282.98$&$0.57$&$ 100$&$500$&$0.05$&$0.8$&$2500$&$11.32$\tabularnewline
+$404.44$&$0.81$&$  50$&$500$&$0.05$&$0.8$&$2500$&$16.18$\tabularnewline
+$585.24$&$1.17$&$  25$&$500$&$0.05$&$0.8$&$2500$&$23.41$\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{itemize}
+  \item What is the target minimum ES? \pause Depends on what the benchmark is (theoretical expectations, intervention costs, etc.)
+  \item Popular benchmark for gauging standardized ES is Cohen's (1977) prescription (based on little empirical evidence) that values of 0.20, 0.50, and 0.80 be
+considered small, moderate, and large.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Multiplier $M_{n-2}=t_{1 - \alpha/2}+t_{1-\Psi}$}
+  \begin{center}
+  \includegraphics[height=2.8in,keepaspectratio=1]{images/powernew_revised.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Power Analysis with Blocking}
+\small
+Assuming $\sigma^2=\sigma_1^2=\sigma_0^2$, we can solve for the \alert{minimum detectable effect}:
+
+\begin{eqnarray}
+MDES(\delta_{CR}) &=&  M_{n-2} \sqrt{\frac{1}{N p(1-p)}} \\
+MDES(\delta_{BR}) &=& M_{n-k-1} \sqrt{\frac{1-R_B^2}{N p(1-p)}}
+\end{eqnarray}
+\begin{itemize}
+  \item $M_{n-2}$ and $M_{n-k-1}$ are the multipliers
+  \item $R_B^2$ is the proportion of explained variation in the outcome predicted by the blocks (Regress $Y$ on $B_j$ dummies)
+  \begin{itemize}
+    \item The more similar observations are within blocks and the more different
+blocks are from each other, the higher this predictive power is and the larger the precision gain from blocking.
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Power Analysis with Blocking}
+
+\begin{table}[!tbp]
+ \begin{center}
+ \begin{tabular}{rrrrrrrrr}\hline\hline
+\multicolumn{1}{c}{MDE}&\multicolumn{1}{c}{MDES}&\multicolumn{1}{c}{N}&\multicolumn{1}{c}{SD}&\multicolumn{1}{c}{Sig}&\multicolumn{1}{c}{Po}&\multicolumn{1}{c}{mean Y}&\multicolumn{1}{c}{MDE/Mean}&\multicolumn{1}{c}{R}\tabularnewline
+
+\hline
+$14.52$&$0.36$&$26$&$40$&$0.05$&$0.8$&$90$&$16.13$&$0.9$\tabularnewline
+$20.53$&$0.51$&$26$&$40$&$0.05$&$0.8$&$90$&$22.81$&$0.8$\tabularnewline
+$25.15$&$0.63$&$26$&$40$&$0.05$&$0.8$&$90$&$27.94$&$0.7$\tabularnewline
+$29.04$&$0.73$&$26$&$40$&$0.05$&$0.8$&$90$&$32.26$&$0.6$\tabularnewline
+\hline
+$15.93$&$0.40$&$22$&$40$&$0.05$&$0.8$&$90$&$17.70$&$0.9$\tabularnewline
+$22.53$&$0.56$&$22$&$40$&$0.05$&$0.8$&$90$&$25.04$&$0.8$\tabularnewline
+$27.60$&$0.69$&$22$&$40$&$0.05$&$0.8$&$90$&$30.66$&$0.7$\tabularnewline
+$31.87$&$0.80$&$22$&$40$&$0.05$&$0.8$&$90$&$35.41$&$0.6$\tabularnewline
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\end{table}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Power Analysis with Blocking $SD=40$}
+  \centering
+  \includegraphics[height=2.8in,keepaspectratio=1]{images/pow1.pdf}
+\end{frame}
+
+
+\subsection{Threats to Validity and Ethics}
+
+
+
+\begin{frame}
+  \frametitle{Threats to Internal and External Validity}
+  
+\begin{itemize}
+\item Internal validity: can we estimate the treatment effect for our particular sample?
+\begin{itemize}
+\item Fails when there are differences between treated and controls (other than the treatment itself) that affect the outcome and that we cannot control for
+\end{itemize}\bigskip
+\item External validity: can we extrapolate our estimates to other populations?
+\begin{itemize}
+\item Fails when outside the experimental environment the treatment has a different effect
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Most Common Threats to Internal Validity}
+  \small
+\begin{itemize}
+\item Failure of randomization
+ \begin{itemize}
+   \item E.g. implementing partners assign their favorites to treatment group, small samples, etc.
+   \begin{itemize}
+   \item JTPA:  Good balance
+ \end{itemize} 
+ \end{itemize}\medskip
+ \item Non-compliance with experimental protocol
+ \begin{itemize}
+   \item Failure to treat or ``crossover'':  Some members of the control group receive the treatment and some in the treatment group go untreated
+      \item Can reduce power significantly
+      \begin{itemize}
+   \item JTPA: only about 65\% of those assigned to treatment actually enrolled in training (compliance was almost perfect in
+the control group)
+ \end{itemize} 
+
+ \end{itemize}\medskip
+ \item Attrition
+ \begin{itemize}
+ \item Can destroy validity if observed potential
+    outcomes are not representative of all potential outcomes even with
+    randomization
+   \item E.g. control group subjects are more likely to drop out of a study %than treatment group subjects
+         \begin{itemize}
+   \item JTPA: only 3 percent dropped out
+ \end{itemize}
+ \end{itemize}
+ \item Spillovers
+          \begin{itemize}
+   \item     Should be dealt with in the design
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Most Common Threats to External Validity}
+\begin{itemize}
+ \item Non-representative sample
+ \bigskip
+  \begin{itemize}
+   \item E.g. laboratory versus field experimentation\bigskip
+   \item Subjects are not the same population that
+     will be subject to the policy, known as ``randomization bias"
+ \end{itemize}\bigskip
+ \item Non-representative program\bigskip
+  \begin{itemize}
+   \item The treatment differs in actual implementations\bigskip
+   \item Scale effects\bigskip
+   \item Actual implementations are not randomized (nor full scale) \bigskip
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{External Validity? Experimental Sites versus all Sites }
+  \includegraphics[height=3.6in,keepaspectratio=1 ]{images/eval.pdf}
+\end{frame}
+
+\begin{frame}{Internal vs. External Validity}
+
+Which one is more important?
+
+\begin{quote}
+One common view is that internal validity comes first. If you do not
+know the effects of the treatment on the units in your study, you are
+not well-positioned to infer the effects on units you did not study who
+live in circumstances you did not study. (Rosenbaum 2010, p.~56)
+\end{quote}
+
+Randomization addresses internal validity. External validity is often
+addressed by comparing the results of several internally valid studies
+conducted in different circumstances and at different times.
+
+The same issues apply in observation studies.
+
+\end{frame}
+
+
+%\begin{frame}{Internal vs External Validity}
+%
+%Francis Fukuyama:
+%
+%\begin{quote}
+%Today, the single most popular form of development dissertation in both
+%economics and political science is a randomized micro-experiment in
+%which the graduate student goes out into the field and studies, at a
+%local level, the impact of some intervention like \ldots{} changes in
+%electoral rules on ethnic voting\ldots{} {[}T{]}hey do not aggregate
+%upwards into anything that can tell us when a regime crosses the line
+%into illegitimacy, or how economic growth is changing the class
+%structure of a society. We are not, in other words, producing new Samuel
+%Huntingtons, with the latter's simultaneous breadth and depth of
+%knowledge.
+%\end{quote}
+%
+%\end{frame}
+%
+%\begin{frame}{Internal vs External Validity}
+%
+%Angrist Deaton in ``Instruments of Development'' argues
+%
+%\begin{quote}
+%I shall argue that, under ideal circumstances, randomized evaluations of
+%projects are useful for obtaining a convincing estimate of the average
+%effect of a program or project. The price for this success is a focus
+%that is too narrow and too local to tell us ``what works'' in
+%development, to design policy, or to advance scientific knowledge about
+%development processes.
+%\end{quote}
+%
+%\end{frame}
+
+%\begin{frame}{Threats to Internal Validity}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Non-compliance
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Ways of partially dealing with this, as we will learn about in the
+%    instrumental variables section of the course.
+%  \item
+%    Reduces power significantly.
+%  \end{itemize}
+%\item
+%  Spill-overs
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Should be dealt with in the design.
+%  \end{itemize}
+%\item
+%  Attrition
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Can destroy validity of an experiment because observed potential
+%    outcomes are not representative of all potential outcomes even with
+%    randomization.\\
+%  \item
+%    Keep attrition in mind when designing the experiment.
+%  \item
+%    Statistical methods in some circumstances can reduce
+%    attrition-induced bias, which we will cover later in the semester.
+%  \end{itemize}
+%\end{itemize}
+%
+%\end{frame}
+
+
+
+
+\begin{frame}{Hardwork is in the Design and Implementation}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Statistics are often easy; the implementation and design are often hard.
+\item
+  Find partners, manage relationships, identify learning
+  opportunities.
+\item
+  Designing experiments so that they are incentive-compatible:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Free ``consulting''
+  \item
+    Allocating limited resources (e.g.~excessively large target groups)
+  \item
+    Phased randomization as a way to mitigate ethical concerns with
+    denial of treatment
+  \item
+    Encouragement designs
+  \item
+    Monitoring
+  \end{itemize}
+\item
+  Potentially high costs.
+\item
+  Many things can go wrong with complex and large scale experiments. %can be risky strategy for graduate students.
+  \item Keep it simple in the field!
+\end{itemize}
+
+\end{frame}
+
+%\subsection{Ethics}
+
+\begin{frame}{Ethics and Experimentation}
+\small
+\begin{itemize}
+\item Fearon, Humphreys, and Weinstein (2009) used a field experiment
+  to examine if community-driven reconstruction programs foster
+  social reconciliation in post-conflict Liberian villages.
+  \item
+    Outcome: funding raised for collective projects in public goods game
+    played with 24 villagers. Total payout to village is publicly
+    announced. \pause
+\end{itemize}
+
+\begin{quote}
+We received a report that leaders in one community had gathered
+villagers together after we left and asked people to report how much
+they had contributed. We moved quickly to prevent any retribution in
+that village, but also decided to alter the protocol for subsequent
+games to ensure greater protection for game participants. \pause
+\end{quote}
+\vspace{-.1in}
+\begin{quote}
+These changes included stronger language about the importance of
+protecting anonymity, random audits of community behavior, facilitation
+of anonymous reporting of violations of game protocol by participants,
+and a new opportunity to receive supplemental funds in a postproject
+lottery if no reports of harassment were received.
+\end{quote}
+
+\end{frame}
+
+\begin{frame}{Ethics and Experimentation}
+\small
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \textbf{Respect for persons}: Participants in most circumstances must
+  give informed consent.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Informed consent often done as part of the baseline survey.
+  \item
+    If risks are minimal and consent will undermine the study, then
+    informed consent rules can be waived. \pause
+  \end{itemize}
+\item
+  \textbf{Beneficence}: Avoid knowingly doing harm. Does not mean that all
+  risk can be eliminated, but possible risks must be balanced against
+  overall benefits to society of the research.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Note that the existence of a control group might be construed as
+    denying access to some benefit.
+  \item
+    But without a control group, generating reliable knowledge about the
+    efficacy of the intervention may be impossible. \pause
+  \end{itemize}
+\item
+  \textbf{Justice}: Important to avoid situations where one group
+  disproportionately bears the risks and another stands to received all
+  the benefits.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Evaluate interventions that are relevant to the subject population
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ethics and Experimentation}
+\small
+\begin{itemize}
+\item
+  IRB approval is required in almost all circumstances.\bigskip
+\item
+  If running an experiment in another country, you need to follow the
+  local regulations on experimental research.
+
+  \begin{itemize}
+  \item
+    Often poorly adapted to social science.
+  \item
+    Or legally murky whether or not approval is required.
+  \end{itemize}\bigskip
+\item
+  Still many unanswered questions and lack of consensus on the ethics of
+  field experimentation within Political Science!
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Be prepared to confront wildly varying opinons on these issues.
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Conclusion: Experiments}
+
+\begin{itemize}
+
+\item
+  Random assignment solves the identification problem for causal
+  inference based on minimal assumptions that we can control as researchers \medskip
+\item
+  Random assignment balances observed and unobserved confounders, which
+  is why it is considered the gold standard for causal inference\medskip
+\item
+  Statistical analysis is simple, transparent, and results are typically not
+  model dependent, since confounders are controlled for ``by design''\medskip
+\item
+  Design features can help to improve inferences\medskip
+\item
+  Always important to think about theory and external validity prior to
+  experimentation\medskip
+\end{itemize}
+
+\end{frame}
+
+\end{document}
+
+
+\end{document}

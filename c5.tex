@@ -1,0 +1,2582 @@
+\documentclass{beamer}
+%\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{MnSymbol,wasysym}
+
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+
+%\usepackage[table]{xcolor}
+\mode<presentation> {
+  \usetheme{Boadilla}
+%  \usetheme{Pittsburgh}
+%\usefonttheme[2]{sans}
+\renewcommand{\familydefault}{cmss}
+%\usepackage{lmodern}
+%\usepackage[T1]{fontenc}
+%\usepackage{palatino}
+%\usepackage{cmbright}
+  \setbeamercovered{transparent}
+\useinnertheme{rectangles}
+}
+%\usepackage{normalem}{ulem}
+%\usepackage{colortbl, textcomp}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg= black}
+\definecolor{trial}{cmyk}{1,0,0, 0}
+\definecolor{trial2}{cmyk}{0.00,0,1, 0}
+\definecolor{darkgreen}{rgb}{0,.4, 0.1}
+\usepackage{ifxetex,ifluatex}
+
+\usepackage{array}
+\beamertemplatesolidbackgroundcolor{white}  \setbeamercolor{alerted
+text}{fg=red}
+\newtheorem{assumption}{Assumption}
+
+\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}
+
+%\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{colortbl}
+\usepackage{fancyvrb}
+\usepackage{multirow}
+
+%\usepackage[usenames, dvipsnames]{color}
+%\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}c
+%\newcolumntype{Y}{\columncolor[cmyk]{0, 0, 1, 0}\raggedright}
+%\newcolumntype{C}{\columncolor[cmyk]{1, 0, 0, 0}\raggedright}
+%\newcolumntype{G}{\columncolor[rgb]{0, 1, 0}\raggedright}
+%\newcolumntype{R}{\columncolor[rgb]{1, 0, 0}\raggedright}
+
+%\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{Block}
+%$A = B$.
+%\end{beamerboxesrounded}}
+\renewcommand{\familydefault}{cmss}
+%\usepackage[all]{xy}
+
+\usepackage{tikz}
+\usepackage{lipsum}
+
+
+ \newenvironment{changemargin}[3]{%
+ \begin{list}{}{%
+ \setlength{\topsep}{0pt}%
+ \setlength{\leftmargin}{#1}%
+ \setlength{\rightmargin}{#2}%
+ \setlength{\topmargin}{#3}%
+ \setlength{\listparindent}{\parindent}%
+ \setlength{\itemindent}{\parindent}%
+ \setlength{\parsep}{\parskip}%
+ }%
+\item[]}{\end{list}}
+\usetikzlibrary{arrows}
+%\usepackage{palatino}
+%\usepackage{eulervm}
+\usecolortheme{lily}
+
+\newtheorem{com}{Comment}
+\newtheorem{lem} {Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+ \numberwithin{equation}{section}
+\newtheorem{iass}{Identification Assumption}
+\newtheorem{ires}{Identfication Result}
+\newtheorem{estm}{Estimand}
+\newtheorem{esti}{Estimator}
+\newcommand{\indep}{{\bot\negthickspace\negthickspace\bot}}
+
+%Box Types
+
+
+\title[Causal Inference] % (optional, nur bei langen Titeln nötig)
+{Causal Inference}
+
+\author{Justin Grimmer}
+\institute[University of Chicago]{Associate Professor\\Department of Political Science \\  University of Chicago}
+\vspace{0.3in}
+
+\date{April 16th, 2018}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+%
+%
+%\section{Experiments vs Observational
+%Studies}\label{experiments-vs-observational-studies}
+%
+%\begin{frame}{Experiments vs Observational Studies}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .8 \linewidth]{images/cartoon.jpg}
+%\end{figure}
+%
+%Lancet 2001: negative correlation between coronary heart disease mor-
+%tality and level of vitamin C in bloodstream (controlling for age,
+%gender, blood pressure, diabetes, and smoking)
+%
+%\end{frame}
+%
+%\begin{frame}{Experiments vs Observational Studies}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .85 \linewidth]{images/cartoon.jpg}
+%\end{figure}
+%
+%Lancet 2002: no effect of vitamin C on mortality in controlled placebo
+%trial (controlling for nothing)
+%
+%\end{frame}
+
+\frame{
+%\frametitle{Experiments vs. Observational Studies}
+\vspace{-.25cm}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .85 \linewidth]{images/cartoon.jpg}
+\end{figure}
+\begin{overprint}
+\onslide<1>
+Lancet 2001: negative correlation between coronary heart disease mortality and level of vitamin C in bloodstream (controlling for
+age, gender, blood pressure, diabetes, and smoking)
+\onslide<2>
+Lancet 2002: no effect of vitamin C on mortality in controlled placebo trial (controlling for nothing)
+\onslide<3>
+Lancet 2003: comparing among individuals with the same age, gender, blood pressure, diabetes, and smoking, those with higher vitamin C levels have lower levels of obesity, lower levels of alcohol consumption, are less likely to grow up in working class, etc.
+\end{overprint}
+
+}
+
+
+
+
+\begin{frame}{Observational Studies}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Randomization forms gold standard for causal inference, because it
+  balances \alert{observed} and \alert{unobserved} confounders\medskip
+\item
+  Cannot always randomize so we do observational studies, where we
+  \alert{adjust} for the \alert{observed covariates} and \alert{hope}
+  that unobservables are balanced\medskip
+\item
+  Better than hoping: \alert{design} observational study to approximate
+  an experiment
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    ``The planner of an observational study should always ask himself:
+    How would the study be conducted if it were possible to do it by
+    controlled experimentation'' (Cochran 1965)
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\section{What Makes a Good Observational
+Study?}\label{what-makes-a-good-observational-study}
+
+\begin{frame}{The Good, the Bad, and the Ugly}
+
+\textbf{Treatments, Covariates, Outcomes}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \alert{Randomized Experiment}: Well-defined treatment, clear
+  distinction between covariates and outcomes, control of assignment mechanism\medskip
+\item
+  \alert{Better Observational Study}: Well-defined treatment, clear
+  distinction between covariates and outcomes, precise knowledge of assignment mechanism\
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Can convincingly answer the following question: Why do two units who
+    are identical on measured covariates receive different treatments?
+  \end{itemize}
+\item
+  \alert{Poorer Observational Study}: Hard to say when treatment began
+  or what the treatment really is. Distinction between covariates and
+  outcomes is blurred, so problems that arise in experiments seem to be
+  avoided but are in fact just ignored. No precise knowledge of assignment mechanism.
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{The Good, the Bad, and the Ugly}
+
+\textbf{How were treatments assigned?}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \alert{Randomized Experiment}: Random assignment \medskip
+\item
+  \alert{Better Observational Study}: Assignment is not random, but
+  circumstances for the study were chosen so that treatment seems
+  haphazard, or at least not obviously related to potential outcomes
+  (sometimes we refer to these as natural or quasi-experiments) \medskip
+\item
+  \alert{Poorer Observational Study}: No attention given to assignment
+  process, units self-select into treatment based on potential outcomes
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{The Good, the Bad, and the Ugly}
+
+\textbf{What is the problem with purely cross-sectional data?}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Difficult to know what is pre or post treatment. \medskip
+\item
+  Many important confounders will be affected by the treatment and including these ``bad controls'' induces post-treatment bias. \medskip
+\item
+  But if you do not condition on the confounders that are
+  post-treatment, then often only left with a limited set of covariates
+  such as socio-demographics.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{The Good, the Bad, and the Ugly}
+
+\textbf{Were treated and controls comparable?}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \alert{Randomized Experiment}: Balance table for observables. \medskip
+\item
+  \alert{Better Observational Study}: Balance table for observables.
+  Ideally sensitivity analysis for unobservables. \medskip
+\item
+  \alert{Poorer Observational Study}: No direct assessment of
+  comparability is presented.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{The Good, the Bad, and the Ugly}
+
+\textbf{Eliminating plausible alternatives to treatment effects?}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \alert{Randomized Experiment}: List plausible alternatives and
+  experimental design includes features that shed light on these
+  alternatives (e.g.~placebos). Report on potential attrition and
+  non-compliance. \medskip
+\item
+  \alert{Better Observational Study}: List plausible alternatives and
+  study design includes features that shed light on these alternatives
+  (e.g.~multiple control groups, longitudinal covariate data, etc.).
+  Requires more work than in experiment since there are usually many
+  more alternatives. \medskip
+\item
+  \alert{Poorer Observational Study}: Alternatives are mentioned in
+  discussion section of the paper.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Good Observational Studies}
+
+\alert{Design features} we can use to handle unobservables:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Design comparisons so that unobservables are likely to be balanced
+  (e.g.~sub-samples, groups where treatment assignment was accidental,
+  etc.) \medskip
+\item
+  Unobservables may differ, but comparisons that are unaffected by
+  differences in time-invariant unobservables \medskip
+\item
+  Instrumental variables, if applied correctly \medskip
+\item
+  Multiple control groups that are known to differ on unobservables
+  \medskip
+\item
+  Sensitivity analysis and bounds \medskip
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Good Observational Studies}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  An observational study should be structured to resemble an experiment.\medskip
+\item
+  Adjustment for observed covariates should be simple, transparent, and
+  convincing.\medskip
+\item
+  The most plausible alternatives to the treatment effect should be
+  anticipated and addressed.\medskip
+\item
+  The analysis should address possible biases from unmeasured
+  covariates.
+%\item There should be a plan for a primary analysis.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Class Size on Student Achievements}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/ang1.pdf}
+\end{figure}
+
+Angrist and Lavy (1999)
+
+\end{frame}
+
+\begin{frame}{Class Size on Student Achievements}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/ang2.pdf}
+\end{figure}
+
+Angrist and Lavy (1999)
+
+\end{frame}
+
+\begin{frame}{Seat Belts on Fatality Rates}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .95 \linewidth]{images/seat_belts.pdf}
+\end{figure}
+
+Evans (1986)
+
+\end{frame}
+
+\begin{frame}{Persuasive Effect of Endorsement Changes on Labour Vote}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .48 \linewidth]{images/LaddLenz1.pdf}
+\end{figure}
+
+Ladd and Lenz (1999)
+
+\end{frame}
+
+\begin{frame}{Persuasive Effect of Endorsement Changes on Labour Vote}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .66 \linewidth]{images/LaddLenz2.pdf}
+\end{figure}
+
+Ladd and Lenz (1999)
+
+\end{frame}
+
+\section{Removing Bias by
+Conditioning}\label{removing-bias-by-conditioning}
+
+\begin{frame}{Adjustment for Observables in Observational Studies}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Subclassification\bigskip
+\item
+  Matching \bigskip
+\item
+  Propensity Score Methods\bigskip
+\item
+  Regression
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Smoking and Mortality (Cochran (1968))}
+
+\begin{center}
+ \begin{tabular}{lcccccc}
+ \multicolumn{7}{c}{\small\sc Table 1}\\
+ \multicolumn{7}{c}{\footnotesize\sc Death Rates per
+ 1,000 Person-Years}\vspace*{0.1cm}\\\hline\hline\\
+ Smoking group&&Canada&&U.K.&&U.S.\\\hline\\
+ Non-smokers&&20.2&&11.3&&13.5\\
+ Cigarettes&&20.5&&14.1&&13.5\\
+ Cigars/pipes&&35.5&&20.7&&17.4\\\hline\\
+ \end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Smoking and Mortality (Cochran (1968))}
+
+\begin{center}
+ \begin{tabular}{lcccccc}
+ \multicolumn{7}{c}{\small\sc Table 2}\\
+ \multicolumn{7}{c}{\footnotesize\sc Mean Ages, Years}
+ \vspace*{0.1cm}\\\hline\hline\\
+ Smoking group&&Canada&&U.K.&&U.S.\\\hline\\
+ Non-smokers&&54.9&&49.1&&57.0\\
+ Cigarettes&&50.5&&49.8&&53.2\\
+ Cigars/pipes&&65.9&&55.7&&59.7\\\hline\\
+ \end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Subclassification}
+
+To control for differences in age, we would like to compare different
+smoking-habit groups with the same age distribution\bigskip
+
+One possibility is to use subclassification:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  for each country, divide each group into different age subgroups
+\item
+  calculate death rates within age subgroups
+\item
+  average within age subgroup death rates using fixed weights (e.g.
+  number of cigarette smokers)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Subclassification: Example}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{ 1}{|c|}{} & \multicolumn{ 1}{c|}{Death Rates  } & \# Pipe- & \# Non- \\
+
+\multicolumn{ 1}{|c|}{} & \multicolumn{ 1}{c|}{Pipe Smokers} &  Smokers  &  Smokers \\
+\hline
+Age 20 - 50  &         15 &         11 &         29 \\
+\hline
+Age 50 - 70  &         35 &         13 &          9 \\
+\hline
+ Age + 70  &         50 &         16 &          2 \\
+\hline
+    Total  &            &         40 &         40 \\
+\hline
+\end{tabular}
+\end{center}
+
+What is the average death rate for Pipe Smokers? \pause
+
+$15\cdot(11/40)+35\cdot(13/40)+50\cdot(16/40)=35.5$
+
+\end{frame}
+
+\begin{frame}{Subclassification: Example}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{ 1}{|c|}{} & \multicolumn{ 1}{c|}{Death Rates  } & \# Pipe- & \# Non- \\
+
+\multicolumn{ 1}{|c|}{} & \multicolumn{ 1}{c|}{Pipe Smokers} &  Smokers  &  Smokers \\
+\hline
+Age 20 - 50  &         15 &         11 &         29 \\
+\hline
+Age 50 - 70  &         35 &         13 &          9 \\
+\hline
+ Age + 70  &         50 &         16 &          2 \\
+\hline
+    Total  &            &         40 &         40 \\
+\hline
+\end{tabular}
+\end{center}
+
+What is the average death rate for Pipe Smokers if they had same age
+distribution as Non-Smokers? \pause
+
+$15\cdot(29/40)+35\cdot(9/40)+50\cdot(2/40)=21.2$
+
+\end{frame}
+
+\begin{frame}{Smoking and Mortality (Cochran (1968))}
+
+\begin{center}
+ \begin{tabular}{lcccccc}
+ \multicolumn{7}{c}{\small\sc Table 3}\\
+ \multicolumn{7}{c}{\footnotesize\sc Adjusted Death Rates using 3 Age groups}
+ \vspace*{0.1cm}\\\hline\hline\\
+ Smoking group&&Canada&&U.K.&&U.S.\\\hline\\
+ Non-smokers&&20.2&&11.3&&13.5\\
+ Cigarettes&&28.3&&12.8&&17.7\\
+ Cigars/pipes&&21.2&&12.0&&14.2\\\hline\\
+ \end{tabular}
+\end{center}
+
+\end{frame}
+
+\section{Identification Under Selection on
+Observables}\label{identification-under-selection-on-observables}
+
+\begin{frame}{Identification Under Selection on Observables}
+
+\begin{iass}
+\begin{enumerate}\small
+\item $(Y_1,Y_0) \indep D |X$ (selection on observables)
+\item $0<\Pr(D=1|X)<1$ with probability one (common support)
+\end{enumerate}
+\end{iass}
+
+\vspace{-.2in}
+
+\begin{overprint}
+\onslide<1>
+\begin{ires}\small
+Given selection on observables we have
+\begin{eqnarray}
+E[Y_1-Y_0|X]&=&E[Y_1-Y_0|X,D=1]\nonumber\\
+           &=& E[Y|X,D=1]-E[Y|X,D=0]\nonumber
+\end{eqnarray}
+Therefore, under the common support condition:
+\begin{eqnarray}
+\tau_{ATE}&=&E[Y_1-Y_0] = \int E[Y_1-Y_0|X]\,dP(X)\nonumber\\
+           &=& \int \big(E[Y|X,D=1]-E[Y|X,D=0]\big)\,dP(X)\nonumber
+\end{eqnarray}
+\end{ires}
+\onslide<2>
+\begin{ires}\small
+Similarly,
+\begin{eqnarray}
+\tau_{ATT}&=&E[Y_1-Y_0|D=1]\nonumber\\
+&=&\int \big(E[Y|X,D=1]-E[Y|X,D=0]\big)\,dP(X|D=1)\nonumber
+\end{eqnarray}
+To identify $\tau_{ATT}$ the selection on observables
+and common support conditions can be relaxed to: \begin{itemize}
+\item $Y_0\indep D | X$ (SOO for Controls)
+\item $\Pr(D=1|X)<1$ (Weak Overlap)
+\end{itemize}
+\end{ires}
+\end{overprint}
+
+\end{frame}
+
+\begin{frame}{Identification Under Selection on Observables}
+
+\begin{overprint}
+\onslide<1>
+\begin{small}
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multirow{2}{*}{$E[Y_1|X=0,D=1]$ } & \multirow{2}{*}{\textcolor{red}{$E[Y_0|X=0,D=1]$} } &                    1 &          0 \\
+         2 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{c|}{} &                    1 &          0 \\
+\hline
+         3 & \multirow{2}{*}{\textcolor{red}{$E[Y_1|X=0,D=0]$}} & \multirow{2}{*}{$E[Y_0|X=0,D=0]$ } &                   0 &          0 \\
+         4 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{c|}{} &                    0 &          0 \\
+\hline
+         5 & \multirow{2}{*}{$E[Y_1|X=1,D=1]$ } & \multirow{2}{*}{\textcolor{red}{$E[Y_0|X=1,D=1]$}} &                    1 &          1 \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{c|}{} &                    1 &          1 \\
+\hline
+         7 & \multirow{2}{*}{\textcolor{red}{$E[Y_1|X=1,D=0]$}} & \multirow{2}{*}{$E[Y_0|X=1,D=0]$} &                    0 &          1 \\
+         8 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{c|}{} &                   0 &          1 \\
+\hline
+\end{tabular}
+\end{small}
+\onslide<2>
+\begin{small}
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multirow{2}{*}{$E[Y_1|X=0,D=1]$ } & \multicolumn{ 1}{c|}{\textcolor{red}{$E[Y_0|X=0,D=1]$}= } &                    1 &          0 \\
+         2 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{l|}{$E[Y_0|X=0,D=0]$} &                    1 &          0 \\
+\hline
+         3 & \multirow{2}{*}{\textcolor{red}{$E[Y_1|X=0,D=0]$}} & \multirow{2}{*}{$E[Y_0|X=0,D=0]$ } &                   0 &          0 \\
+         4 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{c|}{} &                    0 &          0 \\
+\hline
+         5 & \multirow{2}{*}{$E[Y_1|X=1,D=1]$ } & \multicolumn{ 1}{c|}{\textcolor{red}{$E[Y_0|X=1,D=1]$}=} &                    1 &          1 \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{l|}{$E[Y_0|X=1,D=0]$} &                    1 &          1 \\
+\hline
+         7 & \multirow{2}{*}{\textcolor{red}{$E[Y_1|X=1,D=0]$}} & \multirow{2}{*}{$E[Y_0|X=1,D=0]$} &                    0 &          1 \\
+         8 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{c|}{} &                   0 &          1 \\
+\hline
+\end{tabular}
+\end{small}\bigskip\\
+$(Y_1,Y_0) \indep D |X$ implies that we conditioned on all confounders. The treatment is randomly assigned within each stratum of $X$:\vspace{-.1in}
+\begin{eqnarray}
+E[Y_0|X=0,D=1] &=& E[Y_0|X=0,D=0]\,\, \mbox{and}\nonumber\\
+ E[Y_0|X=1,D=1] &=& E[Y_0|X=1,D=0]\nonumber
+\end{eqnarray}
+\onslide<3>
+\begin{small}
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multirow{2}{*}{$E[Y_1|X=0,D=1]$ } & \multicolumn{ 1}{c|}{\textcolor{red}{$E[Y_0|X=0,D=1]$}= } &                    1 &          0 \\
+         2 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{l|}{$E[Y_0|X=0,D=0]$} &                    1 &          0 \\
+\hline
+         3 & \multicolumn{ 1}{c|}{\textcolor{red}{$E[Y_1|X=0,D=0]=$}} & \multirow{2}{*}{$E[Y_0|X=0,D=0]$ } &                   0 &          0 \\
+         4 & \multicolumn{ 1}{l|}{$E[Y_1|X=0,D=1]$} & \multicolumn{ 1}{c|}{} &                    0 &          0 \\
+\hline
+         5 & \multirow{2}{*}{$E[Y_1|X=1,D=1]$ } & \multicolumn{ 1}{c|}{\textcolor{red}{$E[Y_0|X=1,D=1]$}=} &                    1 &          1 \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{ 1}{l|}{$E[Y_0|X=1,D=0]$} &                    1 &          1 \\
+\hline
+         7 &\multicolumn{ 1}{c|}{\textcolor{red}{$E[Y_1|X=1,D=0]=$}} & \multirow{2}{*}{$E[Y_0|X=1,D=0]$} &                    0 &          1 \\
+         8 & \multicolumn{ 1}{l|}{$E[Y_1|X=1,D=1]$ } & \multicolumn{ 1}{c|}{} &                   0 &          1 \\
+         \hline
+\end{tabular}
+\end{small}\bigskip\\
+$(Y_1,Y_0) \indep D |X$ also implies
+\begin{eqnarray}
+E[Y_1|X=0,D=1] &=& E[Y_1|X=0,D=0]\,\, \mbox{and}\nonumber\\
+ E[Y_1|X=1,D=1] &=& E[Y_1|X=1,D=0]\nonumber
+\end{eqnarray}
+\end{overprint}
+
+\end{frame}
+
+%\subsection{Post-Treatment Bias}\label{post-treatment-bias}
+%
+%\begin{frame}{Post-Treatment Bias}
+%
+%\textbf{What are the dangers of conditioning on a post-treatment
+%variable? }
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Imagined scenario: You are interested in estimating the effect of
+%  private school versus public high school education on test scores in
+%  grade 12: $\tau = E[ Y_1 - Y_0]$.
+%\item
+%  You observe test scores in grade 12 and grade 10.
+%\item
+%  A reviewer argues that you should control for grade 10 test scores, in
+%  order to account for baseline differences in test scores.
+%\item
+%  When is adjusting for a post-treatment variable justified?
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Rosenbaum (1984) provides the classic analysis: ``The Consequences
+%    of Adjustment for a Concomitant Variable That has Been Affected by
+%    Treatment''. \emph{Journal of the Royal Statistics Society, Series
+%    A.} 147: 656:666.
+%  \end{itemize}
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Post-Treatment Bias}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  10th grade test scores can be written as follows:
+%  $S_i =     D_iS_1 + (1- D) S_0$ \pause
+%\item
+%  The reviewer wants you to estimate the following quantity:
+%  \[\tilde \tau = E_S\{E[Y|D = 1, S = s\}] - E[Y|D = 0, S = s]\}\]
+%\item
+%  This is an estimator for the average treatment effect controlling for
+%  the post-treatment variable.
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Post-Treatment Bias}
+%
+%Useful to specify the ``Net Treatment Difference'':
+%\[ \tilde v = \E\{E[Y_1 | S_1 = s] - E[Y_0 | S_0 = s] \}\]
+%
+%This would compare private school students with public school students
+%with identical 10th grade test scores.
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  When does $\tau > 0$ and $\tilde v = 0$ suggest about $S$?
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    \pause Positive effect is transmitted through $S$.
+%  \end{itemize}
+%\item
+%  When does $\tau >0 $ and $\tilde v > 0$ suggest about $S$?
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    \pause Positive effect is transmitted through variables other than
+%    $S$.
+%  \end{itemize}
+%\item
+%  When does $\tau > 0$ and $\tilde v < 0$ suggest about the effect of
+%  the treatment?
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    \pause Positive effects over all, but some negative effects.
+%  \end{itemize}
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Post-Treatment Bias}
+%
+%What is the bias when conditioning on a post-treatment variable? (Assume
+%no confounding, i.e. ``as if'' randomization)
+%\[ \tilde \tau - \tau = (\tilde \tau - \tilde v) + (\tilde v -
+%\tau)  \]
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  The first term $(\tilde \tau - \tilde v)$ will be 0 under random
+%  assignment or ``as if'' random assignment.
+%\item
+%  Bias from the second term will be present when the treatment affects
+%  $S$ and $S$ affects $Y$ for any unit. \pause
+%\item
+%  Bias will be absent if the treatment variable has no effect on $S$ for
+%  all $i$ or the treatment has no effect on $Y$ through $S$ for all $i$
+%  (no indirect effects). \pause
+%\item
+%  Overall lesson: \textbf{do not condition on post-treatment
+%      variables}, unless you are confident treatment has no effect on
+%  the post-treatment variable.
+%\end{itemize}
+%
+%\end{frame}
+
+\subsection{Subclassification}\label{subclassification-1}
+
+\begin{frame}{Subclassification Estimator}
+
+\begin{ires}
+\begin{eqnarray}\small
+\tau_{ATE}&=& \int \big(E[Y|X,D=1]-E[Y|X,D=0]\big)\,dP(X) \nonumber\\
+\tau_{ATT}&=&\int \big(E[Y|X,D=1]-E[Y|X,D=0]\big)\,dP(X|D=1) \nonumber
+\end{eqnarray}
+\end{ires}
+
+Assume $X$ takes on $K$ different cells $\{X^1,..., X^k,...,X^K\}$. Then
+the analogy principle suggests estimators: \pause
+
+\begin{eqnarray*}
+\widehat{\tau}_{ATE}= \sum_{k=1}^K \big(
+\bar{Y}_1^k - \bar{Y}_0^k
+\big)\cdot
+\left(
+\frac{N^k}{N}
+\right);\,\,
+\widehat{\tau}_{ATT}= \sum_{k=1}^K \big(
+\bar{Y}_1^k - \bar{Y}_0^k
+\big)\cdot
+\left(
+\frac{N_1^k}{N_1}
+\right)
+\end{eqnarray*}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  $N^k$ is \# of obs. and $N_1^k$ is \# of treated obs. in cell $k$
+\item
+  $\bar{Y}_1^k$ is mean outcome for the treated in cell $k$
+\item
+  $\bar{Y}_0^k$ is mean outcome for the untreated in cell $k$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Subclassification by Age ($K = 2$)}
+
+\begin{tabular}{c|c|c|c|c|c}
+           & Death Rate & Death Rate &            &          \# &         \#  \\
+       $X_k$ &    Smokers & Non-Smokers &      Diff. &    Smokers &       Obs. \\
+       \hline
+       Old &         28 &         24 &         4 &          3 &         10 \\
+       \hline
+     Young &         22 &         16 &         6 &          7 &         10 \\
+     \hline
+     Total &            &            &            &         10 &         20 \\
+\end{tabular}
+
+What is
+$\widehat{\tau}_{ATE}= \sum_{k=1}^K \big( \bar{Y}_1^k - \bar{Y}_0^k \big)\cdot \left( \frac{N^k}{N} \right)$?
+\pause
+
+$\widehat{\tau}_{ATE}=4\cdot(10/20)+6\cdot(10/20)=5$
+
+\end{frame}
+
+\begin{frame}{Subclassification by Age ($K = 2$)}
+
+\begin{tabular}{c|c|c|c|c|c}
+           & Death Rate & Death Rate &            &          \# &         \#  \\
+       $X_k$ &    Smokers & Non-Smokers &      Diff. &    Smokers &       Obs. \\
+       \hline
+       Old &         28 &         24 &         4 &          3 &         10 \\
+       \hline
+     Young &         22 &         16 &         6 &          7 &         10 \\
+     \hline
+     Total &            &            &            &         10 &         20 \\
+\end{tabular}
+
+What is
+$\widehat{\tau}_{ATT}= \sum_{k=1}^K \big( \bar{Y}_1^k - \bar{Y}_0^k \big)\cdot \left( \frac{N_1^k}{N_1} \right)$?
+\pause
+
+$\widehat{\tau}_{ATT}=4\cdot(3/10)+6\cdot(7/10)=5.4$
+
+\end{frame}
+
+\begin{frame}{Subclassification by Age and Gender ($K = 4$)}
+
+\begin{tabular}{l|c|c|c|c|c}
+           & Death Rate & Death Rate &            &         \# &         \#  \\
+       $X_k$ &    Smokers & Non-Smokers &      Diff. &    Smokers &       Obs. \\
+       \hline
+ Old, Male &         28 &         22 &          4 &          3 &          7 \\
+ \hline
+Old, Female &            &         24 &            &          0 &          3 \\
+\hline
+Young, Male &         21 &         16 &          5 &          3 &          4 \\
+\hline
+Young, Female &         23 &         17 &          6 &          4 &          6 \\
+\hline
+     Total &            &            &            &         10 &         20 \\
+\end{tabular}
+
+What is
+$\widehat{\tau}_{ATE}= \sum_{k=1}^K \big( \bar{Y}_1^k - \bar{Y}_0^k \big)\cdot \left( \frac{N^k}{N} \right)$?
+\pause
+
+\alert{Not identified!}
+
+\end{frame}
+
+\begin{frame}{Subclassification by Age and Gender ($K = 4$)}
+
+\begin{tabular}{l|c|c|c|c|c}
+           & Death Rate & Death Rate &            &         \# &         \#  \\
+       $X_k$ &    Smokers & Non-Smokers &      Diff. &    Smokers &       Obs. \\
+       \hline
+ Old, Male &         28 &         22 &          4 &          3 &          7 \\
+ \hline
+Old, Female &            &         24 &            &          0 &          3 \\
+\hline
+Young, Male &         21 &         16 &          5 &          3 &          4 \\
+\hline
+Young, Female &         23 &         17 &          6 &          4 &          6 \\
+\hline
+     Total &            &            &            &         10 &         20 \\
+\end{tabular}
+
+What is
+$\widehat{\tau}_{ATT}= \sum_{k=1}^K \big( \bar{Y}_1^k - \bar{Y}_0^k \big)\cdot \left( \frac{N_1^k}{N_1} \right)$?
+\pause
+
+$\widehat{\tau}_{ATT}= 4\cdot(3/10)+5\cdot(3/10)+6\cdot(4/10)=5.1$
+
+\end{frame}
+
+%\begin{frame}{Fisher on Smoking}
+%
+%R.A. Fisher:
+%
+%\begin{quote}
+%The causes of smoking cigarettes may be studied among your friends, to
+%some extent, and I think you will agree that a slight cause of
+%irritation---a slight disappointment, an unexpected delay, some sort of
+%a mild rebuff, a frustration---are {[}sic{]} commonly accompanied by
+%pulling out a cigarette and getting a little compensation for life's
+%minor ills in that way. And so, anyone suffering from a chronic
+%inflammation in part of the body (something that does not give rise to
+%conscious pain) is not unlikely to be associated with smoking more
+%frequently, or smoking rather than not smoking. \ldots{} And to take the
+%poor chap's cigarettes away from him would be rather like taking away
+%his white stick from a blind man.
+%\end{quote}
+%
+%\end{frame}
+%
+%\begin{frame}{Example of Subclassification}
+%
+%Maya Sen, in ``Exploring the Role of Race and Gender in the Subprime
+%Lending Crisis'', asks if there is evidence of discriminatory lending of
+%subprime loans and uses a database of all real estate transactions HMDA
+%database:
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .8 \linewidth]{images/sen.png}
+%\end{figure}
+%
+%\end{frame}
+
+\subsection{Matching}\label{matching}
+
+\begin{frame}{}
+
+\centering
+
+\fbox{Matching is Not an Identification Strategy}
+
+\end{frame}
+
+%\begin{frame}{Lyall (2009)}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .8 \linewidth]{images/lyall_map.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Identification Strategy: Doctrine and Drunks}
+%
+%\textbf{``Harassment and Interdiction'' Doctrine}: ``barrages at random
+%intervals and of varying duration on random days'' \pause \bigskip
+%
+%\textbf{Drunks}: ``As one Russian commander put it, solders `get drunk
+%as pigs, lob a few shells, claim combat pay and get drunk again'.''"
+%
+%\end{frame}
+%
+%\begin{frame}{Balance Checks}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .99 \linewidth]{images/lyall_balance.png}
+%\end{figure}
+%
+%\end{frame}
+
+%\begin{frame}{Gilligan and Sargenti (2008)}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .99 \linewidth]{images/gilligan_sargenti_balance.png}
+%\end{figure}
+%
+%\end{frame}
+
+%\begin{frame}{Gilligan and Sargenti (2008)}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .99 \linewidth]{images/gilligan_sargenti_matched_pairs.png}
+%\end{figure}
+%
+%\end{frame}
+
+
+
+\begin{frame}{Matching}
+
+When $X$ is continuous we can estimate $\tau_{ATT}$ by ``imputing''
+the missing potential outcome of each treated unit using the observed
+outcome from the ``closest'' control unit: \[
+\widehat{\tau}_{ATT}= \frac{1}{N_1} \sum_{D_i=1}
+\big(Y_i - Y_{j(i)}\big)
+\] where $Y_{j(i)}$ is the outcome of an untreated observation such that
+$X_{j(i)}$ is the \alert{closest} value to $X_i$ among the untreated
+observations. \pause
+
+We can also use the average for $M$ closest matches: \[
+\widehat{\tau}_{ATT}= \frac{1}{N_1} \sum_{D_i=1} \left\{ Y_i -
+\left(\frac{1}{M}\sum_{m=1}^M Y_{j_m(i)},\right)\right\}
+\] Works well when we can find good matches for each treated unit
+
+\end{frame}
+
+\begin{frame}{Matching: Example with a Single $X$}
+
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multicolumn{ 1}{c|}{6} & \multicolumn{ 1}{c|}{\textcolor{red}{?}} &                    1 &          3 \\
+         2 & \multicolumn{ 1}{c|}{1} & \multicolumn{ 1}{c|}{\textcolor{red}{?}} &                    1 &          1 \\
+         3 & \multicolumn{ 1}{c|}{0} & \multicolumn{ 1}{c|}{\textcolor{red}{?}} &                    1 &          10 \\
+\hline
+         4 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{0} &                    0 &          2 \\
+         5 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{9} &                    0 &          3 \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{1} &                    0 &          -2 \\
+         7 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{1} &                    0 &          -4 \\
+         \hline
+\end{tabular}
+
+What is
+$\widehat{\tau}_{ATT}= \frac{1}{N_1} \sum_{D_i=1} \big(Y_i - Y_{j(i)}\big)$?
+\pause
+
+Match and plugin in
+
+\end{frame}
+
+\begin{frame}{Matching: Example with a Single $X$}
+
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multicolumn{ 1}{c|}{6} & \multicolumn{ 1}{c|}{\textcolor{blue}{9}} &                    1 &          \textcolor{blue}{3} \\
+         2 & \multicolumn{ 1}{c|}{1} & \multicolumn{ 1}{c|}{\textcolor{cyan}{0}} &                    1 &          \textcolor{cyan}{1} \\
+         3 & \multicolumn{ 1}{c|}{0} & \multicolumn{ 1}{c|}{\textcolor{blue}{9}} &                    1 &          \textcolor{blue}{10} \\
+\hline
+         4 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{\textcolor{cyan}{0}} &                    0 &          \textcolor{cyan}{2} \\
+         5 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{\textcolor{blue}{9}} &                    0 &          \textcolor{blue}{3} \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{1} &                    0 &          -2 \\
+         7 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{1} &                    0 &          -4 \\
+         \hline
+\end{tabular}
+
+What is
+$\widehat{\tau}_{ATT}= \frac{1}{N_1} \sum_{D_i=1} \big(Y_i - Y_{j(i)}\big)$?
+\pause
+
+$\widehat{\tau}_{ATT}=1/3\cdot(6-\textcolor{blue}{9})+1/3\cdot(1-\textcolor{cyan}{0})+1/3\cdot(0-\textcolor{blue}{9})=-3.7$
+
+\end{frame}
+
+\begin{frame}{Matching Distance Metric}
+\scriptsize
+``Closeness'' is often defined by a \alert{distance metric}. Let
+$X_i=(X_B,X_B,...,X_{ik})'$ and $X_j=(X_{j1},X_{j2},...,X_{jk})'$
+be the covariate vectors for $i$ and $j$.\\\medskip A commonly used distance is
+the \alert{Mahalanobis distance}: \[
+MD(X_i,X_j)=\sqrt{(X_i-X_j)'\Sigma^{-1}(X_i-X_j)}
+\] where $\Sigma$ is the Variance-Covariance-Matrix so the distance metric is scale-invariant and takes into account the correlations. For an exact match
+$MD(X_i,X_j)=0$. 
+
+Other distance metrics can be used, for example Stata's \texttt{nnmatch} by default uses the diagonal matrix of the inverse of the covariate variances (normalized Euclidean distance):
+\[
+StataD(X_i,X_j)=\sqrt{(X_i-X_j)'diag(\Sigma_X^{-1})(X_i-X_j)}
+\]
+
+In \texttt{R}, Genetic matching uses (\texttt{GenMatch(Matching)}): \[
+GeneticD(X_i,X_j) = \sqrt{(X_i - X_j)'(S^{-1/2})'\, W\, S^{-1/2} (X_i - X_j)}
+\] where $W$ is a $(k \times k)$ positive definite weight matrix with
+zeros in off-diagonals.
+
+\end{frame}
+
+%\begin{frame}{Mahalanobis Distance}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = 1 \linewidth]{images/mahal.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Mahalanobis Distance}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .8 \linewidth]{images/choleskytransform.png}
+%\end{figure}
+%
+%\end{frame}
+
+\begin{frame}{Mahalanobis Distance: Example}
+
+\begin{table}[!h]
+ \begin{center}
+ \begin{tabular}{ccc}
+\multicolumn{1}{l}{}&
+\multicolumn{1}{c}{$X_1$}&
+\multicolumn{1}{c}{$X_2$}
+\\ \hline
+Treated &$0$&$  0$\\
+Control A &$ 2$&$2$\\
+Control B &$ 1.8$&$0$\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+$X_T=\left(        \begin{array}{cc}          0 & 0 \\        \end{array}      \right)' $
+$\quad X_A=\left(                 \begin{array}{cc}                   2 & 2 \\                 \end{array}               \right)' $
+$\quad X_B=\left(                 \begin{array}{cc}                   1.8 &  0 \\                 \end{array}               \right)' $\\\bigskip
+
+$\quad\Sigma=\left(                \begin{array}{ccc}                   & X_1 & X_2 \\                  X_1 & 1 &  .9 \\                  X_2 & .9 & 1\\                \end{array}              \right)$\\\bigskip
+
+Which control is closer?
+
+\end{frame}
+
+\begin{frame}{Mahalanobis Distance}
+\scriptsize
+$X_T=\left(        \begin{array}{cc}          0 & 0 \\        \end{array}      \right)' $
+$\,\, X_A=\left(                 \begin{array}{cc}                   2 &  2 \\                 \end{array}               \right)' $
+$\,\, X_B=\left(                 \begin{array}{cc}                   1.8 &  0 \\                 \end{array}               \right)' $
+$\,\,\Sigma=\left(                \begin{array}{ccc}           & X_1 & X_2 \\                  X_1 & 1 &  .9 \\                  X_2 & .9 & 1\\                \end{array}              \right)$
+
+\begin{align*}
+MD(X_A,X_{T}) &= \sqrt{
+(X_A-X_T)'\Sigma^{-1}(X_A-X_T)}\\
+ &=  \sqrt{
+(\left(
+       \begin{array}{cc}
+         2 & 2 \\
+       \end{array}
+     \right)-\left(
+                \begin{array}{cc}
+                  0 &  0 \\
+                \end{array}
+              \right))' \left(
+               \begin{array}{cc}
+                  1 &  .9 \\
+                   .9 & 1 \\
+               \end{array}
+             \right)^{-1} (\left(
+       \begin{array}{cc}
+         2 & 2 \\
+       \end{array}
+     \right)-\left(
+                \begin{array}{cc}
+                    0 &  0 \\
+                \end{array}
+              \right))}\\
+& =  \sqrt{
+\left(
+       \begin{array}{cc}
+         2 &  2 \\
+       \end{array}
+     \right)' \left(
+               \begin{array}{cc}
+                   5.2 &  -4.7 \\
+                   -4.7 & 5.2 \\
+               \end{array}
+             \right)\left(
+       \begin{array}{cc}
+         2 &  2 \\
+       \end{array}
+     \right)}\\
+ &= 4.2\\
+MD(X_B,X_{T}) &=  \sqrt{
+\left(
+       \begin{array}{cc}
+         1.8 &  0 \\
+       \end{array}
+     \right)' \left(
+               \begin{array}{cc}
+                   5.2 &  -4.7 \\
+                   -4.7 & 5.2 \\
+               \end{array}
+             \right)\left(
+       \begin{array}{cc}
+          1.8 &  0 \\
+       \end{array}
+     \right)}\\
+ &= 17\\
+\end{align*}
+With $StataD(X_A,X_T)=\sqrt{(X_i-X_T)'diag(\Sigma_X^{-1})(X_i-X_T)}$ we find $StataD(X_A,X_T)=84$ and $StataD(X_B,X_T)=17$ since correlation is ignored.
+\end{frame}
+
+\begin{frame}{Mahalanobis Distance}
+\vspace{-.2in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .9 \linewidth]{images/maha1.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Normalized Euclidean Distance}
+\vspace{-.2in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .9 \linewidth]{images/maha2.pdf}
+\end{figure}
+
+\end{frame}
+
+%\begin{frame}{Genmatch}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .5 \linewidth]{images/genmatch_flow_chart.png}
+%\end{figure}
+%
+%\end{frame}
+
+%\begin{frame}{Genmatch}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .8 \linewidth]{images/genmatch.png}
+%\end{figure}
+%
+%\end{frame}
+
+\begin{frame}{Local Methods and the Curse of Dimensionality}
+\small
+\textbf{Big} Problem: \pause in a mathematical space, the volume increases \alert{exponentially} when adding extra dimensions.
+\vspace{-.5cm}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .8 \linewidth]{images/curse_dimensionality1.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Local Methods and the Curse of Dimensionality}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .6 \linewidth]{images/curse_dimensionality2.pdf}
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{The E-Harmony Problem}
+
+Curse of dimensionality and on-line dating:\pause \\
+
+\scalebox{0.75}{\includegraphics{eharmony.png}}
+ 
+\invisible<1>{Suppose (for example) 29 dimensions are binary (0,1):} \pause \\
+\invisible<1-2>{Suppose dimensions are independent:} \pause \\
+\invisible<1-3>{Pr(2 people agree) = 0.5 } \pause 
+
+\begin{eqnarray}
+\invisible<1-4>{\text{Pr(Exact)} & = & \text{Pr(Agree)}_{1} \times \text{Pr(Agree)}_{2}\times \hdots \times \text{Pr(Agree)}_{29} } \pause  \nonumber \\
+\invisible<1-5>{& = & 0.5 \times 0.5 \times \hdots \times 0.5} \pause  \nonumber \\
+\invisible<1-6>{& = & 0.5^{29} } \pause \nonumber \\
+\invisible<1-7>{& \approx & 1.8 \times 10^{-9}  } \pause    \nonumber 
+\end{eqnarray}
+
+\invisible<1-8>{1 in 536,870,912 people}  \pause 
+
+\invisible<1-9>{Across many ``variables" (events) agreement is harder} 
+
+\end{frame}
+
+
+
+
+\begin{frame}{Matching with Bias Correction}
+
+Matching estimators may behave badly if $X$ contains multiple continuous
+variables.
+
+Need to adjust matching estimators in the following way: \[
+\tilde{\tau}_{ATT}= \frac{1}{N_1} \sum_{D_i=1}
+(Y_i - Y_{j(i)}) - (\widehat\mu_0(X_i)-\widehat\mu_0(X_{j(i)})),
+\] where $\mu_0(x)=E[Y|X=x, D=0]$ is the population regression function
+under the control condition and $\widehat \mu_0$ is an estimate of
+$\mu_0$.
+
+$X_i-X_{j(i)}$ is often referred to as the \alert{matching discrepancy}.
+
+These ``bias-corrected'' matching estimators behave well even if $\mu_0$
+is estimated using a simple linear regression (ie.
+$\mu_0(x)=\beta_0 + \beta_1 x$) (Abadie and Imbens, 2005)
+
+\end{frame}
+
+\begin{frame}{Matching with Bias Correction}
+
+Each treated observation contributes \[
+\mu_0(X_i)-\mu_0(X_{j(i)})
+\] to the bias.
+
+Bias-corrected matching: \[
+\tilde\tau_{ATT}= \frac{1}{N_1}\sum_{D_i=1} \Big((Y_i-Y_{j(i)})-
+(\widehat\mu_0(X_i)-\widehat\mu_0(X_{j(i)}))
+\Big)
+\] The large sample distribution of this estimator (for the case of
+matching with replacement) is (basically) standard normal. $\mu_0$ is
+usually estimated using a simple linear regression (ie.
+$\mu_0(x)=\beta_0 + \beta_1 x$).\\\bigskip
+
+In R: \texttt{Match(Y,Tr, X,BiasAdjust = TRUE)}
+
+\end{frame}
+
+\begin{frame}{Bias Adjustment with Matched Data}
+
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multicolumn{ 1}{c|}{6} & \multicolumn{ 1}{c|}{\textcolor{red}{?}} &                    1 &          3 \\
+         2 & \multicolumn{ 1}{c|}{1} & \multicolumn{ 1}{c|}{\textcolor{red}{?}} &                    1 &          1 \\
+         3 & \multicolumn{ 1}{c|}{0} & \multicolumn{ 1}{c|}{\textcolor{red}{?}} &                    1 &          10 \\
+\hline
+         4 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{0} &                    0 &          2 \\
+         5 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{9} &                    0 &          3 \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{1} &                    0 &          8 \\
+         \hline
+\end{tabular}
+
+What is
+$\tilde\tau_{ATT}= \frac{1}{N_1}\sum_{D_i=1} \Big((Y_i-Y_{j(i)})- (\widehat\mu_0(X_i)-\widehat\mu_0(X_{j(i)})) \Big)$?
+
+\end{frame}
+
+\begin{frame}{Bias Adjustment with Matched Data}
+
+\footnotesize 
+
+\begin{tabular}{c|c|c|c|c}
+ &Potential Outcome & Potential Outcome &   & \\
+unit &under Treatment  & under Control &   &  \\
+\hline
+   i  & $Y_{1i}$  & $Y_{0i}$ &    $D_i$ &  $X_i$ \\
+\hline
+         1 & \multicolumn{ 1}{c|}{6} & \multicolumn{ 1}{c|}{\textcolor{blue}{9}} &                    1 &          3 \\
+         2 & \multicolumn{ 1}{c|}{1} & \multicolumn{ 1}{c|}{\textcolor{cyan}{0}} &                    1 &          1 \\
+         3 & \multicolumn{ 1}{c|}{0} & \multicolumn{ 1}{c|}{\textcolor{green}{1}} &                    1 &          10 \\
+\hline
+         4 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{0} &                    0 &          \textcolor{cyan}{2} \\
+         5 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{9} &                    0 &          \textcolor{blue}{3} \\
+         6 & \multicolumn{ 1}{c|}{} & \multicolumn{1}{c|}{1} &                    0 &          \textcolor{green}{8} \\
+         \hline
+\end{tabular}
+
+What is
+$\tilde\tau_{ATT}= \frac{1}{N_1}\sum_{D_i=1} \Big((Y_i-Y_{j(i)})- (\widehat\mu_0(X_i)-\widehat\mu_0(X_{j(i)})) \Big)$?
+
+Estimate $\widehat\mu_0(x)=\beta_0 + \beta_1 x = 5 - .4 x$. \pause Now
+plug in:
+
+\begin{eqnarray*}
+\widehat{\tau}_{ATT} &=&1/3 \{ ((6-\textcolor{blue}{9})-(\widehat\mu_0(3)-\widehat\mu_0(\textcolor{blue}{3})))\\
+&+&((1-\textcolor{cyan}{0})-(\widehat\mu_0(1)-\widehat\mu_0(\textcolor{cyan}{2})))\\
+&+&((0-\textcolor{green}{1})-
+(\widehat\mu_0(10)-\widehat\mu_0(\textcolor{green}{8})))\}\\
+&=& -0.86
+\end{eqnarray*}
+
+Unadjusted:  $1/3((6-9) + (1-0) + (0-1) )=-1$
+
+\end{frame}
+
+\begin{frame}{Before Matching}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim1.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{After Matching}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim2.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{After Matching: Imputation Function}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim3.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{After Matching: Imputation of missing $Y_0$}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim4.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{After Matching: No Overlap in $Y_0$}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim5.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{After Matching: Imputation of missing $Y_0$}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim6.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{After Matching: Imputation of missing $Y_0$}
+\vspace{-.3in}
+\begin{figure}[ht] \centering
+    \includegraphics[width = .75 \linewidth]{images/matching_sim7.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Choices when Matching}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  With or Without Replacement? \pause
+\item
+  How many matches? \pause
+\item
+  Which Matching Algorithm?
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Genetic Matching
+  \item
+    Kernel Matching
+  \item
+    Full Matching
+  \item
+    Coarsened Exact Matching
+  \item
+    Matching as Pre-processing
+  \item
+    Propensity Score Matching \pause
+  \end{itemize}
+\item
+  Use whatever gives you the best balance! Checking balance is important
+  to get a sense for how much extrapolation is needed
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Should check balance on interactions and higher moments
+  \end{itemize}
+\item
+  With insufficient overlap, all adjustment methods are problematic
+  because we have to heavily rely on a model to impute missing potential
+  outcomes.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Balance Checks}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .65 \linewidth]{images/hansen1.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Balance Checks}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .99 \linewidth]{images/lyall1.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Variance of the Matching Estimator}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  The sampling variance of the matching estimator (conditional on
+  covariates and treatment indicators) can be written as the following:
+  \[ V(\hat \tau_{ATT} | \mathbf{X}, \mathbf{D}) = \sum_{i=1}^{N} \lambda_i(\mathbf{X}, \mathbf{W}) \cdot \sigma^2_{D_i}(X_i)\]
+  where $\lambda_i(\mathbf{X}, \mathbf{W})$ is just a set of weights which
+  account for matching with replacement and multiple controls per
+  treatment unit. \pause
+\item
+  $\sigma^2_i$ is the unit level variance. Abadie and Imbens suggest
+  matching to estimate this quantity:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Let $v(i)$ be the closest unit to $i$ with the same treatment
+    indicator ($D_{v(i)} = D_i$). The sample variance of the outcome
+    variable for these 2 units can be used to estimate
+    $\sigma^2_{D_i}(X_i)$:
+    \[ \hat \sigma^2_{D_i}(X_i) = (Y_i - Y_{v(i)})^2 / 2 \] 
+    \item Robust standard errors also available\pause
+  \end{itemize}
+\item
+  Do not use the bootstrap!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Useful Matching Functions}
+
+The workhorse model is the \texttt{Match()} function in the
+\texttt{Matching} package:
+
+\small
+\begin{verbatim}
+Match(Y = NULL, Tr, X, Z = X, V = rep(1, length(Y)), 
+    estimand = "ATT", M = 1, BiasAdjust = FALSE, exact = NULL, 
+    caliper = NULL,  replace = TRUE, ties = TRUE, 
+    CommonSupport = FALSE, Weight = 1, Weight.matrix = NULL, 
+    weights = NULL, Var.calc = 0,  sample = FALSE, restrict = NULL, 
+    match.out = NULL, distance.tolerance = 1e-05, 
+    tolerance = sqrt(.Machine$double.eps), version = "standard") 
+\end{verbatim}
+
+Default distance metric (\texttt{Weight=1}) is normalized Euclidean distance
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \texttt{MatchBalance(formu)} for balance checking
+\item
+  \texttt{GenMatch()} for genetic matching
+\end{itemize}
+
+\end{frame}
+
+\subsection{Propensity Scores}\label{propensity-scores}
+
+%\begin{frame}{Review: Law of Iterated Expectations}
+%
+%\begin{definition}
+%A very important property of conditional expectations is:
+%$$
+%E[Y]=E[E[Y|X]]
+%$$
+%since $E[Y|X]$ is a function of $X$, the outer expectation
+%is taken with respect to the distribution of $X$.
+%\end{definition}
+%
+%Example: \pause 
+%
+%Imagine $Y$=Support and $X$=gender $(1,0)$. Then, the law of iterated
+%expectations tells us: \[
+%E[Y]=\pause E[Y|X=1]\cdot \Pr(X=1) + E[Y|X=0]\cdot \Pr(X=0).
+%\] This means: \medskip
+%\small
+%
+%\begin{tabular}{lcll}
+%Average Support &=& Average Support for men&$\times$ Proportion of men\\
+%               &+& Average Support for women&$\times$ Proportion of women.
+%\end{tabular}
+%
+%\end{frame}
+
+\begin{frame}{Identification with Propensity Scores}
+
+\begin{definition}
+Propensity score is defined as the selection probability conditional on the confounding variables:
+$\pi(X)=\Pr(D=1|X)$
+\end{definition}
+
+\begin{iass}
+\begin{enumerate}
+\item $(Y_1,Y_0) \indep D |X$ (selection on observables)
+\item $0<\Pr(D=1|X)<1$ with probability one (common support)
+\end{enumerate}
+\end{iass}
+
+\begin{ires}
+Under selection on observables we have $(Y_1,Y_0) \indep D| \pi(X)$, ie. conditioning
+on the propensity score is enough to have independence between the treatment indicator and potential outcomes. Implies substantial dimension reduction.
+\end{ires}
+
+\end{frame}
+
+\begin{frame}{Identification with Propensity Scores}
+
+\begin{Proof}
+\small
+Show that $\Pr(D = 1|Y_0, Y_1, \pi(X)) = \Pr(D = 1|\pi(X)) = \pi(X)$, implying
+independence of $(Y_0,Y_1)$ and $D$ conditional on $\pi(X)$.
+\begin{eqnarray*}
+\Pr(D=1|Y_1,Y_0,\pi(X))&=&E[D|Y_1,Y_0,\pi(X)]\\ \pause
+&=&E\left[E[D|Y_1,Y_0,X]|Y_1,Y_0,\pi(X)\right] \mbox{ (LIE) }\\ \pause
+&=&E\left[E[D|X]|Y_1,Y_0,\pi(X)\right] \mbox{ (SOO) } \\\pause
+&=&E\left[\pi(X)|Y_1,Y_0,\pi(X)\right] \\ \pause
+&=&\pi(X)
+\end{eqnarray*}
+Using a similar argument
+\begin{eqnarray*}
+\Pr(D=1|\pi(X))&=&E[D|\pi(X)]=E[E[D|X]|\pi(x)]\\ \pause
+&=&E[\pi(X)|\pi(X)]=\pi(X)
+\end{eqnarray*}
+therefore $\Pr(D=1|Y_1,Y_0,\pi(X))=\Pr(D=1|\pi(X))$
+\end{Proof}
+
+\end{frame}
+
+\begin{frame}{Matching on the Propensity Score}
+
+\begin{corollary} If $(Y_1,Y_0) \indep D|X$, then
+\begin{eqnarray*}
+E[Y|D=1,\pi(X)=\bar{\pi}]-E[Y|D=0,\pi(X)=\bar{\pi}]&=&\\
+E[Y_1-Y_0|\pi(X)=\bar{\pi}]
+\end{eqnarray*}
+\end{corollary}
+
+Suggests a two step procedure to estimate causal effects under selection
+on observables:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Estimate the propensity score $\pi(X)=P(D=1|X)$ (e.g. using
+  logit/probit regression, machine learning methods, etc) \pause
+\item
+  Match or subclassify on propensity score.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Estimating the Propensity Score}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Given selection on observables we have $(Y_1,Y_0) \indep D|\pi(X)$
+  which implies the balancing property of the propensity score: \[
+    \Pr(X|D=1,\pi(X))=\Pr(X|D=0,\pi(X))
+    \] \pause
+\item
+  We can use this to check if our estimated propensity score actually
+  produces balance:
+  $P(X|D=1,\widehat{\pi}(X))=P(X|D=0,\widehat{\pi}(X))$ \pause
+\item
+  To properly model the assignment mechanism, we need to include
+  important confounders correlated with treatment and outcome
+\item
+  Need to find the correct functional form, miss-specified propensity
+  scores can lead to bias. Any methods can be used (probit, logit, etc.)
+\item
+  Estimate $\mapsto$ Check Balance $\mapsto$ Re-estimate $\mapsto$ Check
+  Balance
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Example: Blattman (2010)}
+
+\footnotesize
+
+\begin{verbatim}
+pscore.fmla <- as.formula(paste("abd~",paste(names(covar),collapse="+")))
+abd <- data$abd
+pscore_model <- glm(pscore.fmla, data = data,
+family = binomial(link = logit))
+pscore <- predict(pscore_model, type = "response")
+\end{verbatim}
+\centering
+\includegraphics[height = 2.4in]{images/blattman_pscore.pdf}
+
+\end{frame}
+
+% \begin{frame}[fragile]{Blattman (2010): Match on the Propensity Score}
+
+% \footnotesize
+
+% \begin{verbatim}
+% match.pscore <-Match(Tr=}\NormalTok{abd, }\DataTypeTok{X=}\NormalTok{pscore, }\DataTypeTok{M=}\DecValTok{1}\NormalTok{, }\DataTypeTok{estimand=}\StringTok{"ATT"}\NormalTok{)}
+% \end{verbatim}
+
+% \centering
+% \includegraphics[height = 3in]{images/blattman_pscore_matching.pdf}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{Blattman (2010): Check Balance}
+
+% \footnotesize
+
+% \begin{Shaded}
+% \begin{Highlighting}[]
+% \NormalTok{match.pscore <-}
+% \NormalTok{+}\StringTok{ }\KeywordTok{MatchBalance}\NormalTok{(abd ~}\StringTok{ }\NormalTok{age, }\DataTypeTok{data=}\NormalTok{data, }\DataTypeTok{match.out =} \NormalTok{match.pscore)}
+
+% \NormalTok{**}\ErrorTok{***}\StringTok{ }\NormalTok{(V1) age **}\ErrorTok{***}
+% \StringTok{                       }\NormalTok{Before Matching     After Matching}
+% \NormalTok{mean treatment........     }\FloatTok{21.366}          \FloatTok{21.366} 
+% \NormalTok{mean control..........     }\FloatTok{20.151}          \FloatTok{20.515} 
+% \NormalTok{std mean diff.........     }\FloatTok{24.242}          \FloatTok{16.976} 
+
+% \NormalTok{var }\KeywordTok{ratio} \NormalTok{(Tr/Co).....     }\FloatTok{1.0428}         \FloatTok{0.98412} 
+% \NormalTok{T-test p-value........  }\FloatTok{0.0012663}       \FloatTok{0.0034409} 
+% \NormalTok{KS Bootstrap p-value..      }\FloatTok{0.016}           \FloatTok{0.034} 
+% \NormalTok{KS Naive p-value......   }\FloatTok{0.024912}        \FloatTok{0.070191} 
+% \NormalTok{KS Statistic..........    }\FloatTok{0.11227}        \FloatTok{0.077899} 
+% \end{Highlighting}
+% \end{Shaded}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{Blattman (2010): Mahalanobis Distance Matchng}
+
+% \footnotesize
+
+% \begin{Shaded}
+% \begin{Highlighting}[]
+% \NormalTok{match.mah <-}\StringTok{ }\KeywordTok{Match}\NormalTok{(}\DataTypeTok{Tr=}\NormalTok{abd, }\DataTypeTok{X=}\NormalTok{covar, }\DataTypeTok{M=}\DecValTok{1}\NormalTok{, }\DataTypeTok{estimand=}\StringTok{"ATT"}\NormalTok{, }\DataTypeTok{Weight =} \DecValTok{3}\NormalTok{)}
+% \KeywordTok{MatchBalance}\NormalTok{(abd ~}\StringTok{ }\NormalTok{age, }\DataTypeTok{data=}\NormalTok{data, }\DataTypeTok{match.out =} \NormalTok{match.mah)}
+
+% \NormalTok{**}\ErrorTok{***}\StringTok{ }\NormalTok{(V1) age **}\ErrorTok{***}
+% \StringTok{                       }\NormalTok{Before Matching     After Matching}
+% \NormalTok{mean treatment........     }\FloatTok{21.366}          \FloatTok{21.366} 
+% \NormalTok{mean control..........     }\FloatTok{20.151}          \FloatTok{21.154} 
+% \NormalTok{std mean diff.........     }\FloatTok{24.242}          \FloatTok{4.2314} 
+
+% \NormalTok{var }\KeywordTok{ratio} \NormalTok{(Tr/Co).....     }\FloatTok{1.0428}          \FloatTok{1.0336} 
+% \NormalTok{T-test p-value........  }\FloatTok{0.0012663}      \FloatTok{3.0386e-05} 
+% \NormalTok{KS Bootstrap p-value..      }\FloatTok{0.008}           \FloatTok{0.798} 
+% \NormalTok{KS Naive p-value......   }\FloatTok{0.024912}         \FloatTok{0.94687} 
+% \NormalTok{KS Statistic..........    }\FloatTok{0.11227}        \FloatTok{0.034261} 
+% \end{Highlighting}
+% \end{Shaded}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{Blattman (2010): Genetic Matching}
+
+% \footnotesize
+
+% \begin{Shaded}
+% \begin{Highlighting}[]
+% \NormalTok{genout <-}\StringTok{ }\KeywordTok{GenMatch}\NormalTok{(}\DataTypeTok{Tr=}\NormalTok{abd,}\DataTypeTok{X=}\NormalTok{covar,}\DataTypeTok{BalanceMatrix=}\NormalTok{covar,}\DataTypeTok{estimand=}\StringTok{"ATT"}\NormalTok{,}
+%                   \DataTypeTok{pop.size=}\DecValTok{1000}\NormalTok{)}
+% \NormalTok{match.gen <-}\StringTok{ }\KeywordTok{Match}\NormalTok{(}\DataTypeTok{Tr=}\NormalTok{abd, }\DataTypeTok{X=}\NormalTok{covar,}\DataTypeTok{M=}\DecValTok{1}\NormalTok{,}\DataTypeTok{estimand=}\StringTok{"ATT"}\NormalTok{,}\DataTypeTok{Weight.matrix=}\NormalTok{genout)}
+% \NormalTok{gen.bal <-}\StringTok{ }\KeywordTok{MatchBalance}\NormalTok{(abd~age,}\DataTypeTok{match.out=}\NormalTok{match.gen,}\DataTypeTok{data=}\NormalTok{covar)}
+
+% \NormalTok{**}\ErrorTok{***}\StringTok{ }\NormalTok{(V1) age **}\ErrorTok{***}
+% \StringTok{                       }\NormalTok{Before Matching     After Matching}
+% \NormalTok{mean treatment........     }\FloatTok{21.366}          \FloatTok{21.366} 
+% \NormalTok{mean control..........     }\FloatTok{20.151}          \FloatTok{21.225} 
+% \NormalTok{std mean diff.........     }\FloatTok{24.242}          \FloatTok{2.8065} 
+
+% \NormalTok{var }\KeywordTok{ratio} \NormalTok{(Tr/Co).....     }\FloatTok{1.0428}          \FloatTok{1.1337} 
+% \NormalTok{T-test p-value........  }\FloatTok{0.0012663}         \FloatTok{0.21628} 
+% \NormalTok{KS Bootstrap p-value..      }\FloatTok{0.008}           \FloatTok{0.454} 
+% \NormalTok{KS Naive p-value......   }\FloatTok{0.024912}         \FloatTok{0.68567} 
+% \NormalTok{KS Statistic..........    }\FloatTok{0.11227}        \FloatTok{0.046512} 
+% \end{Highlighting}
+% \end{Shaded}
+
+% \end{frame}
+
+\begin{frame}{Weighting on the Propensity Score}
+
+\small
+Provided that the relevant moments exists, if $Y_1,Y_0\indep D |X$, then
+
+\begin{eqnarray*}
+\tau_{ATE}&=&E[Y_1-Y_0]=E\left[
+Y\cdot \frac{D-\pi(X)}{\pi(X)\cdot (1-\pi(X))}
+\right]\\
+\tau_{ATT}&=&E[Y_1-Y_0|D=1]=\frac{1}{P(D=1)}\cdot E\left[
+Y\cdot \frac{D-\pi(X)}{1-\pi(X)}
+\right]
+\end{eqnarray*}
+
+\begin{Proof}
+\scriptsize Consider
+\begin{eqnarray*}
+&&E\left[\left.
+Y \frac{D-\pi(X)}{\pi(X) (1-\pi(X))}\right| X \right]\\
+&=& E\left[\left.\frac{Y}{\pi(X)} \right|X, D=1 \right] \pi(X) + E\left[\left.\frac{-Y}{1-\pi(X)}\right|X, D=0\right] (1-\pi(X))\\
+&=& E[Y|X, D=1] - E[Y|X, D=0]
+\end{eqnarray*}
+And the results of the proposition follow from integration over $\Pr(X)$ and $\Pr(X|D=1)$.
+\end{Proof}
+
+\end{frame}
+
+\begin{frame}{Weighting on the Propensity Score}
+
+\small
+
+\begin{eqnarray*}
+\tau_{ATE}&=&E[Y_1-Y_0]=E\left[
+Y\cdot \frac{D-\pi(X)}{\pi(X)\cdot (1-\pi(X))}
+\right]\\
+\tau_{ATT}&=&E[Y_1-Y_0|D=1]=\frac{1}{\Pr(D=1)}\cdot E\left[
+Y\cdot \frac{D-\pi(X)}{1-\pi(X)}
+\right]
+\end{eqnarray*}
+
+How do we estimate this? \pause Analogy principle suggest a two step
+procedure:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Estimate the propensity score ($\widehat{\pi}(X)$)
+\item
+  Use sample averages and the estimated propensity score to produce
+  analog estimators of $\tau_{ATE}$ and $\tau_{ATT}$:
+
+  \begin{eqnarray*}
+  \widehat{\tau}_{ATE}&=&\frac{1}{N} \sum_{i=1}^N
+  Y_i\cdot \frac{D_i-\widehat{\pi}(X_i)}{\widehat{\pi}(X_i)\cdot
+  (1-\widehat{\pi}(X_i))},\\
+  \widehat{\tau}_{ATT}&=&\frac{1}{N_1} \sum_{i=1}^N
+  Y_i\cdot \frac{D_i-\widehat{\pi}(X_i)}{1-\widehat{\pi}(X_i)}
+  \end{eqnarray*}
+\end{enumerate}
+
+\end{frame}
+
+% \begin{frame}[fragile]{Blattman (2010): Weighting on the Propensity
+% Score}
+
+% \begin{Shaded}
+% \begin{Highlighting}[]
+% \KeywordTok{mean}\NormalTok{(covar$age[abd ==}\StringTok{ }\DecValTok{1}\NormalTok{]) -}\StringTok{ }\KeywordTok{mean}\NormalTok{(covar$age[abd ==}\StringTok{ }\DecValTok{0}\NormalTok{])}
+% \NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{1.215263}
+
+% \KeywordTok{sum}\NormalTok{(covar$age *}\StringTok{ }\NormalTok{(abd -}\StringTok{ }\NormalTok{pscore) /}\StringTok{ }\NormalTok{(}\DecValTok{1} \NormalTok{-}\StringTok{ }\NormalTok{pscore)) /}\StringTok{ }\KeywordTok{length}\NormalTok{(abd)}
+% \NormalTok{[}\DecValTok{1}\NormalTok{] }\FloatTok{0.007663878}
+% \end{Highlighting}
+% \end{Shaded}
+
+% \end{frame}
+
+%\begin{frame}{Caveats about Inverse Propensity Score Weighting}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Shown to have poor finite sample performance when some weights are
+%  ``extreme'', which indicates a lack of overlap (Kang and Schaefer
+%  2008).
+%\item
+%  Might want to trim units from the sample with extreme weights, though
+%  this will change your estimand. See Crump, Hotz, Imbens, and Mitnik
+%  (2009) for more on this. \pause
+%\item
+%  \textbf{Entropy Balancing}: To avoid the iterative process of PS
+%  weighting and matching, choose weights that optimize for balance
+%  directly (Hainmueller 2011).
+%\end{itemize}
+%
+%\end{frame}
+
+\subsection{Regression}\label{regression}
+
+%\begin{frame}{Regression}
+%
+%David Freedman:
+%
+%\begin{quote}
+%I sometimes have a nightmare about Kepler. Suppose a few of us were
+%transported back in time to the year 1600, and were invited by the
+%Emperor Rudolph II to set up an Imperial Department of Statistics in the
+%court at Prague. Despairing of those circular orbits, Kepler enrolls in
+%our department. We teach him the general linear model, least squares,
+%dummy variables, everything. He goes back to work, fits the best
+%circular orbit for Mars by least squares, puts in a dummy variable for
+%the exceptional observation - and publishes. And that's the end, right
+%there in Prague at the beginning of the 17th century.
+%\end{quote}
+%
+%\end{frame}
+
+%\begin{frame}{Linear Regression with Potential Outcomes (No $X$s)}
+%
+%\begin{eqnarray*}
+%Y_i &=& D_i Y_{1i} + (1-D_i)Y_{0i} \\ \pause
+%    &=& Y_{0i} + (Y_{1i}- Y_{0i})D_i \\ \pause
+%    &=& Y_{0i} + \tau_i D_i \\ \pause
+%    &=& \mu_0 + \tau_i D_i + \nu_0
+%\end{eqnarray*}
+%
+%where $\mu_0 = E[Y_0]$ and $\nu_0=Y_{0i}-E[Y_0]$. \pause To identify
+%$\tau_{ATE}$ we re-express: \[
+%Y_i = \mu_0 + (\mu_1 - \mu_0) D_i + Vepsilon_i
+%\] where $\mu_1 = E[Y_1]$, $\nu_1=Y_{1i}-E[Y_1]$, and so
+%$(\mu_1 - \mu_0)=\tau_{ATE}$. The regression error term is
+%$Vepsilon_i = \nu_0 + D_i(\nu_1 - \nu_0)$. \pause Note that:
+%
+%\[
+%Vepsilon_i = \left\{
+% \begin{array}{l}
+%  \nu_0 = Y_{0i}-E[Y_0]\, \mbox{ if }\, D_i=0\\
+%  \nu_1 = Y_{1i}-E[Y_1]\, \mbox{ if }\, D_i=1
+% \end{array}
+% \right\}
+%\] When will $Vepsilon_i \indep D_i$ so that $\widehat{\tau}_{ATE}$
+%is unbiased and consistent?
+%
+%\end{frame}
+%
+%\begin{frame}{Linear Regression with Potential Outcomes (No $X$s)}
+%
+%\[
+%Y_i = \mu_0 + (\mu_1 - \mu_0) D_i + Vepsilon_i
+%\] with $Vepsilon_i = \nu_0 + D_i(\nu_1 - \nu_0)$ and so \[
+%Vepsilon_i = \left\{
+% \begin{array}{l}
+%  \nu_0 = Y_{0i}-E[Y_0]\, \mbox{ if }\, D_i=0\\
+%  \nu_1 = Y_{1i}-E[Y_1]\, \mbox{ if }\, D_i=1
+% \end{array}
+% \right.
+%\] $Vepsilon_i$ and $D_i$ can be correlated in two ways:\pause
+%
+%\begin{enumerate}
+%\def\labelenumi{\arabic{enumi}.}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  If there is a baseline bias $E[Y_0|D=1]\neq E[Y_0|D=0]$ then $D_i$ is
+%  correlated with $\nu_0$ and thus correlated with $Vepsilon_i$.
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    This is true even if $\tau_i=Y_{1i}-Y_{0i}$ is constant for all
+%    $i$, so $D(\nu_1 - \nu_0)=0$ on average because $(\nu_1 - \nu_0)$
+%    does not vary with $D$.\pause
+%  \end{itemize}
+%\item
+%  If the magnitude of the treatment effects $\tau_i$ is correlated
+%  with membership in the treatment group, then $(\nu_1 - \nu_0)$ varies
+%  for the treated and untreated so $Vepsilon_i$ is correlated with
+%  $D_i$ through $D(\nu_1 - \nu_0)$.
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    This holds even with no baseline bias $E[Y_0|D=1]=E[Y_0|D=0]$ when
+%    $D$ is uncorrelated with $\nu_0$
+%  \end{itemize}
+%\end{enumerate}
+%
+%\end{frame}
+
+\begin{frame}{Identification under Selection on Observables: Regression}
+
+Consider the linear regression of
+$Y_i = \beta_0 + \tau D_i  + X_i' \beta + \epsilon_i$.\\
+
+Given \alert{selection on observables}, there are mainly three identification
+scenarios: \pause
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Constant treatment effects and outcomes are linear in $X$
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    $\tau$ will provide unbiased and consistent estimates of ATE.
+    \bigskip
+  \end{itemize}
+\item
+  Constant treatment effects and unknown functional form
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    $\tau$ will provide well-defined linear approximation to the
+    average causal response function $E[Y|D=1,X]-E[Y|D=0,X]$.
+    Approximation may be very poor if $E[Y|D,X]$ is misspecified and
+    then $\tau$ may be biased for the ATE. \pause
+  \end{itemize}
+\item
+  Heterogeneous treatment effects ($\tau$ differs for different values
+  of $X$)
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    If outcomes are linear in $X$, $\tau$ is unbiased and consistent
+    estimator for conditional-variance-weighted average of the
+    underlying causal effects. This average is often different from the
+    ATE.
+  \end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Identification under Selection on Observables: Regression}
+
+\begin{iass}
+
+\begin{enumerate}
+
+\item Constant treatment effect: $\tau = Y_{1i}-Y_{0i}$ for all $i$
+\item Control outcome is linear in $X$: $Y_{0i} = \beta_0 + X_i' \beta + \epsilon_i$ with $\epsilon_i \indep X_i$ (no omitted variables and linearly separable confounding)
+
+\end{enumerate}
+
+\end{iass}
+
+\begin{ires}
+
+Then $\tau_{ATE}= E[Y_1-Y_0]$ is identified by a regression of the observed outcome on the covariates and the treatment indicator  $Y_i= \beta_0 + \tau D_i + X_i' \beta + \epsilon_i$
+
+\end{ires}
+
+\end{frame}
+
+%\begin{frame}{Linear Constant Effects Model}
+%
+%Assume \alert{constant linear effects} and
+%\alert{linearly separable confounding}:
+%\[Y_i(d) = Y_i = \beta_0 + \tau D_i + \eta_i\] \pause
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  \textbf{Linearly separable confounding:} assume that
+%  $E[\eta_i |     X_i] = X'_i \beta$, which means that
+%  $\eta_i = X'_i \beta +     \epsilon_i$ where
+%  $E[\epsilon_i | X_i] = 0$.
+%\item
+%  Under this model, $(Y_1,Y_0) \indep D |X$ implies
+%  $\epsilon_i | X \indep D$
+%\item
+%  As a result,
+%
+%  \begin{align*}
+%       Y_i &= \beta_0 + \tau D_i + E[\eta_i] \\
+%      &= \beta_0 + \tau D_i + X'_i \beta +
+%      E[\epsilon_i] \\
+%      &= \beta_0 + \tau D_i + X'_i \beta 
+%     \end{align*}
+%\item
+%  Thus, a regression where $D_i$ and $X_i$ are entered linearly can
+%  recover the ATE.
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Omitted Variable Bias}
+%
+%\small
+%
+%What happens if we ignore or do not measure $X_i$? Say we have the
+%following \textbf{long} model:
+%
+%\[ Y_i = \beta_0 + \tau D_i + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i\]
+%
+%\pause
+%
+%If we do not observe or measure $X_{2i}$ then we put it in the error
+%term and write the \textbf{short} equation:
+%
+%\[ Y_i = \beta_0 + \tau D_i + \beta_1 X_{1i} + \eta_i\] where
+%$\eta_i = \beta_2 X_{2i} + \epsilon_i$
+%
+%Write the regression of $X_{2i}$ onto the explanatory variables as:
+%\[X_{2i} = \delta_0 + \delta_{D} D_i + \delta_1 X_{1i} + r_i\]
+%
+%\pause
+%
+%Plugging into the long equation:
+%\[Y_i = (\beta_0 + \beta_2 \delta_0) + (\tau + \beta_2 \delta_{D})D_i +(\beta_1 + \beta_2 \delta_1) X_{1i} + \epsilon_i + \beta_2 r_i\]
+%
+%\pause
+%
+%Thus, the \textbf{Omitted Variable Bias} formula is:
+%\[\hat \tau = \tau + \beta_2 \cdot \delta_D\]
+%
+%\end{frame}
+
+%\begin{frame}{Regression with Heterogeneous Effects}
+%
+%What is regression estimating when we allow for heterogeneity? \pause
+%
+%First, let's re-derive the ATT matching estimator so we can compare it
+%to the regression estimator:
+%
+%Assuming $(Y_1,Y_0) \indep D | X$ and let $\tau_x$ be the conditional
+%ATE $\tau_x = E[Y_1 - Y_0 | X = x]$ (note that X is discrete):
+%
+%\begin{align*}
+%\tau_{ATT} &= E[Y_1 - Y_0 | D = 1] \\
+%&= \E\{ E[Y_1 - Y_1 | X, D = 1] | D = 1 \}\\
+%&= \E\{ E[Y_1| X, D = 1] - E[Y_0| X, D = 1] | D = 1 \}  \\
+%&= \E\{ E[Y | X, D = 1] - E[Y | X, D = 0] | D = 1 \} \text{ (by CIA)} \\
+%&= E[\tau_x | D = 1] = \sum_x \tau_x \Pr[X = x | D = 1] \\ 
+%&= \frac{\sum_x \tau_x \Pr[D = 1 | X = x] \Pr[X=x]}{\sum_x \Pr[D = 1 | X = x] \Pr[X=x]}
+%\end{align*}
+%
+%\end{frame}
+
+\begin{frame}{Regression with Heterogeneous Effects}
+
+What is regression estimating when we allow for heterogeneity? \pause
+
+
+Suppose that we wanted to estimate $\tau_{OLS}$ using a
+\alert{fully saturated} regression model:
+\[ Y_i = \sum_x B_{xi} \beta_x + \tau_{OLS} D_i + e_i\] where $B_{xi}$
+is a dummy variable for unique combination of $X_i$.
+
+Because this regression is fully saturated, it is linear in the
+covariates (i.e.~linearity assumption holds by construction). %\pause
+
+%We will also use the following property of OLS (Frisch-Waugh-Lovell
+%(FWL) theorem):
+%\[\beta_k = \frac{\Cov(Y_i, \tilde{x}_{ki})}{V(\tilde{x}_{ki})}\]
+%where $\tilde{x}_{ki}$ is the regression of $x_{ki}$ on all other
+%covariates.
+
+\end{frame}
+%
+%\begin{frame}{Regression with Heterogeneous Effects}
+%
+%What is $\tau_{OLS}$? Using FWL,
+%
+%\begin{align*}
+% \tau_{OLS} &= \frac{\Cov(Y, \tilde D)}{V(\tilde D)} \\
+% &= \frac{\Cov(E[Y|X,D], D - E[D|X])}{\E(D - E[D|X])^2} \\
+%  &= \frac{\E\{E[Y|X,D] (D - E[D|X])\}}{\E(D - E[D|X])^2} \\
+% &= \frac{\E\{(E[Y|X,D = 0] + \tau_x D) (D - E[D|X])\}}{\E(D - E[D|X])^2}\\
+% &= \frac{E[\tau_x (D - E[D|X])^2]}{E[(D -  E[D|X]^2)]} = \frac{E[\tau_x  E[(D - E[D|X])^2|X]]}{E[E[(D -  E[D|X]^2)|X]]} = \frac{E[\tau_x \sigma^2_{D,X}]}{E[\sigma^2_{D,X}]} \\
+% &= \frac{\sum_x \tau_x [\Pr[D = 1 | X = x] (1 - \Pr[D = 1 | X = x])] \Pr[X=x]}{
+%   [\Pr[D = 1 | X = x] (1 - \Pr[D = 1 | X = x])] \Pr[X=x]}
+%\end{align*}
+%
+%\end{frame}
+
+\begin{frame}{Heterogenous Treatment Effects}
+
+\scriptsize
+
+With two $X$ strata there are two stratum-specific average causal
+effects that are averaged to obtain the ATE or ATT.
+
+Subclassification weights the stratum-effects by the marginal
+distribution of $X$, i.e. weights are proportional to the share of units in each stratum:
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+\tau_{ATE} &=& (E[Y|D=1,X=1]-E[Y|D=0,X=1])\textcolor{blue}{\Pr(X=1)} \\
+   &+&   (E[Y|D=1,X=2]-E[Y|D=0,X=2])\textcolor{blue}{\Pr(X=2)}
+\end{eqnarray*}
+
+Regression weights by the marginal distribution of $X$ \alert{and} the
+conditional variance of $V[D|X]$ in each stratum:
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  \tau_{OLS} &=& (E[Y|D=1,X=1]- E[Y|D=0,X=1])\frac{\textcolor{cyan}{V[D|X=1]}\textcolor{blue}{\Pr(X=1)}}{\sum_{X}Var[D|X=x]\Pr(X=x)} \\
+   &+& (E[Y|D=1,X=2]- E[Y|D=0,X=2])\frac{\textcolor{cyan}{V[D|X=2]}\textcolor{blue}{\Pr(X=2)}}{\sum_{X}V[D|X=x]\Pr(X=x)}
+\end{eqnarray*}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  So strata with a higher $V[D|X]$ receive higher weight. These are
+  the strata with propensity scores close to $.5$
+\item
+  Strata with propensity score close to $0$ or $1$ receive lower weight
+\item
+  OLS is a minimum-variance estimator of $\tau_{OLS}$ so it
+  downweights strata where the average causal effects are less precisely
+  estimated.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Heterogenous Treatment Effects}
+
+\scriptsize
+
+With two $X$ strata there are two stratum-specific average causal
+effects that are averaged to obtain the ATE or ATT.
+
+Subclassification weights the stratum-effects by the marginal
+distribution of $X$, i.e. weights are proportional to the share of units in each stratum:
+
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+\tau_{ATE} &=& (E[Y|D=1,X=1]-E[Y|D=0,X=1])\textcolor{blue}{\Pr(X=1)} \\
+   &+&   (E[Y|D=1,X=2]-E[Y|D=0,X=2])\textcolor{blue}{\Pr(X=2)}
+\end{eqnarray*}
+
+Regression weights by the marginal distribution of $X$ \alert{and} the
+conditional variance of $V[D|X]$ in each stratum:
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+  \tau_{OLS} &=& (E[Y|D=1,X=1]- E[Y|D=0,X=1])\frac{\textcolor{cyan}{V[D|X=1]}\textcolor{blue}{\Pr(X=1)}}{\sum_{X}Var[D|X=x]\Pr(X=x)} \\
+   &+& (E[Y|D=1,X=2]- E[Y|D=0,X=2])\frac{\textcolor{cyan}{V[D|X=2]}\textcolor{blue}{\Pr(X=2)}}{\sum_{X}V[D|X=x]\Pr(X=x)}
+\end{eqnarray*}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Whenever both weighting components are misaligned (e.g.~the PS is
+  close to 0 or 1 for relatively large strata) then $\tau_{OLS}$
+  diverges from $\tau_{ATE}$ or $\tau_{ATT}$.
+\item
+  With constant effects we have $\tau_{OLS}=\tau_{ATE}=\tau_{ATT}$
+\item
+  If linearity fails the intuition remains that linearity in $X$ implies
+  an implicit linearity in the underlying PS.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Conclusion: Regression}
+\small
+\begin{center}
+\fbox{\alert{Is regression evil? \frownie}}
+\end{center}
+
+\pause
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Its ease sometimes results in lack of thinking. So only a little.
+  \smiley
+\item
+  For descriptive inference, very useful!
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Good tool for characterizing the conditional expectation function
+    (CEF)
+  \item
+    But other less restrictive tools are also available for that task
+    (machine learning) \pause
+  \end{itemize}
+\item
+  For causal analysis, always need to ask yourself if \emph{linearly}
+  separable confounding is plausible.
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    A regression is causal when the CEF it approximates is causal.\\
+  \item
+    Still need to check common support! 
+    \item Results will be highly sensitive if the treated and controls are far apart (e.g. standardized difference above .2)
+  \end{itemize}
+\item
+  Think about what your \textbf{estimand} is: because of variance
+  weighting, coefficient from your regression may not capture ATE if effects are heterogeneous
+\end{itemize}
+
+\end{frame}
+
+\section{When Do Observational Studies Recover Experimental
+Benchmarks?}\label{when-do-observational-studies-recover-experimental-benchmarks}
+
+\begin{frame}
+  \frametitle{Dehejia and Wabha (1999) Results}
+  \includegraphics[height=2.7in,keepaspectratio=1]{images/tableDW.pdf}
+\end{frame}
+
+\begin{frame}{Heckman, Ichimura, Smith, and Todd (1998)}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Study randomized evaluation of the Job Training Partnership Act (JTPA)
+\item
+  3 groups:
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    Experimental Treatment Group
+  \item
+    Experimental Control Group
+  \item
+    Eligible Non-Participants (ENPs): eligible for program but chose not
+    to participate
+  \end{itemize}
+\item
+  Heckman et al. studies under what conditions can covariate adjustment
+  methods make the differences between ENPs and experimental controls
+  diappear.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Heckman, Ichimura, Smith, and Todd (1998)}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .8 \linewidth]{images/heckman_hist.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Heckman, Ichimura, Smith, and Todd (1998)}
+
+Decomposes bias: \[ B = B_1 + B_2 + B_3 \]
+
+where
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  $B_1$ is bias due to lack of common support \pause
+\item
+  $B_2$ is bias from the fact that distribution of outcome ($Y_0$) is
+  different among ENPs and experimental controls \pause
+\item
+  $B_3$ is differences in outcomes that remain even after controlling
+  for observed differences (\alert{hidden bias}).
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Characterizing Selection Bias}
+
+\begin{figure}[ht] \centering
+    \includegraphics[width = .95 \linewidth]{images/heckman_table.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Characterizing Selection Bias}
+
+\begin{itemize}
+\item
+  Matching removes most of the bias, but because experimental estimates
+  are small, point estimates would still be substantially biased.
+  \frownie \pause
+\item
+  Finds that the bias is roughly constant over time. \pause
+\item
+  Thus, difference-in-differences estimator (combined with matching)
+  drives the bias to near 0. \smiley 
+
+  \begin{itemize}
+  \itemsep1pt\parskip0pt\parsep0pt
+  \item
+    More about difference-in-differences estimator later in the
+quarter
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+%\begin{frame}{Shadish, Clark, and Steiner (2008)}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = .95 \linewidth]{images/shadish_image.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Shadish, Clark, and Steiner (2008)}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = 1 \linewidth]{images/shadish_table.png}
+%\end{figure}
+%
+%\end{frame}
+
+%\section{Placebo Tests}\label{placebo-tests}
+%
+%\begin{frame}{Post-Mortem Atlantic Salmon}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = 1 \linewidth]{images/salmon.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Tests of Design}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Imagine we have data on a ``placebo'' outcome that is known to be
+%  unaffected by the treatment
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    E.g. lags of the outcome variable that are measured before treatment
+%  \end{itemize}
+%\item
+%  For example, assume $D$ is realized at $t=0$ and is ignorable
+%  conditional on a set of $T$ lags of the outcome
+%  $Y_1,Y_0\indep D | Y_{t=-1},Y_{t=-2},...,Y_{t=-T},X$\medskip
+%\item
+%  Given a stability assumption we should have ignorability conditional
+%  on all lags but one:\[
+%  Y_{t=-1} \indep D | Y_{t=-2},...,Y_{t=-T},X
+%  \]
+%\item
+%  If we find a non-zero placebo effect for the first lag, then
+%  ignorability conditional on all lags seems not very credible (esp.
+%  with many lags).
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Sekhon and Titiunik}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = 1 \linewidth]{images/sekhon_new_neighbors.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Sekhon and Titiunik}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = 1 \linewidth]{images/sekhon_texas.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Sekhon and Titiunik: Failed Placebo Test}
+%
+%\begin{figure}[ht] \centering
+%    \includegraphics[width = 1 \linewidth]{images/sekhon_failed_placebo.png}
+%\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}{Sekhon and Titiunik: Placebo Test - Incumbent Vote (2002)}
+%
+%\begin{table}[tb]
+%  \begin{center}
+%   \caption{Placebo Estimates Under Two Different Designs}
+%   \begin{tabular}{llll}
+%   \hline
+% \hline
+% \textbf{Design} & \textbf{Estimate} & \textbf{95\% CI} & \textbf{p value}\\
+% \hline
+%   Presidential Vote Only & 0.0285 & [0.0160, 0.0413] & 0.00 \\
+%   Full Set of Controls & 0.00245 & [-.00488, 0.00954] & 0.513\\
+% \hline
+% \hline
+% \end{tabular}
+%\end{center}
+%\end{table}
+%
+%\end{frame}
+%
+%\begin{frame}{Estimates on Experimental JTPA Data}
+%
+%\begin{table}
+%\begin{center}
+%\begin{tabular}{l|ccc}
+%           & \multicolumn{ 3}{c}{Earnings75 Outcome} \\
+%           &       mean &         se &     t-stat \\
+%\hline
+% Simple Difference &       0.27 &        0.30 &        0.9 \\
+%OLS (parallel) &       0.15 &       0.22 &        0.7 \\
+%OLS (separate) &       0.12 &       0.22 &        0.6 \\
+%Propensity Score Weighting &       0.15 &        0.30 &        0.5 \\
+%Propensity Score Blocking &        0.10 &       0.03 &        3.4 \\
+%Propensity Score Regression &       0.16 &        0.30 &        0.5 \\
+%Propensity Score Matching &       0.23 &       0.37 &        0.6 \\
+%  Matching &       0.14 &       0.28 &        0.50 \\
+%Weighting and Regression &       0.15 &       0.21 &        0.7 \\
+%Blocking and Regression &       0.09 &       0.02 &        3.8 \\
+%Matching and Regression &       0.06 &       0.28 &        0.2 \\
+%\end{tabular}
+%\end{center}
+%\end{table}
+%
+%\end{frame}
+%
+%\begin{frame}{Estimats on CPS Data}
+%
+%\begin{table}
+%\begin{center}
+%\begin{tabular}{l|ccc}
+%           & \multicolumn{ 3}{c}{Earnings75 Outcome} \\
+%           &       mean &         se &     t-stat \\
+%\hline
+%Simple Difference &        -12 &       0.68 &        -18 \\
+%OLS (parallel) &       -1.2 &       0.36 &         -3 \\
+%OLS (separate) &       -1.1 &       0.36 &         -3 \\
+%Propensity Score Weighting &       -1.2 &       0.26 &         -5 \\
+%Propensity Score Blocking &       -1.4 &       0.32 &         -9 \\
+%Propensity Score Regression &       -1.7 &       0.79 &         -2 \\
+%Propensity Score Matching &       -1.3 &       0.46 &         -3 \\
+%  Matching &       -1.3 &       0.41 &         -3 \\
+%Weighting and Regression &       -1.2 &       0.24 &         -5 \\
+%Blocking and Regression &       -1.3 &       0.25 &         -5 \\
+%Matching and Regression &       -1.3 &       0.42 &         -3 \\
+%\end{tabular}
+%\end{center}
+%\end{table}
+%
+%\end{frame}
+%
+%\begin{frame}{Placebo Outcome with Zero Effect}
+%
+%\begin{itemize}
+%\itemsep1pt\parskip0pt\parsep0pt
+%\item
+%  Similar placebo tests have been successfully used for outcomes that
+%  are known to be unaffected by the treatment:
+%
+%  \begin{itemize}
+%  \itemsep1pt\parskip0pt\parsep0pt
+%  \item
+%    Several studies support Becker and Murphy's (1988) theory of
+%    rational addiction for tobacco and alcohol consumption. Auld and
+%    Grootendorst (2004, JHE) replicate the exact same models with data
+%    for milk, eggs, oranges, and apples. \pause
+%  \item
+%    Krueger (1993) reports that the ability to use computers causes a
+%    15-20\% increase in earnings via a regression analysis of
+%    cross-sectional data. Using a similar design, Dinardo and
+%    Pischke,report that the use of calculators, telephones, pens or
+%    pencils, and chairs while on the job ``cause'' a nearly equivalent
+%    increase in wages. \pause
+%  \item
+%    Several studies have found significant networks effects on outcomes
+%    such as obesity, smoking, alcohol use, and happiness. Cohen-Cole and
+%    Fletcher (2008, BMJ) use similar models and data and find similar
+%    network effects for acne, height, and headaches.
+%  \end{itemize}
+%\end{itemize}
+%
+%\end{frame}
+
+\end{document}

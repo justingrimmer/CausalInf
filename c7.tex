@@ -1,0 +1,1459 @@
+\documentclass{beamer}
+
+%\usepackage[table]{xcolor}
+\mode<presentation> {
+  \usetheme{Boadilla}
+%  \usetheme{Pittsburgh}
+%\usefonttheme[2]{sans}
+\renewcommand{\familydefault}{cmss}
+%\usepackage{lmodern}
+%\usepackage[T1]{fontenc}
+%\usepackage{palatino}
+%\usepackage{cmbright}
+  \setbeamercovered{transparent}
+\useinnertheme{rectangles}
+}
+\usepackage{multirow}
+\usepackage{listings}
+
+%\usepackage{normalem}{ulem}
+%\usepackage{colortbl, textcomp}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg= black}
+\definecolor{trial}{cmyk}{1,0,0, 0}
+\definecolor{trial2}{cmyk}{0.00,0,1, 0}
+\definecolor{darkgreen}{rgb}{0,.4, 0.1}
+\usepackage{ifxetex,ifluatex}
+
+\usepackage{array}
+\beamertemplatesolidbackgroundcolor{white}  \setbeamercolor{alerted
+text}{fg=red}
+\newtheorem{assumption}{Assumption}
+
+\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}
+
+%\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{colortbl}
+\usepackage{fancyvrb}
+%\usepackage[usenames, dvipsnames]{color}
+%\setbeamertemplate{caption}[numbered]\newcounter{mylastframe}c
+%\newcolumntype{Y}{\columncolor[cmyk]{0, 0, 1, 0}\raggedright}
+%\newcolumntype{C}{\columncolor[cmyk]{1, 0, 0, 0}\raggedright}
+%\newcolumntype{G}{\columncolor[rgb]{0, 1, 0}\raggedright}
+%\newcolumntype{R}{\columncolor[rgb]{1, 0, 0}\raggedright}
+
+%\begin{beamerboxesrounded}[upper=uppercol,lower=lowercol,shadow=true]{Block}
+%$A = B$.
+%\end{beamerboxesrounded}}
+\renewcommand{\familydefault}{cmss}
+%\usepackage[all]{xy}
+
+\usepackage{tikz}
+\usepackage{lipsum}
+
+
+ \newenvironment{changemargin}[3]{%
+ \begin{list}{}{%
+ \setlength{\topsep}{0pt}%
+ \setlength{\leftmargin}{#1}%
+ \setlength{\rightmargin}{#2}%
+ \setlength{\topmargin}{#3}%
+ \setlength{\listparindent}{\parindent}%
+ \setlength{\itemindent}{\parindent}%
+ \setlength{\parsep}{\parskip}%
+ }%
+\item[]}{\end{list}}
+\usetikzlibrary{arrows}
+%\usepackage{palatino}
+%\usepackage{eulervm}
+\usecolortheme{lily}
+
+\newtheorem{com}{Comment}
+\newtheorem{lem} {Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+ \numberwithin{equation}{section}
+\newtheorem{iass}{Identification Assumption}
+\newtheorem{ires}{Identfication Result}
+\newtheorem{estm}{Estimand}
+\newtheorem{esti}{Estimator}
+\newcommand{\indep}{{\bot\negthickspace\negthickspace\bot}}
+
+%Box Types
+
+
+\title[Causal Inference] % (optional, nur bei langen Titeln nötig)
+{Causal Inference}
+
+\author{Justin Grimmer}
+\institute[University of Chicago]{Associate Professor\\Department of Political Science \\  University of Chicago}
+\vspace{0.3in}
+
+\date{April 25th, 2018}
+
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Selection on Unobservables}
+\begin{Problem}
+Often there are reasons to believe that treated and untreated units differ in unobservable
+characteristics that are associated with potential outcomes even
+after controlling for differences in observed characteristics.\\\bigskip In
+such cases, treated and untreated units are not directly comparable. What can we
+do then?
+\end{Problem}
+\end{frame}
+
+%\section{Motivating Example: The Mariel Boatlift}
+
+
+\begin{frame}
+  \frametitle{Example: Minimum wage laws and employment}
+\begin{itemize}
+\item Do higher minimum wages decrease low-wage employment?\medskip
+ \item Card and Krueger (1994) consider impact of New Jersey's 1992 minimum wage increase from \$4.25 to \$5.05 per hour\medskip
+ \item Compare employment in 410 fast-food restaurants in
+New Jersey and eastern Pennsylvania before and after the rise\medskip
+\item Survey data on wages and employment from two waves:
+\begin{itemize}
+  \item Wave 1: March 1992, one month before the minimum wage increase
+  \item Wave 2: December 1992, eight months after increase
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Locations of Restaurants (Card and Krueger 2000)}
+\begin{center}
+\includegraphics[height=3in,keepaspectratio=1]{CK1.pdf}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Wages Before Rise in Minimum Wage}
+\begin{center}
+\includegraphics[height=3in,keepaspectratio=1]{CKbefore.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Wages After Rise in Minimum Wage}
+  \begin{center}
+\includegraphics[height=3in,keepaspectratio=1]{CKafter.pdf}
+\end{center}
+
+\end{frame}
+
+%
+%\begin{frame}
+%  \frametitle{Motivating Example: The Mariel Boatlift}
+%\begin{itemize}
+%\item How do inflows of immigrants affect the wages and employment of natives in local labor markets?\medskip
+% \item Card (1990) uses the Mariel Boatlift of 1980 as a natural experiment
+%to measure the effect of a sudden influx of immigrants on unemployment among less-skilled natives
+%\end{itemize}
+%\begin{overprint}
+%\onslide<1>
+%\begin{center}
+%  \includegraphics[height=1.8in,keepaspectratio=1]{Mariel1a.pdf}
+%\end{center}
+%\onslide<2>
+%\begin{itemize}
+%\medskip
+%\item The Mariel Boatlift increased the Miami labor force by 7\%\medskip
+%\item Individual-level data on unemployment
+%from the Current Population Survey (CPS) for Miami and four
+%comparison cities (Atlanta, Los Angeles, Houston and Tampa-St. Petersburg)
+%\end{itemize}
+%\end{overprint}
+%\end{frame}
+
+%
+%\begin{frame}
+%  \frametitle{Motivating Example: The Mariel Boatlift}
+%\begin{itemize}
+%\item How do inflows of immigrants affect the wages and employment of natives in local labour markets?\bigskip
+% \item Card (1990) uses the Mariel Boatlift of 1980 as a natural experiment
+%to measure the effect of a sudden influx of immigrants on unemployment among less-skilled natives\bigskip
+%\item The Mariel Boatlift increased the Miami labor force by 7\%\bigskip
+%\item Individual-level data on unemployment
+%from the Current Population Survey (CPS) for Miami and four
+%comparison cities (Atlanta, Los Angeles, Houston and Tampa-St. Petersburg)
+%\end{itemize}
+%\end{frame}
+
+
+%\begin{frame}
+%  \frametitle{The Mariel Boatlift}
+%\begin{center}
+%  \includegraphics[height=2.9in,keepaspectratio=1]{Mariel1b.pdf}
+%\end{center}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{The Mariel Boatlift}
+%\begin{center}
+%  \includegraphics[height=2.9in,keepaspectratio=1]{Mariel1a.pdf}
+%\end{center}
+%\end{frame}
+
+\section{Difference-in-Differences: Setup}
+
+
+\begin{frame}
+  \frametitle{Two Groups and Two Periods}
+\begin{Definition}
+Two groups:
+\begin{itemize}
+\item $D=1$ Treated units
+\item $D=0$ Control units
+\end{itemize}\medskip
+Two periods:
+\begin{itemize}
+\item $T=0$ Pre-Treatment period
+\item $T=1$ Post-Treatment period
+\end{itemize}\medskip
+Potential outcomes $Y_d(t)$:
+\begin{itemize}
+\item $Y_{1i}(t)$ potential outcome unit $i$ attains in period $t$ when treated between $t$ and $t-1$
+\item $Y_{0i}(t)$ potential outcome unit $i$ attains in period $t$ with control between $t$ and $t-1$
+\end{itemize}
+\end{Definition}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two Groups and Two Periods}
+\begin{Definition}
+Causal effect for unit $i$ at time $t$ is
+\begin{itemize}
+\item $\tau_{it}=Y_{1i}(t)-Y_{0i}(t)$
+\end{itemize}\medskip
+Observed outcomes $Y_i(t)$ are realized as
+\begin{itemize}
+\item $Y_i(t)=Y_{0i}(t)\cdot (1-D_i(t))+Y_{1i}(t)\cdot D_i(t)$
+\end{itemize}\medskip
+Fundamental problem of causal inference:
+\begin{itemize}
+  \item  If $D$ occurs only after $t=0$ ($D_i=D_i(1)$ and $Y_i(0)=Y_{0i}(0)$) we have: $Y_i(1)=Y_{0i}(1)\cdot (1-D_i)+Y_{1i}(1)\cdot
+D_i$
+\end{itemize}
+\end{Definition}
+\begin{estm}[ATT]
+Focus on estimating the average
+effect of the treatment on the treated: $\tau_{ATT}=E[Y_{1}(1)-Y_{0}(1)|D=1]$
+\end{estm}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Two Groups and Two Periods}
+  \begin{estm}[ATT]
+$\tau_{ATT}=E[Y_{1}(1)-Y_{0}(1)|D=1]$
+\end{estm}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+    {\bf } & {\bf Post-Period (T=1)} & {\bf Pre-Period (T=0)} \\
+\hline
+\multirow{2}{*}{Treated D=1}  & \multirow{2}{*}{$E[Y_1(1)|D=1]$} & \multirow{2}{*}{$E[Y_0(0)|D=1]$}  \\
+ & &  \\
+\hline
+\multirow{2}{*}{Control D=0}  & \multirow{2}{*}{$E[Y_0(1)|D=0]$} & \multirow{2}{*}{$E[Y_0(0)|D=0]$}  \\
+ & &  \\
+\hline
+\end{tabular}
+\end{center}
+\begin{overprint}
+\onslide<1|handout:1>
+\begin{problem}
+Missing potential outcome: \textcolor{red}{$E[Y_0(1)|D=1]$}, ie. what is the average post-period outcome for the treated in the absence of the treatment?
+\end{problem}
+\onslide<2|handout:2>
+Control Strategy: Before vs. After\begin{itemize}
+\item Use: $E[Y(1)|D=1]-E[Y(0)|D=1]$
+%\item Assumes: \textcolor{red}{$E[Y_0(1)|D=1]$}$=E[Y_0(0)|D=1]$
+\end{itemize}
+\onslide<3|handout:3>
+Control Strategy: Before-After Comparison\begin{itemize}
+\item Use: $E[Y(1)|D=1]-E[Y(0)|D=1]$
+\item Assumes: \textcolor{red}{$E[Y_0(1)|D=1]$}$=E[Y_0(0)|D=1]$
+\end{itemize}
+\onslide<4|handout:4>
+Control Strategy: Treated-Control Comparison in Post-Period\begin{itemize}
+\item Use: $E[Y(1)|D=1]-E[Y(1)|D=0]$
+%\item Assumes: \textcolor{red}{$E[Y_0(1)|D=1]$}$=E[Y_0(1)|D=0]$
+\end{itemize}
+\onslide<5|handout:5>
+Control Strategy: Treated-Control Comparison in Post-Period\begin{itemize}
+\item Use: $E[Y(1)|D=1]-E[Y(1)|D=0]$
+\item Assumes: \textcolor{red}{$E[Y_0(1)|D=1]$}$=E[Y_0(1)|D=0]$
+\end{itemize}
+\onslide<6|handout:6>
+Control Strategy: Difference-in-Differences (DD)\begin{itemize}\small
+\item Use:\\$\Bigl\{ E[Y(1)|D=1]-E[Y(1)|D=0] \Bigr\}-$\\
+$\Bigl\{ E[Y(0)|D=1]-E[Y(0)|D=0] \Bigr\}$
+%\item Assumes: \textcolor{red}{$E[Y_0(1)-Y_0(0)|D=1]\,$}$=E[Y_0(1)-Y_0(0)|D=0]$
+\end{itemize}
+\onslide<7|handout:7>
+Control Strategy: Difference-in-Differences (DD)\begin{itemize}\small
+\item Use:\\$\Bigl\{ E[Y(1)|D=1]-E[Y(1)|D=0] \Bigr\}-$\\
+$\Bigl\{ E[Y(0)|D=1]-E[Y(0)|D=0] \Bigr\}$
+\item Assumes: \textcolor{red}{$E[Y_0(1)-Y_0(0)|D=1]\,$}$=E[Y_0(1)-Y_0(0)|D=0]$
+\end{itemize}
+\end{overprint}
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Graphical Representation: Difference-in-Differences}
+%\begin{center}
+%  \includegraphics[height=2.7in,keepaspectratio=1]{did1.pdf}
+%\end{center}
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Graphical Representation: Difference-in-Differences}
+ \setlength{\unitlength}{1cm}
+ \hspace*{-1.5cm}\begin{picture}(8,6)(-4,-0.5)
+ \linethickness{0.5pt}
+ \thicklines
+ \put(0,0){\vector(1,0){7}}
+ \put(0,0){\vector(0,1){5.5}}
+ \put(1,0.5){\line(3,1){3.5}}
+ \put(1,2){\line(5,3){3.5}}
+ \put(1,0.5){\circle*{0.1}}
+ \put(1,2){\circle*{0.1}}
+ \put(4.5,1.663){\circle*{0.1}}
+ \put(4.5,4.1){\circle*{0.1}}
+ \put(1,-0.1){\line(0,1){0.2}}
+ \put(4.5,-0.1){\line(0,1){0.2}}
+ \put(0.6,-0.5){$t=0$}
+ \put(4.1,-0.5){$t=1$}
+ \thinlines
+ \multiput(0,0.5)(0.2,0){5}{\line(1,0){0.1}}
+ \multiput(0,2)(0.2,0){5}{\line(1,0){0.1}}
+ \multiput(0,1.663)(0.2,0){22}{\line(1,0){0.1}}
+ \multiput(0,4.1)(0.2,0){22}{\line(1,0){0.1}}
+ \put(-2.5,0.4){\small$E[Y(0)|D=0]$}
+ \put(-2.5,2){\small$E[Y(0)|D=1]$}
+ \put(-2.5,1.45){\small$E[Y(1)|D=0]$}
+ \put(-2.5,4){\small$E[Y(1)|D=1]$}
+ \onslide<2->\multiput(1,2)(0.6,0.2){6}{\line(3,1){0.4}}
+ \put(4.5,3.163){\circle{0.1}}
+ \onslide<3->
+ \multiput(0,3.163)(0.2,0){22}{\line(1,0){0.1}}
+ \put(-2.5,3.1){\small$E[Y_0(1)|D=1]$}
+ \onslide<4-> \thicklines
+ \put(4.5,3.25){\vector(0,1){0.8}}
+ \put(4.5,4){\vector(0,-1){0.75}}
+ \put(4.7,3.5){\small $E[Y_1(1)-Y_0(1)|D=1]$}
+\end{picture}
+\end{frame}
+
+
+\section{Difference-in-Differences: Identification}
+
+
+\begin{frame}
+  \frametitle{Identification with Difference-in-Differences}
+\begin{iass}[parallel trends]
+\textcolor{blue}{$E[Y_0(1)-Y_0(0)|D=1]=E[Y_0(1)-Y_0(0)|D=0]$}
+\end{iass}
+\begin{overprint}
+\onslide<1|handout:1>
+\begin{ires}
+Given parallel trends the ATT is identified as:\\
+\begin{eqnarray*}
+E[Y_1(1)-Y_0(1)|D=1]&=&\Bigl\{ E[Y(1)|D=1]-E[Y(1)|D=0] \Bigr\}\\
+      &-&\Bigl\{ E[Y(0)|D=1]-E[Y(0)|D=0] \Bigr\}
+\end{eqnarray*}
+\end{ires}
+\onslide<2|handout:2>
+\scriptsize
+\begin{Proof}
+Note that the identification assumption implies 
+$\alert{E[Y_0(1)|D=0]} = E[Y_0(1)|D=1] - E[Y_0(0)|D=1] + E[Y_0(0)|D=0]$\\
+plugging in we get
+
+\begin{eqnarray*}
+% \nonumber to remove numbering (before each equation)
+   & & \left\{ E[Y(1)|D=1]-E[Y(1)|D=0] \right\}
+      -\left\{ E[Y(0)|D=1]-E[Y(0)|D=0] \right\}\\
+   &=&  \left\{ E[Y_1(1)|D=1]-\alert{E[Y_0(1)|D=0]} \right\}
+      -\left\{ E[Y_0(0)|D=1]-E[Y_0(0)|D=0] \right\} \\    
+&=& \left\{ E[Y_1(1)|D=1]- \left( E[Y_0(1)|D=1] - E[Y_0(0)|D=1] + E[Y_0(0)|D=0] \right) \right\} \\
+&-& \left\{ E[Y_0(0)|D=1]-E[Y_0(0)|D=0] \right\}\\
+&= & E[Y_1(1)- Y_0(1)|D=1] + \left\{ E[Y_0(0)|D=1] - E[Y_0(0)|D=0] \right\} \\
+      &-&\left\{ E[Y_0(0)|D=1]-E[Y_0(0)|D=0] \right\} \\
+ &=&E[Y_1(1)-Y_0(1)|D=1]
+\end{eqnarray*}
+\end{Proof}
+\end{overprint}
+\end{frame}
+
+%\begin{footnotesize}
+%\begin{eqnarray*}
+%% \nonumber to remove numbering (before each equation)
+%   & & \left\{ E[Y(1)|D=1]-E[Y(1)|D=0] \right\}
+%      -\left\{ E[Y(0)|D=1]-E[Y(0)|D=0] \right\}\\
+%   &=&  \left\{ E[Y_1(1)|D=1]-E[Y_0(1)|D=0] \right\}
+%      -\left\{ E[Y_0(0)|D=1]-E[Y_0(0)|D=0] \right\} \\
+%   & & \\
+% & & \mbox{Now notice that Assumption \ref{assumption:id} implies:} \\
+% & & E[Y_0(1)|D=0] = E[Y_0(1)|D=1] - E[Y_0(0)|D=1] + E[Y_0(0)|D=0]\\
+% & & \mbox{plug into above and get:}   \\  
+% & & \\
+% &=& \left\{ E[Y_1(1)|D=1]- \left( E[Y_0(1)|D=1] - E[Y_0(0)|D=1] + E[Y_0(0)|D=0] \right) \right\}
+%      -\left\{ E[Y_0(0)|D=1]-E[Y_0(0)|D=0] \right\}\\
+% &= &  E[Y_1(1)- Y_0(1)|D=1] + \left\{ E[Y_0(0)|D=1] - E[Y_0(0)|D=0] \right\}
+%      -\left\{ E[Y_0(0)|D=1]-E[Y_0(0)|D=0] \right\} \\
+% &=& E[Y_1(1)-Y_0(1)|D=1]
+%\end{eqnarray*}
+%\end{footnotesize}
+
+\section{Difference-in-Differences: Estimation}
+
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Estimators}
+
+\begin{estm}[ATT]\vspace{-.15in}
+\begin{eqnarray*}\small
+E[Y_1(1)-Y_0(1)|D=1]&=&\Bigl\{ E[Y(1)|D=1]-E[Y(1)|D=0] \Bigr\}\\
+      &-&\Bigl\{ E[Y(0)|D=1]-E[Y(0)|D=0] \Bigr\}
+\end{eqnarray*}
+\end{estm}\vspace{-.05in}
+%\pause
+\begin{esti}[Sample Means: Panel]\small
+\[
+\left\{\frac{1}{N_1}\sum_{D_i=1} Y_i(1) -
+\frac{1}{N_0}\sum_{D_i=0} Y_i(1)\right\} -
+\left\{\frac{1}{N_1}\sum_{D_i=1} Y_i(0) -
+\frac{1}{N_0}\sum_{D_i=0} Y_i(0)\right\}
+\]
+\[
+=\left\{\frac{1}{N_1}\sum_{D_i=1} \{Y_i(1)-Y_i(0)\} -
+\frac{1}{N_0}\sum_{D_i=0} \{Y_i(1)-Y_i(0)\}\right\},
+\]
+where $N_1$ and $N_0$ are the number of treated and control units respectively.
+\end{esti}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sample Means: Minimum wage laws and employment}
+\begin{center}
+  \includegraphics[height=2.4in,keepaspectratio=1]{CKresults1.pdf}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Estimators}
+
+
+\begin{esti}[Sample Means: Repeated Cross-Sections]\small
+Let
+$\{Y_i, D_i, T_i \}_{i=1}^n$ be the
+pooled sample (the two different cross-sections merged) where $T$
+is a random variable that indicates the period (0 or 1) in which the
+individual is observed.\\\bigskip The difference-in-differences estimator is given by:
+\begin{multline}
+\left\{\frac{\sum  D_i\cdot T_i\cdot Y_i}{\sum D_i\cdot T_i} -
+\frac{\sum  (1-D_i)\cdot T_i\cdot Y_i}{\sum (1-D_i)\cdot T_i}\right\}\\ -
+\left\{\frac{\sum D_i\cdot(1-T_i)\cdot Y_i}{\sum D_i\cdot(1-T_i)} -
+\frac{\sum (1-D_i)\cdot (1-T_i)\cdot Y_i}{\sum (1-D_i)\cdot (1-T_i)}\right\}\nonumber
+%\label{equation:sdid}
+\end{multline}
+\end{esti}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Estimators}
+
+\begin{esti}[Regression: Repeated Cross-Sections]\small
+Alternatively, the same estimator can be obtained using regression techniques.
+Consider the linear model:
+\[
+Y = \mu + \gamma\cdot D + \delta\cdot T + \tau \cdot (D\cdot T) + \varepsilon,
+\]
+where $E[\varepsilon|D,T]=0$.
+\end{esti}\medskip
+\begin{overprint}
+\onslide<1|handout:1>
+Easy to show that $\tau$ estimates the DD effect:
+\begin{eqnarray*}
+\tau =&
+\left\{
+E[Y|D=1, T=1] - E[Y|D=0, T=1]
+\right\}\\
+-&
+\left\{
+E[Y|D=1, T=0] - E[Y|D=0, T=0]
+\right\}
+\end{eqnarray*}
+\onslide<2|handout:2>
+\begin{center}
+\small
+\begin{tabular}{|c|c|c|c|}
+\hline
+    {\bf } & {\bf After (T=1)} & {\bf Before (T=0)} & {\bf After - Before} \\
+\hline
+\multirow{2}{*}{{\bf Treated D=1}}  & \multirow{2}{*}{$\mu + \gamma + \delta + \tau$} & \multirow{2}{*}{$\mu + \gamma$} & \multirow{2}{*}{$\delta + \tau$}    \\
+ & & & \\
+\hline
+\multirow{2}{*}{{\bf Control D=0}}   & \multirow{2}{*}{$\mu +  \delta$} & \multirow{2}{*}{$\mu$} & \multirow{2}{*}{$\delta$}    \\
+ & & & \\
+\hline
+\multirow{2}{*}{{\bf Treated - Control}}   & \multirow{2}{*}{$\gamma + \tau$} & \multirow{2}{*}{$\gamma$} & \multirow{2}{*}{$\tau$}    \\
+ & & & \\
+\hline
+\end{tabular}
+\end{center}
+%Correct standard errors to account for temporal dependence!
+\end{overprint}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Regression: Minimum wage laws and employment}
+
+\footnotesize
+\begin{lstlisting}[language=R, basicstyle=\ttfamily]
+> d <- read.dta("CK1994_longformat.dta",convert.factors = FALSE)
+> head(d[, c('ID', 'nj', 'postperiod', 'emptot')])
+  ID nj postperiod emptot
+1  1  0          0  40.50
+2  1  0          1  24.00
+3  2  0          0  13.75
+4  2  0          1  11.50
+5  3  0          0   8.50
+6  3  0          1  10.50
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Regression: Minimum wage laws and employment}
+
+\footnotesize
+\begin{lstlisting}[language=R, basicstyle=\ttfamily]
+with(d, 
+ (
+  mean(emptot[nj == 1 & postperiod == 1], na.rm = TRUE) - 
+  mean(emptot[nj == 1 & postperiod == 0], na.rm = TRUE)
+  )  - 
+  (mean(emptot[nj == 0 & postperiod == 1], na.rm = TRUE) - 
+  mean(emptot[nj == 0 & postperiod == 0], na.rm = TRUE)
+  )
+ )
+[1] 2.753606
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Regression: Minimum wage laws and employment}
+
+\footnotesize
+\begin{verbatim}
+
+> ols <- lm(emptot ~ postperiod * nj, data = d)
+> coeftest(ols)
+
+t test of coefficients:
+
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)    23.3312     1.0719 21.7668  < 2e-16 ***
+postperiod     -2.1656     1.5159 -1.4286  0.15351    
+nj             -2.8918     1.1935 -2.4229  0.01562 *  
+postperiod:nj   2.7536     1.6884  1.6309  0.10331    
+\end{verbatim}
+Note: Should adjust standard errors to account for temporal dependence
+
+
+\end{frame}
+
+%\begin{frame}[fragile]
+%  \frametitle{Regression: Minimum wage laws and employment}
+%
+%\footnotesize
+%\begin{verbatim}
+%
+%library(plm)
+%library(lmtest)
+%> # define panel data
+%> d <- plm.data(d, indexes = c("ID", "postperiod"))
+%
+%> # run DID regression
+%> did.reg <- plm(emptot ~ postperiod * nj, data = d,
+%                          model = "pooling")
+%
+%> # get clustered SEs
+%> coeftest(did.reg, vcov=function(x) 
+%                 vcovHC(x, cluster="group", type="HC1"))
+%
+%t test of coefficients:
+%
+%               Estimate Std. Error t value Pr(>|t|)    
+%(Intercept)     23.3312     1.3457 17.3370  < 2e-16 ***
+%postperiod1     -2.1656     1.2173 -1.7790  0.07562 .  
+%nj              -2.8918     1.4387 -2.0100  0.04477 *  
+%postperiod1:nj   2.7536     1.3058  2.1087  0.03529 * 
+%\end{verbatim}
+%
+%\end{frame}
+
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Estimators}
+
+\begin{esti}[Regression: Repeated Cross-Sections]\small
+Can use regression version of the DD estimator
+to include covariates:
+\[
+Y = \mu + \gamma\cdot D + \delta\cdot T + \tau \cdot (D\cdot T) + X'\beta + \varepsilon.
+\]\vspace*{-0.5cm}
+\begin{itemize}
+\item introducing time-invariant   $X$'s is not helpful (they get differenced-out)
+\item be careful with time-varying $X$'s: they are often affected by the treatment and may introduce endogeneity (e.g. price of meal)
+\item always correct standard errors to account for temporal dependence
+\end{itemize}
+Can interact time-invariant
+covariates with the time indicator:
+\begin{equation}
+Y = \mu + \gamma\cdot D + \delta\cdot T + \alpha\cdot (D\cdot T) + X'\beta_0 + (T\cdot X')\beta_1   +\varepsilon \nonumber
+%\label{equation:tvdid}
+\end{equation}
+\end{esti}
+$\Rightarrow$ $X$ is used to explain differences in trends.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Estimators}
+
+
+\begin{esti}[Regression: Panel Data]\small
+
+With panel data we can estimate the difference-in-differences effect using a fixed effects regression with unit and  period fixed effects:
+\[
+Y_{it} = \mu + \gamma_i + \delta T + \tau D_{it} + X'_{it}\beta + \varepsilon_{it}
+\]\vspace*{-0.5cm}
+
+\begin{itemize}
+\item One intercept for each unit $\gamma_i$
+\item $D_{it}$ coded as 1 for treated in post-period and 0 otherwise
+%\item Correct standard errors to account for temporal dependence
+\end{itemize}
+
+Or equivalently we can use regression with the dependent variable in first differences:
+\[
+\Delta Y_i = \delta + \tau \cdot D_i + u_i,
+\]
+where $\Delta Y_i = Y_i(1)-Y_i(0)$ and $u_i=\Delta \varepsilon_i$.\\\bigskip
+%\begin{itemize}
+%\item Often helps with temporal dependence.
+%\item With two periods this gives the same result as other regressions
+%\end{itemize}
+%$\Rightarrow$ Can also add $X$ to explain differences in trends.
+\end{esti}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Regression: Minimum wage laws and employment}
+
+\footnotesize
+\begin{verbatim}
+
+library(plm)
+library(lmtest)
+
+> d$Dit <- d$nj * d$postperiod
+
+> d <- plm.data(d, indexes = c("ID", "postperiod"))
+
+> did.reg <- plm(emptot ~ postperiod + Dit, data = d,
+                          model = "within")
+
+> coeftest(did.reg, vcov=function(x) 
+                 vcovHC(x, cluster="group", type="HC1"))
+
+t test of coefficients:
+
+            Estimate Std. Error t value Pr(>|t|)  
+postperiod1  -2.2833     1.2465 -1.8319  0.06775 .
+Dit           2.7500     1.3359  2.0585  0.04022 *
+\end{verbatim}
+
+\end{frame}
+
+
+%\begin{frame}[fragile]
+%\begin{verbatim}
+%library(plm)
+%library(lmtest)
+%> ck_data <- plm.data(ck_data, indexes = c("ID", "postperiod"))
+%> fixed.mod <- (plm(emptot ~ postperiod * nj, data = ck_data,
+%                    model = "within"))
+%> coeftest(fixed.mod, vcov=function(x) 
+%                           vcovHC(x, cluster="group", 
+%                                  type="HC1"))
+%
+%t test of coefficients:
+%
+%               Estimate Std. Error t value Pr(>|t|)  
+%postperiod1     -2.2833     1.2465 -1.8319  0.06775 .
+%postperiod1:nj   2.7500     1.3359  2.0585  0.04022 *
+%---
+%Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+%\end{verbatim}
+%
+%\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+  \frametitle{Regression: Minimum wage laws and employment}
+  \footnotesize
+\begin{verbatim}
+> firstdiff.mod <- plm(emptot ~ postperiod * nj, 
+                                 data = d, model = "fd")
+> coeftest(firstdiff.mod, vcov=function(x) vcovHC(x, type="HC0"))
+
+t test of coefficients:
+
+               Estimate Std. Error t value Pr(>|t|)  
+postperiod1     -2.2833     1.2465 -1.8319  0.06775 .
+postperiod1:nj   2.7500     1.3359  2.0585  0.04022 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+\end{verbatim}
+\end{frame}
+
+\section{Difference-in-Differences: Threats to Validity}
+
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Threats to Validity}
+
+\begin{enumerate}
+% \item \emph{Compositional differences}: In repeated cross-sections
+%       we do not want that the composition
+%       of the sample changes between periods.
+% \begin{itemize}
+% \item Falsification Test: Distribution of $(D,X)$ should be similar for the pre-treatment and
+%       post-treatment periods.
+% \end{itemize}\bigskip
+\item Non-parallel dynamics\bigskip
+\item Compositional differences\bigskip
+\item Long-term effects versus reliability\bigskip
+\item Functional form dependence\bigskip
+\end{enumerate}
+Bias is a matter of degree. Small violations of the identification assumptions may not matter much as the bias may be rather small. However, biases can sometimes be so large that the estimates we get are completely wrong, even of the opposite sign of the true treatment effect.\\\bigskip
+
+Helpful to avoid overly strong causal claims for difference-in-differences estimates.
+
+
+
+
+\end{frame}
+
+
+%\subsection{Non-parallel dynamics}
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Threats to Validity}
+
+\begin{enumerate}
+% \item \emph{Compositional differences}: In repeated cross-sections
+%       we do not want that the composition
+%       of the sample changes between periods.
+% \begin{itemize}
+% \item Falsification Test: Distribution of $(D,X)$ should be similar for the pre-treatment and
+%       post-treatment periods.
+% \end{itemize}\bigskip
+ \item \emph{Non-parallel dynamics}: Often treatments/programs are targeted based on pre-existing differences in outcomes.\medskip
+ \begin{itemize}
+   \item ``Ashenfelter dip'': participants in training programs often experience a dip in earnings
+just before they enter the program (that may be \emph{why} they participate). Since wages have a natural tendency to mean reversion, comparing wages of participants and non-participants using DD leads to an upward biased estimate of the program effect\medskip
+   \item Regional targeting: NGOs may target villages that appear most promising (or worst off)\medskip
+%   \item In repeated cross-sections, we do not want that the composition of the sample changes between periods.
+ \end{itemize}
+
+% \begin{itemize}
+% \item Falsification Test: Under the parallel trends assumption during the periods $t=-1,0,1$, we have:
+%       \[
+%        E[Y(0)-Y(-1)|D=1]- E[Y(0)-Y(-1)|D=0]=0
+%       \]
+%       \item That is, apply DID estimator to $t=-1,0$ and test if $\alpha=0$
+%   %    \item Can use similar placebo test with second control group or other placebo outcomes that
+%  %     are known to be unaffected
+% \end{itemize}
+%\item \emph{Long-term effects vs. reliability}:
+%\begin{itemize}
+%  \item Parallel trends assumption for DD is more likely to hold over
+%a shorter time-window. In the long-run, many other things may happen and confound the effect of the treatment.
+%\item Should be cautious to extrapolate short-term effects to long-term effects
+%\end{itemize}
+\end{enumerate}
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Checks for Difference-in-Differences Design}
+%\begin{enumerate}
+% \item Falsification test using data for prior periods
+% \begin{itemize}
+%\item Given parallel trends during periods $t=-1,0,1$, we have:
+%       \[
+%        E[Y(0)-Y(-1)|D=1]- E[Y(0)-Y(-1)|D=0]=0
+%       \]
+%\item run placebo DD on data from $t=-1,0$ and test if $\alpha=0$. If not, your
+%       estimate comparing $t=0$ and $t=1$ may be biased
+% \end{itemize}\medskip \pause
+%\item Falsification test using data for alternative control group
+% \begin{itemize}
+%\item if the placebo DD with the alternative control is different from the DD with the original control, then the original DD may be biased
+% \end{itemize}\medskip \pause
+%\item Falsification test using alternative placebo outcome that is not supposed to be affected by the treatment
+% \begin{itemize}
+% \item if DD from placebo outcome is non-zero, then the DD estimate for original outcome may be biased
+%  \end{itemize}
+%\end{enumerate}
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Checks for Difference-in-Differences Design}
+\begin{enumerate}
+ \item Falsification test using data for prior periods \bigskip
+% \begin{itemize}
+%\item Given parallel trends during periods $t=-1,0,1$, we have:
+%       \[
+%        E[Y(0)-Y(-1)|D=1]- E[Y(0)-Y(-1)|D=0]=0
+%       \]
+%\item run placebo DD on data from $t=-1,0$ and test if $\alpha=0$. If not, your
+%       estimate comparing $t=0$ and $t=1$ may be biased
+% \end{itemize}\medskip \pause
+\item Falsification test using data for alternative control group \bigskip
+% \begin{itemize}
+%\item if the placebo DD with the alternative control is different from the DD with the original control, then the original DD may be biased
+% \end{itemize}\medskip \pause
+\item Falsification test using alternative placebo outcome that is not supposed to be affected by the treatment
+% \begin{itemize}
+% \item if DD from placebo outcome is non-zero, then the DD estimate for original outcome may be biased
+%  \end{itemize}
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Falsification test: Data for prior periods}
+  \vspace{-.2in}
+\begin{center}
+  \includegraphics[height=3.2in,keepaspectratio=1]{KCfalsification1.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Falsification test: Data for prior periods}
+  \vspace{-.2in}
+\begin{center}
+  \includegraphics[height=3.2in,keepaspectratio=1]{KCfalsification2.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Falsification test: Data for prior periods}
+  \vspace{-.2in}
+\begin{center}
+  \includegraphics[height=3.2in,keepaspectratio=1]{KCfalsification3.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Falsification test: Data for prior periods}
+  \vspace{-.2in}
+\begin{center}
+  \includegraphics[height=3.2in,keepaspectratio=1]{KCfalsification4.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Longer Trends in Employment (Card and Krueger 2000)}
+  \vspace{-.1in}
+\begin{center}
+  \includegraphics[height=3in,keepaspectratio=1]{PreTrend.pdf}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Falsification test: Alternative control group}
+  \vspace{-.2in}
+\begin{center}
+  \includegraphics[height=1.3in,keepaspectratio=1]{CKresults4.pdf}
+\end{center}
+% \begin{itemize}
+%\item
+If placebo DD between original and alternative control group is not zero, then the original DD may be biased
+% \end{itemize}\medskip \pause
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Triple DDD: Mandated Maternity Benefits (Gruber, 1994)}
+\hspace*{0.5cm}\begin{overprint}
+\onslide<1|handout:1>\includegraphics[height=3.2in,keepaspectratio=1]{DDD1markup.pdf}
+\onslide<2|handout:2>\includegraphics[height=3.2in,keepaspectratio=1]{DDD2markup.pdf}
+\onslide<3|handout:3>\includegraphics[height=3.2in,keepaspectratio=1]{DDDmarkup.pdf}
+\end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How useful is the Triple DDD?}
+\begin{itemize}
+  \item The DDD estimate is the difference between the DD of interest and the placebo DD (that is supposed to be zero)\bigskip
+  \begin{itemize}
+    \item If the placebo DD is non zero, it might be difficult to convince reviewers that the DDD removes all the bias\medskip
+    \item If the placebo DD is zero, then DD and DDD give the same results but DD is preferable because standard errors are smaller for DD than for DDD
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+ 
+
+%\section{Example: Gerhard Schr\"oder's Flood}
+%
+%\begin{frame}
+%  \frametitle{The Elbe Valley}
+%  \vspace{-.06in}
+%\begin{center}
+%  \includegraphics[height=3.1in,keepaspectratio=1]{elbe1.pdf}
+%\end{center}
+%\end{frame}
+%
+%
+%%\begin{frame}
+%%  \frametitle{The Elbe Valley: 2001 and 2002}
+%%  \vspace{-.06in}
+%%\begin{center}
+%%  \includegraphics[height=3.1in,keepaspectratio=1]{NASA.pdf}
+%%\end{center}
+%%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Schr\"oder Sends the Troops}
+%\begin{columns}
+%  \begin{column}{0.5\textwidth}
+%    \centerline{\includegraphics[height=1.2in,keepaspectratio=1]{flood1.pdf}}
+%    \centerline{\includegraphics[height=1.2in,keepaspectratio=1]{flood2.pdf}}
+%
+%
+%  \end{column}
+%
+%  \begin{column}{0.3\textwidth}
+%    \centerline{\includegraphics[height=1.2in,keepaspectratio=1]{flood3.pdf}}
+%    \centerline{\includegraphics[height=1.2in,keepaspectratio=1]{flood4.pdf}}
+%  \end{column}
+%\end{columns}
+%
+%\end{frame}
+%
+%%\begin{frame}
+%%  \frametitle{Gerhard Schr\"oder's Flood}
+%%
+%%  \begin{itemize}
+%%    \item Panel data for Germany's 299 electoral districts. $Y$: PR-vote share of Social Democratic Party SPD\bigskip
+%%    \item Two periods
+%%    \begin{itemize}
+%%      \item $T=0$: Federal election 1998
+%%      \item $T=1$: Federal election 2002
+%%      \item The Elbe flood occurred in August of 2002 and the election was held in September of 2002
+%%      \end{itemize}\bigskip
+%%   \item Treatment: Flooded Districts
+%%   \begin{itemize}
+%%     \item $D=1$ Flooded districts (all of which received federal disaster aid)
+%%     \item $D=0$ Unaffected districts
+%%   \end{itemize}
+%%  \end{itemize}
+%%\end{frame}
+%
+
+%\subsection{Long-term effects versus reliability}
+
+
+\begin{frame}
+  \frametitle{Difference-in-Differences:  Further Threats to Validity}
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\emph{\item Compositional differences}\bigskip
+\begin{itemize}
+  \item In repeated cross-sections, we do not want that the composition of the sample changes between periods.\medskip
+\item Example:
+\begin{itemize}
+  \item Hong (2011) uses repeated cross-sectional data from Consumer Expenditure Survey (CEX) containing music expenditures and internet use for random samples of U.S. households\medskip
+   \item Study exploits the emergence of Napster (the first sharing software widely used by Internet users) in June 1999 as a natural experiment.\medskip
+  \item Study compares internet users and internet non-users, before and after emergence of Napster
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Compositional differences?}
+  \vspace{-.06in}
+\begin{center}
+  \includegraphics[height=2.8in,keepaspectratio=1]{Jong2011.pdf}
+\end{center}  \vspace{-.11in}
+%\small{
+%Diffusion of the internet may change the samples (e.g. the fraction of music fans decreases among internet users)}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Compositional differences?}
+  \vspace{-.4in}
+\begin{center}
+  \includegraphics[height=4.6in,angle=270,keepaspectratio=1]{Jong20111.pdf}
+\end{center}  \vspace{-.0in}
+Diffusion of the internet changes samples (e.g. younger music fans are early adopters)
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Difference-in-Differences:  Further Threats to Validity}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item \emph{Long-term effects versus reliability}:
+\begin{itemize}\medskip
+  \item Parallel trends assumption for DD is more likely to hold over
+a shorter time-window\medskip
+\item In the long-run, many other things may happen that could confound the effect of the treatment\medskip
+\item Should be cautious to extrapolate short-term effects to long-term effects
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Effect of War on Tax Rates (Scheve and Stasavage 2010)}
+  \vspace{-.06in}
+\begin{center}
+  \includegraphics[height=2.8in,keepaspectratio=1]{Ken.pdf}
+\end{center}  \vspace{-.0in}
+\end{frame}
+
+%\begin{frame}
+% \frametitle{Political Rewards for Flood Aid}
+%  \vspace{-.2in}
+% \begin{itemize}
+%   \item Bechtel and Hainmueller (2011) consider relief spending in the context of the 2002 Elbe flooding in Germany, to estimate short- and long-term electoral returns to targeted policy benefits.
+% \end{itemize}
+%\begin{center}
+%  \includegraphics[height=2.1in,keepaspectratio=1]{elbe1.pdf}
+%  \includegraphics[height=2.2in,keepaspectratio=1]{flood4.pdf}
+%\end{center}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Political Rewards for Flood Aid}
+%  \vspace{-.06in}
+%\begin{center}
+%  \includegraphics[height=2.8in,keepaspectratio=1]{elbe2.pdf}
+%\end{center}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Political Rewards for Flood Aid}
+%  \vspace{-.06in}
+%\begin{center}
+%  \includegraphics[height=2.8in,keepaspectratio=1]{elbe3.pdf}
+%\end{center}
+%\end{frame}
+
+
+
+%\section{Difference-in-Differences: Further Issues}
+
+%\begin{frame}
+%  \frametitle{Conditioning on Lagged Outcomes}
+%
+%\begin{itemize}
+%\item Difference-in-Differences identification:
+%\[
+%\Delta Y_i = \delta + \tau{DD} \cdot D_i + u_i,
+%\]
+%where $\Delta Y_i = Y_i(1)-Y_i(0)$ and $u_i=\Delta \varepsilon_i$.
+%\begin{itemize}
+%  \item idea: remove bias from time-invariant unobservables
+%\end{itemize} \bigskip
+%
+%\pause
+%\item Alternative identification is to condition on pre-period outcome:
+%\[
+%Y_{i,t=1} = \beta_0 + \rho Y_{i,t=0} + \tau{SOO} \cdot D_{i} + \varepsilon_{i}
+%\]\vspace{-.2in}  \pause
+%\begin{itemize}
+%  \item idea: once pre-period outcome is controlled for, selection on observables holds
+%\end{itemize}
+%\item Models are non-nested: Try both (with sufficient overlap on $Y_{i,t=0}$) \pause
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Conditioning on Pre-Period Employment}
+%  \vspace{-.2in}
+%\begin{center}
+%  \includegraphics[height=2.5in,keepaspectratio=1]{CKresults5.pdf}
+%\end{center}
+%\end{frame}
+
+%\subsection{Functional form dependence}
+
+\begin{frame}
+  \frametitle{Difference-in-Differences: Further Threats to Validity}
+\begin{enumerate}
+\setcounter{enumi}{3}
+ \item \emph{Functional form dependence}: Magnitude or even sign of the DD effect may be sensitive to the functional form, when average outcomes for controls and treated are very different at baseline
+ \begin{itemize}\bigskip
+ \item Training program for the young:\medskip
+ \begin{itemize}
+   \item Employment for the young increases from 20\% to 30\%
+   \item Employment for the old increases from 5\% to 10\%
+   \item Positive DD effect: $(30 - 20) - (10 - 5) = 5\%$ increase\medskip \pause
+   \item But if you consider log changes in employment, the DD is,
+$[log(30) - log(20)] - [log(10) - log(5)] = log(1.5)- log(2) < 0$
+ \end{itemize}\bigskip
+ \item DD estimates may be more reliable if treated and controls are more similar at baseline\medskip
+ \item More similarity may help with parallel trends assumption
+ \end{itemize}
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Matching and difference-in-differences}
+
+\begin{itemize}
+\item Combine matching and difference-in-differences:\medskip
+\begin{itemize}
+  \item Match on pre-treatment covariates and (lagged) outcomes\medskip
+  \item Run difference-in-differences regression in matched data-set\medskip
+  \item Can also use inverse-propensity score weighting (Hirano, Imbens, and Ridder 2003; Imai and Kim 2012)\medskip
+%   \item Run difference-in-differences regression in matched data-set\medskip
+%  \item More similar units are more likely to experience more similar trends so the parallel path assumption may be more plausible.
+\end{itemize}\bigskip
+%\item This strategy is more widely used now:\medskip
+%\begin{itemize}
+%\item Heckman, Ichimura, and Todd (1998). Matching as an econometric evaluation estimator, \emph{Review of Economic Studies} 65(2): 261-94.\medskip
+%%  \item Lenz and Ladd (2009). Exploiting a Rare Communication Shift to Document the Persuasive Power of the News Media, \emph{American Journal of Political Science}, 53(2): 394-410.
+%\end{itemize} \bigskip
+\item Can also combine difference-in-differences with regression discontinuity design or randomized experiment \bigskip
+%\item With few treated units: synthetic control method
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Effect of Voter ID Laws}
+
+Voter Identification laws: require government ID to vote
+
+\begin{itemize}
+  \item[-] Minority voters: much less likely to hold IDs (Ansolabehere and Hersh 2016)
+  \item[-] What is effect of ID laws on turnout?
+  \item[-] Methods question: assess effect using surveys?
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Survey Data and Effects of Election Administration}
+
+``Our article evaluates
+this research and disputes the strength of
+the statistical arguments used to support findings
+of an observable negative effect on turnout
+from voter ID laws. Alternatively, we adjust the
+models using state samples and difference-indifferences
+techniques and reanalyze the CPS
+data for the 2002 and 2006 midterm elections.
+While we do not conclude that voter ID rules
+have no effect on turnout, \alert{our data and tools
+are not up to the task of making a compelling
+statistical argument for an effect} " (Erikson and Minnite 2009)
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Obstacles to Estimating Voter ID Laws' Effect}
+
+Hajnal, Lajevardi, and Nielson (2017) (HLN) $\leadsto$ Voter ID laws suppress turnout of minority voters, estimate effect using CCES survey data
+\begin{itemize}
+  \item[-] General election$\leadsto$ hispanic voters
+  \item[-] Primary election $\leadsto$ hispanic, black, and asian voters
+\end{itemize}
+
+Limitations of the design
+\begin{itemize}
+  \item[1)] Placebo test: cross sectional designs suffer from selection 
+  \item[2)] Difference in Differences in HLN reports positive effect $\leadsto$ Merge error in Virginia (2006, 2008, and 2010) and other 2006 states
+  \item[3)] Once merge error corrected: data + designs provide positive, negative, or null effects
+\end{itemize} 
+
+\alert{No reliable inference$\leadsto$ Administrative data essential to estimate effects}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{HLN: Influential and High Profile Study of Turnout Effects}
+
+
+\huge
+`` The analysis shows that strict identification laws have a differentially
+negative impact on the turnout of racial and ethnic minorities in primaries and general elections"
+
+\end{frame}
+
+\begin{frame}
+\frametitle{HLN: Research Design}
+
+\begin{itemize}
+  \item[] \alert{Data}: Cooperative Congressional Election Study (2006-2014) 
+    \begin{itemize}
+      \item[-] Merge: Strict voter ID law in state
+      \item[-] Dependent Variable: General/Primary Election Turnout
+      \item[-] Treatment: Strict Voter ID Law
+    \end{itemize} 
+  \item[1)] Selection on observables: cross sectional comparion
+  \begin{itemize}
+  \item[-]  Effect heterogeneity by race, party ID, and ideology
+\end{itemize}
+  \item[2) ] Difference-in-Differences: state and year fixed effects 
+  \begin{itemize}
+  \item[-]  Effect heterogeneity by race, party ID, and ideology
+\end{itemize}
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{HLN Results} 
+Voter ID laws suppress turnout 
+\begin{itemize}
+\item[-] General election:  increase gap between white and hispanic turnout (general election) 
+\item[-] Primary Election: Increase gap between white and hispanic, black, and asian turnout (primary elections) 
+\end{itemize}
+\scalebox{0.45}{\includegraphics{JOP_Effects.png}}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Assessing Cross Sectional Design: Placebo Test}
+ \only<1-4,6>{
+\begin{itemize}
+  \item[-] If cross sectional (selection on observables) design works:\pause
+  \begin{itemize}
+  \invisible<1>{\item[-] States that implement voter ID laws are (conditionally) on average similar to states that do not} \pause 
+  \invisible<1-2>{\item[-] No ``effect" of being a strict voter ID law in the past}\pause 
+\end{itemize}
+  \invisible<1-3>{\item[-] Placebo test: assess ``effect" of being future strict voter ID law state on turnout before law implemented} \pause 
+  \invisible<1-5>{\item[-] Hajnal, Kuk, and Lejavardi (2018) suggest placebo test using difference in differences (state and year fixed effects): not possible to estimate this placebo test. 
+  \begin{itemize} 
+    \item[-] Why?: no within state variation on future strict voter ID law status. 
+    \item[-] Coefficients from placebo test in HKL: estimated by statistical routine automatically dropping states to fit model.  Strict voter ID law reported coefficient just a state fixed effect, interaction estimated solely from within state racial composition variation
+    \item[-] Does not provide an assessment of the plausibility of the design
+    \end{itemize} }
+\end{itemize}}
+
+\only<5>{\scalebox{0.5}{\includegraphics{Placebo.png}}}
+\pause 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Cross Sectional $\leadsto$ Difference in Differences}
+
+\large 
+Cross Sectional Design Fails $\leadsto$ Difference in Differences Design\\
+HLN: ``one of the most rigorous ways to examine panel data"\\
+HKL: `` we were aware of concerns related to omitted-variable bias, and we duly noted those concerns in the article. That is exactly why we sought to reconfirm
+our results with a state fixed effects model" [difference in differences]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Difference in Differences Estimates, HLN}
+
+\begin{tikzpicture}
+\node (image) at (-8, 8) [] {\scalebox{0.85}{\includegraphics{DiD.png}}} ;
+\node (c1) at (-15, 9) [] {} ;
+\node (c2) at (-15, 8.2) [] {} ;
+\node (c3) at (-10, 9) [] {} ;
+\node (c4) at (-10, 8.2) [] {} ;
+
+\node (c5) at (-15, 7.7) [] {} ;
+\node (c6) at (-15, 8.2) [] {} ;
+\node (c7) at (-10, 7.7) [] {} ;
+\node (c8) at (-10, 8.2) [] {} ;
+
+\node (c9) at (-15, 7.2) [] {} ;
+\node (c10) at (-15, 7.7) [] {} ;
+\node (c11) at (-10, 7.2) [] {} ;
+\node (c12) at (-10, 7.7) [] {} ;
+
+
+\only<2->{\draw[-, line width = 1.5pt] (c1) to (c2) ;
+\draw[-, line width = 1.5pt] (c1) to (c3) ;
+\draw[-, line width = 1.5pt] (c3) to (c4) ;
+\draw[-, line width = 1.5pt] (c2) to (c4) ; }
+
+\only<3>{\draw[-, line width = 1.5pt] (c5) to (c6) ;
+\draw[-, line width = 1.5pt] (c5) to (c7) ;
+\draw[-, line width = 1.5pt] (c6) to (c8) ;
+\draw[-, line width = 1.5pt] (c7) to (c8) ; }
+
+
+\only<4>{\draw[-, line width = 1.5pt] (c9) to (c10) ;
+\draw[-, line width = 1.5pt] (c9) to (c11) ;
+\draw[-, line width = 1.5pt] (c11) to (c12) ;
+\draw[-, line width = 1.5pt] (c10) to (c12) ; }
+\end{tikzpicture}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Estimated Effect of Voter ID Laws from HLN's Diff-in-Diff in General Elections (All Statistically Significant)}
+
+\begin{tabular}{|ll|}
+\hline \hline
+     & Estimate \\
+\hline
+White       & 10.9 \\
+\hline
+African American &  10.4 \\
+\hline
+Latinos & 6.5  \\
+\hline
+Asian Americans & 12.5 \\
+\hline
+Mixed Race & 8.3 \\
+\hline \hline
+\end{tabular}
+
+\end{frame}
+
+
+\begin{frame}
+
+\huge
+Results are not credible $\leadsto$ due to merge error in data
+
+\end{frame}
+
+\begin{frame}
+\Huge
+\alert{WE ARE NOT ARGUING VOTER ID LAWS INCREASE TURNOUT}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{What went wrong?}
+
+\only<1>{
+CCES turnout in Virginia shows 0\% turnout in control period, plausible turnout levels in treatment period $\leadsto$ ``positive effect" due to merge error
+\scalebox{0.5}{\includegraphics{VAPlot.pdf}}}
+\only<2>{
+To see influence of Virginia, we can drop one state at a time and assess the effect on the estimated effect of strict voter ID laws on turnout, estimated using a difference in differences design 
+\scalebox{0.5}{\includegraphics{DropOneStateBoxPlot.pdf}}}
+\only<3>{\Large This is a risk with \alert{any} fixed effect regression
+
+\begin{itemize}
+\item[-] Use within unit variation, average across units to calculate effect
+\item[-] Major Errors in one unit $\leadsto$ exercise substantial influence over estimates
+\item[-] \alert{Inspect Your Data!}
+\end{itemize}
+
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Other Explanations?}
+
+\only<1>{\begin{itemize}
+\item[-] \Large Hajnal, Kuk, and Lejavardi (2018): Argue specification is Missing Political Control Variables (Partisan control of governor, State House, and State Senate) 
+\end{itemize}}
+
+\only<2>{\footnotesize Originally provided political control variables had state-level missingness for states (alphabetically) from Virginia to Wyoming from 2006-2008. Figure below shows percent missing for respondents from each state for Republican governor, 2006-2008 This missingness effectively drops the problematic Virginia years from the analysis.   Once corrected, political control variables do not resolve implausible positive effects
+\begin{center}
+ \scalebox{0.435}{\includegraphics{MissingDataGov.pdf}}
+ \end{center}
+}
+
+\only<3>{ HKL (2018) also argue the model in HLN is problematic because:
+  \begin{itemize}
+    \item[-] No clustering of Standard Errors 
+    \item[-] No Survey Weights 
+  \end{itemize}
+}
+
+\only<4>{\small The top estimate in each figure shows original HLN estimate of strict voter ID laws on general election turnout from difference in differences model, second is the estimate after clustering standard errors, third is estimate after including survey weights, fourth after including political controls, fifth from dropping Virginia, sixth recoding turnout so nonmatches are zero 
+  \scalebox{0.6}{\includegraphics{rep_specs}}
+
+}
+
+
+\end{frame}
+
+
+\begin{frame}
+\huge
+After correcting data, Survey not up to the task (Erikson and Minnite 2009) 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Survey Data and Effects of Election Administration}
+
+\only<1>{\scalebox{0.6}{\includegraphics{compareactualtoccesall.eps}}}
+\only<2>{\scalebox{0.8}{\includegraphics{tablea9_combined.eps}}}
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{How to Assess Effect of Voter ID Laws?}
+\begin{itemize}
+\item[-] Even with large sample CCES unable to inform debate on voter ID laws because small samples in each state
+\item[-] Placebo tests: useful, but caution must be used because statistical routines drop variables to enable regression to estimate, coefficients may not reflect what you think.  
+\item[-] Fixed effect regression, worry about unit-level errors that exercise substantial influence on estimates
+\end{itemize}
+
+
+
+\end{frame}
+
+\end{document}

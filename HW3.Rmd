@@ -1,0 +1,194 @@
+---
+title: "Homework 3"
+author: "Wanlin Ji"
+date: "4/26/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Problem 1
+
+a. 
+
+Given the randomness within experimental data, we can use difference in means estimator as an unbiased estimate of the ATE.
+
+```{r cars}
+library(foreign)
+
+exp <- read.dta("~/Desktop/CausalInf/Homeworks/HW3/nsw_exper.dta")
+nexp <- read.dta("~/Desktop/CausalInf/Homeworks/HW3/nsw_psid_withtreated.dta")
+
+#set.seed(1)
+
+# a
+SATE <- mean(exp$re78[exp$nsw==1]) - mean(exp$re78[exp$nsw==0])
+
+SE <- sqrt(var(exp$re78[exp$nsw==1])/sum(exp$nsw==1) + 
+             var(exp$re78[exp$nsw==0])/sum(exp$nsw==0))
+
+ci1 <- SATE - 1.96*(SE/sqrt(sum(exp$nsw)))
+ci2 <- SATE + 1.96*(SE/sqrt(sum(exp$nsw)))
+```
+
+Our estimate ATE is `r SATE`, while its SE is `r SE`. 
+
+The 95\% confidence interval is (`r max(ci1)` , `r max(ci2)`)
+
+b. How are other vars controlled?
+
+```{r }
+ATEcov <- summary(lm(re78 ~ nsw + age + educ + black + hisp + married + re74
+                     + re75 + u74 + u75, data = exp))
+```
+
+The estimate is 1672, and its SE is 634.3, which is smaller than no-controll SE. Why is that? If these controls are uncorrelated with the treatment variable, then they will not affect our estimate. But we see controlling other variables adds precision to the estimates and explanatory power for earnings. Thus including these control variables therefore reduces the residual variance, which in turn lowers the standard error of the regression estimates.
+
+c.
+
+```{r message=FALSE, warning=FALSE, results = "hide" }
+library("Matching")
+
+
+ba <-  MatchBalance(nsw ~ age + educ + black + hisp + married + re74
+                     + re75 + u74 + u75, data = nexp)
+```
+
+We found that the two sample t test result shows great significance among almost every covariate except for hispanic. This shows significant imbalance of coavriates for the non-experimental data. 
+
+Covariates |  Standard Mean Difference | KS Statistics
+------------- | ------------- | -------------
+age |-126.27 |0.37714
+educ |-88.077  |0.40289
+black  | 162.56 | --
+hispanic |11.357 | --
+married |-172.41 | --
+re74 | -354.71|0.72924
+re75 | -544.58|0.77362
+u74 |136.39  |--
+u75 | 101.79| --
+
+As we can see from balance statistics, the units selected into the treatmnet group tends to be younger, receiving less education, less likely to be black or hispanic, likely to be unmarried, having much lower income previously and likely to be unemployed in 1974 or 1975. The most important factors that determine the selection into the program are their real earnings for 1974 or 1975, whose SMD is huge. 
+
+d. 
+
+```{r}
+SATE2 <- mean(nexp$re78[nexp$nsw==1]) - mean(nexp$re78[nexp$nsw==0])
+SATE2
+
+SE2 <- sqrt(var(nexp$re78[nexp$nsw==1])/sum(nexp$nsw==1) + 
+             var(nexp$re78[nexp$nsw==0])/sum(nexp$nsw==0))
+
+nci1 <- SATE - 1.96*(SE/sqrt(sum(nexp$nsw)))
+nci2 <- SATE + 1.96*(SE/sqrt(sum(nexp$nsw)))
+
+```
+
+Our estimate ATE is `r SATE2`, while its SE is `r SE2`. 
+The 95\% confidence interval is (`r max(nci1)` , `r max(nci2)`)
+
+e.
+
+```{r message=FALSE, warning=FALSE, results = "hide" }
+ATEcov2 <- summary(lm(re78 ~ nsw + age + educ + black + hisp + married + re74
+                     + re75 + u74 + u75, data = nexp))
+ATEcov2
+```
+
+The estimate is 115.4, with SE 100.7. We find a total positive estimate, comparing to -15204,  with much higher standard error. 
+Yes. This is because we did not randomly assignment units for treatment and control, thus create biased SATE in d. It is obvious that when considered in a much larger population, those treated units self-select into the treatment group based on their low earnings, which relflects baseline difference in earning among treatment and control group. 
+
+f.
+
+```{r message=FALSE, warning=FALSE, results = "hide"}
+diffm <- mean(nexp$re78[(nexp$married==1) & (nexp$nsw==1)]) - mean(nexp$re78[(nexp$married==1) & (nexp$nsw==0)])
+
+
+diffum <- mean(nexp$re78[(nexp$married==0) & (nexp$nsw==1)]) - mean(nexp$re78[(nexp$married==0) & (nexp$nsw==0)])
+
+ATT <- diffm*sum((nexp$married==1) & (nexp$nsw==1))/sum((nexp$nsw==1)) + 
+  diffum*sum((nexp$married==0) & (nexp$nsw==1))/sum((nexp$nsw==1))
+
+ATT
+```
+
+The subclassificaton estimator of ATT is -11124.4, conditioning on marital status of individuals. 
+
+g. h.
+
+```{r message=FALSE, warning=FALSE, results = "hide"}
+# bining the earnings
+nexp$re75 <- findInterval(nexp$re75, c(0, 10000, 20000))
+
+# Needs debugging
+ATTDisCon <- function(data, dependent, treatment, discrete){
+  ATTn <- 0
+  for (i in discrete){
+    for (a in unique(nexp$i))
+    if ( sum((nexp$i==a) & (nexp$nsw==1)) == 0) {warning('ATT not identifiable')}
+    else {
+    ATTn = ATTn + sum((nexp$i==a) & (nexp$nsw==1))  / sum((nexp$nsw==1)) 
+    }
+  }
+  return(ATTn)
+}
+
+```
+
+
+### Problem 2
+
+a. 
+
+```{r }
+
+nexp2 <- read.dta("~/Desktop/CausalInf/Homeworks/HW3/nsw_psid_withtreated.dta")
+
+
+X <- cbind(nexp2$age, nexp2$educ, nexp2$black, nexp2$hisp, nexp2$married, nexp2$re74, nexp2$re75, nexp2$u74, nexp2$u75)
+colnames(X)<-c("age", "educ", "black", "hisp", "married", "re74", "re75", "u74", "u75")
+
+nexpm <- Match(Y=nexp2$re78, Tr=nexp2$nsw, X= X)
+summary(nexpm)
+
+```
+
+The ATT is 2073.5 after one match per treated unit, including the default bias adjustment.
+
+b.
+
+```{r message=FALSE, warning=FALSE}
+check <- MatchBalance(nsw ~ age + educ + black + hisp + married + re74
+                     + re75 + u74 + u75, data = nexp2, match.out=nexpm)
+
+
+```
+
+Please see the statistics above. The balance looks much better than the full non-experimental data set. We can see that for all discrete variables, the standard mean difference goes to 0. And the matching balance only left two coavriates, age and education, still with much smaller standard mean differences. 
+
+c.
+
+```{r}
+nexpm2 <- Match(Y=nexp2$re78, Tr=nexp2$nsw, X= X, BiasAdjust = FALSE)
+summary(nexpm2)
+
+```
+
+The results are same. 
+The bias correction is important for that it corrects the matching estimators by reducing matching discrepancy. 
+It is most important if we have multiple continuous variables in covariates.
+
+d.
+
+```{r}
+
+```
+
+
+
+
+
+
+

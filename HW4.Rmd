@@ -1,0 +1,291 @@
+---
+title: "HW4"
+author: "Wanlin Ji"
+date: "5/9/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Problem 1
+
+a.	$\hat{\tau_{OLS}} = \frac{\sum_{i=1}^{I}D_i \times Y_i} { \sum_{i=1}^{I}Y_i^2}$
+, where $I$ is number of total observations.
+
+b.	$\hat{\tau_{OLS}}=\frac{Cov(Y,D)} {Var(Y)}$
+c.	
+
+d.	$\tau_{OLS}=\sum_{i=1}^{N}P_{i}\tau_{Xi}$
+Where N is the number of blocking group.
+
+e.	It's different from the OLS one. The weighted one is unbiased and the OLS one is not because there are some random effects and unobserved effects having impact on the OLS result.
+
+
+### Problem 2
+
+a. 
+```{r}
+library(Matching)
+library(foreign)
+
+data <- read.csv("~/Desktop/CausalInf/Homeworks/HW4/dataQ2.csv")
+head(data)
+lm1 <- lm(data$Y ~ data$D)
+summary(lm1)
+
+lm2 <- lm(data$Y ~ data$D + data$X)
+summary(lm2)
+
+data0 <- data[data$X==0,]
+data1 <- data[data$X==1,]
+
+dif0 <- mean(data0$Y[data0$D==1])-mean(data0$Y[data0$D==0])
+dif1 <- mean(data1$Y[data1$D==1])-mean(data1$Y[data1$D==0])
+ATE <- dif0*(length(data0)/length(data))+dif1*(length(data1)/length(data))
+ATE
+```
+
+(i) Our estimate is -2.2204  with se as   1.1811
+(ii) Our estimate is  -4.243   with se as    1.171 
+(iii) Our estimate is -90.12302
+
+```{r message=FALSE, warning=FALSE, results = "hide"}
+Match(data$Y,data$D,data$X, ties= TRUE, estimand = "ATE")
+Match(data$Y,data$D,data$X, ties= FALSE, estimand = "ATE")
+```
+
+(iv) Our estimate is -23.36667 with se as 3.464732
+(v) Our estimate is -23.37438
+
+
+b.
+They are different. ATE is resembles the partial regression coefficient in a linear model. The coefficient varies by different model as well as different covariate.
+
+c.
+Conditions should be $D$ is independent with $X$. In the methods above, (iii) and (iv) give the unbiased estimate of the ATE.
+
+d.
+ATE=-100.12456\*(1000/1333) - 10.00154\*(333/1333)=-77.61071
+
+###Problem 3
+
+a.
+```{r}
+library(dplyr)
+
+sim1<- read.csv("~/Desktop/CausalInf/Homeworks/HW4/simdata1.csv")
+head(sim1)
+
+sim11 <- filter(sim1, sim1$D == 1) 
+sim10 <- sim1[sim1$D==0,]
+summary(sim11$X)
+summary(sim10$X)
+summary(sim1$X)
+
+MatchBalance(sim1$D~sim1$X)
+```
+
+
+b.
+
+(1)
+
+```{r}
+lm31=lm(sim1$Y~sim1$D)
+summary(lm31)
+```
+
+
+(2)
+```{r}
+lm32=lm(sim1$Y~sim1$D+sim1$X)
+summary(lm32)
+```
+
+(3)
+
+```{r}
+lm33=lm(sim1$Y~sim1$D+sim1$X+sim1$X^2+sim1$X^3)
+summary(lm33)
+```
+
+
+(4)
+
+```{r message=FALSE, warning=FALSE, results = "hide"}
+Match(sim1$Y,sim1$D,sim1$X)
+```
+
+$orig.nobs
+[1] 1000
+
+$orig.wnobs
+[1] 1000
+
+$orig.treated.nobs
+[1] 531
+
+$nobs
+[1] 1000
+
+$wnobs
+[1] 531
+
+
+Notice:(1)The more variables are added into a linear model, the larger R square it would be. (2) Matching and regression with controls for covariate can yeilds unbiased estimate.(3) Adding Square term and cubic term of covariate into regression model is not a good idea.
+
+c. 
+
+```{r}
+sim2<- read.csv("~/Desktop/CausalInf/Homeworks/HW4/simdata2.csv")
+head(sim2)
+sim21=sim2[sim2$D==1,]
+sim20=sim2[sim2$D==0,]
+summary(sim21$X)
+summary(sim20$X)
+summary(sim2$X)
+
+lm34 <- lm(sim2$Y ~ sim2$D)
+summary(lm34)
+
+lm35=lm(sim2$Y~sim2$D+sim2$X)
+summary(lm35)
+
+lm36=lm(sim2$Y~sim2$D+sim2$X+sim2$X^2+sim2$X^3)
+summary(lm36)
+
+rr=Match(sim2$Y,sim2$D,sim2$X)
+summary(rr)
+MatchBalance(sim2$D~sim2$X,match.out = rr)
+
+```
+
+
+Differences:(2)and(3)method,i.e., regression with covariate can not give the stable result to balence different value in D on X ,but matching can. This mathcing method did balance treatment and control groups on x, because the standard mean difference has decreased after matching.
+
+
+
+Problem 4
+
+1.
+
+```{r}
+library(foreign)
+ck=read.dta('~/Desktop/CausalInf/Homeworks/HW4/card_krueger.dta')
+cknj=ck[ck$nj==1,]
+ckpa=ck[ck$pa==1,]
+t.test(cknj$bk,ckpa$bk,paired=F)
+t.test(cknj$kfc,ckpa$kfc,paired=F)
+t.test(cknj$roys,ckpa$roys,paired=F)
+t.test(cknj$wendys,ckpa$wendys,paired=F)
+t.test(cknj$co_owned,ckpa$co_owned,paired=F)
+
+t.test(ckpa$emptot,ckpa$emptot2,paired=F)
+t.test(ckpa$wage_st,ckpa$wage_st2,paired=F)
+t.test(ckpa$pmeal,ckpa$pmeal2,paired=F)
+t.test(ckpa$pmeal,ckpa$pmeal2,paired=F)
+t.test(ckpa$hrsopen,ckpa$hrsopen2,paired=F)
+t.test(ckpa$hrsopen,ckpa$hrsopen2,paired=F)
+
+t.test(cknj$emptot,cknj$emptot2,paired=F)
+t.test(cknj$wage_st,cknj$wage_st2,paired=F)
+t.test(cknj$pmeal,cknj$pmeal2,paired=F)
+t.test(cknj$pmeal,cknj$pmeal2,paired=F)
+t.test(cknj$hrsopen,cknj$hrsopen2,paired=F)
+t.test(cknj$hrsopen,cknj$hrsopen2,paired=F)
+
+```
+
+2.
+
+There were no significant difference before and after the changing of minimum wages.
+
+3.
+
+```{r}
+hist(cknj$wage_st,freq=F)
+hist(ckpa$wage_st,freq=F)
+hist(cknj$wage_st2,freq=F)
+hist(ckpa$wage_st2,freq=F)
+```
+
+After adjusting the minimum wage, most of the companies fixed their wage at the minimum wage.
+
+
+4.
+
+Variable Creation
+
+```{r}
+empc=ck$emptot2-ck$emptot
+ckpa2<-data.frame(ckpa,iwg=0)
+cknj2<-data.frame(cknj,iwg=0)
+for(i in 1:331){
+  if(is.na(cknj$wage_st[i])=="TRUE"){
+    cknj2$iwg[i]=0
+  }else
+  if(5.05-cknj$wage_st[i]>0){
+    cknj2$iwg[i]=5.05-cknj$wage_st[i]
+  }else{cknj2$iwg[i]=0
+  }
+}
+ck22=rbind(ckpa2,cknj2)
+ck2<-data.frame(ck22,empc)
+
+
+
+```
+
+Regressions
+
+```{r}
+lm41 = lm(empc ~ nj, data = ck2)
+summary(lm41)
+lm42=lm(empc~nj+bk+roys+wendys,data = ck2)
+summary(lm42)
+lm43=lm(empc~iwg,data = ck2)
+summary(lm43)
+lm44=lm(empc~iwg+bk+roys+wendys,data = ck2)
+summary(lm44)
+lm45=lm(empc~iwg+bk+roys+wendys+southj+centralj+pa1+pa2,data = ck2)
+summary(lm45)
+
+
+```
+
+Above all, Initial Wage Gap is the most significant variable to interpret the change of wage, regardless of other variables.
+
+5. 
+
+```{r}
+empcnj=cknj$emptot2-cknj$emptot
+empcpa=ckpa$emptot2-ckpa$emptot
+t.test(empcnj,empcpa)
+```
+
+The t value is just a little larger then critical value. So, to statistical level, the result is credible. However, there should be more variable that could have impact in the change of wage does not includes in this data frame. Thus, there may be a omitted variable bias of this method.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

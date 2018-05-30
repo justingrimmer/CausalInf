@@ -1,0 +1,34 @@
+---
+title: "Homework 5"
+author: "Wanlin Ji"
+date: "5/20/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Problem 1
+
+a. 
+
+```{r message = FALSE}
+library(foreign)
+data <- read.dta("~/Desktop/CausalInf/Homeworks/HW5/Swiss_Panel_Long.dta")
+
+install.packages("plm")
+library(plm)
+reg1 <- plm()
+
+```
+
+Gausian assumptions. 
+
+There will be two assumptions. 
+
+b. 
+
+
+
+
